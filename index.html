@@ -22,14 +22,9 @@
         .audio-progress-fill { height: 100%; width: 35%; background: #556B2F; position: absolute; left: -35%; }
         .anim-loading .audio-progress-fill { animation: loading-bar 1.5s infinite linear; }
         @keyframes loading-bar { 0% { left: -35%; } 100% { left: 100%; } }
-        .chat-container { height: 320px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; padding: 15px; }
-        .message { padding: 12px 16px; border-radius: 14px; font-size: 13px; max-width: 85%; line-height: 1.4; }
-        .user-msg { align-self: flex-end; background: #556B2F; color: #F9F5E6; font-weight: 700; }
-        .ai-msg { align-self: flex-start; background: #E6E2D3; color: #333300; border: 1px solid #CCC; }
         .custom-scroll::-webkit-scrollbar { width: 5px; }
         .custom-scroll::-webkit-scrollbar-thumb { background: #888877; border-radius: 10px; }
         
-        /* Table Styles for PyG */
         .pyg-table th { font-size: 10px; text-transform: uppercase; color: #556B2F; padding: 8px 12px; font-weight: 800; letter-spacing: 0.05em; border-bottom: 2px solid rgba(51, 102, 0, 0.1); }
         .pyg-table td { padding: 8px 12px; font-size: 11px; border-bottom: 1px solid rgba(51, 102, 0, 0.05); white-space: nowrap; }
         .pyg-table tr:hover td { background: rgba(51, 102, 0, 0.02); }
@@ -41,7 +36,6 @@
         .infra-list li { margin-bottom: 8px; font-size: 18px; display: flex; align-items: flex-start; gap: 8px; color: #444; }
         .infra-list li::before { content: '•'; color: #556B2F; font-weight: bold; }
 
-        /* --- LOADER STYLE --- */
         .loader {
             width: 14px;
             height: 14px;
@@ -54,7 +48,6 @@
             margin-left: 8px;
         }
         @keyframes rotation { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        /* --- ESTILOS FORZADOS PARA HTML2PDF (.print-mode) --- */
         
         .print-mode nav, 
         .print-mode footer, 
@@ -65,57 +58,20 @@
             display: none !important; 
         }
 
-        .print-mode body { 
-            background-color: #ffffff !important; 
-            color: #111 !important;
-        }
-
-        .print-mode .glass-card { 
-            background: #ffffff !important; 
-            border: 1px solid #ddd !important; 
-            box-shadow: none !important; 
-            backdrop-filter: none !important;
-        }
-
-        .print-mode section {
-            page-break-after: always !important;
-            break-after: page !important;
-            min-height: 100vh !important;
-            display: flex !important;
-            flex-direction: column !important;
-            justify-content: flex-start !important;
-            padding: 10px !important; 
-            box-sizing: border-box !important;
-        }
-
-        .print-mode section h2 {
-            margin-top: 20px !important;
-            margin-bottom: 20px !important;
-            color: #1a410b !important;
-        }
-
+        .print-mode body { background-color: #ffffff !important; color: #111 !important; }
+        .print-mode .glass-card { background: #ffffff !important; border: 1px solid #ddd !important; box-shadow: none !important; backdrop-filter: none !important; }
+        .print-mode section { page-break-after: always !important; break-after: page !important; min-height: 100vh !important; display: flex !important; flex-direction: column !important; justify-content: flex-start !important; padding: 10px !important; box-sizing: border-box !important; }
+        .print-mode section h2 { margin-top: 20px !important; margin-bottom: 20px !important; color: #1a410b !important; }
         .print-mode canvas { display: none !important; }
-        .print-mode .print-chart-image { 
-            display: block !important; 
-            max-width: 90% !important; 
-            margin: 20px auto !important; 
-        }
-        
-        .print-mode header {
-            padding-top: 20px !important;
-            justify-content: center !important;
-            min-height: 100vh !important;
-            page-break-after: always !important;
-        }
+        .print-mode .print-chart-image { display: block !important; max-width: 90% !important; margin: 20px auto !important; }
+        .print-mode header { padding-top: 20px !important; justify-content: center !important; min-height: 100vh !important; page-break-after: always !important; }
 
         @media print {
             @page { margin: 0; }
             nav, .quick-action-btn, #langBtn, .no-print, button, #chatInput, .loader, #hub, #btnImprimir { display: none !important; }
             body { background-color: #ffffff !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; margin: 0 !important; padding: 0 !important; }
             section { page-break-after: always !important; break-after: page !important; min-height: 100vh !important; display: flex !important; flex-direction: column !important; justify-content: flex-start !important; align-items: flex-start !important; padding: 0 40px !important; box-sizing: border-box !important; }
-            section::before { content: "" !important; display: block !important; width: 100% !important; height: 150px !important; flex-shrink: 0 !important; }
             section h1, section h2, section h3 { margin-top: 0 !important; margin-bottom: 50px !important; width: 100% !important; text-align: left !important; }
-            header { page-break-after: always !important; break-after: page !important; min-height: 100vh !important; display: flex !important; flex-direction: column !important; justify-content: center !important; }
             .glass-card { background: #ffffff !important; backdrop-filter: none !important; border: 1px solid #ddd !important; box-shadow: none !important; break-inside: avoid !important; }
             .print-chart-image { display: block !important; width: 100% !important; max-height: 400px; object-fit: contain; margin: 10px auto; }
             canvas { display: none !important; }
@@ -128,16 +84,16 @@
         <div class="font-black text-2xl tracking-tighter uppercase text-white">TORREVELLA <span class="text-orange">S.L.</span></div>
         <div class="flex items-center gap-6">
             <div class="hidden lg:flex gap-5 text-[10px] uppercase font-bold tracking-[0.2em] text-white/70">
-                <a href="#tesis" class="hover:text-white transition-colors">Tesis</a>
-                <a href="#analisis" class="hover:text-white transition-colors">Análisis</a>
-                <a href="#infraestructura" class="hover:text-white transition-colors text-orange">Infraestructura</a>
-                <a href="#saneamiento" class="hover:text-white transition-colors">Saneamiento</a>
-                <a href="#financieros" class="hover:text-white transition-colors">Finanzas</a>
+                <a href="#tesis" class="hover:text-white transition-colors" data-i18n="nav-tesis">Tesis</a>
+                <a href="#analisis" class="hover:text-white transition-colors" data-i18n="nav-analysis">Análisis</a>
+                <a href="#infraestructura" class="hover:text-white transition-colors text-orange" data-i18n="nav-infra">Infraestructura</a>
+                <a href="#saneamiento" class="hover:text-white transition-colors" data-i18n="nav-restructuring">Saneamiento</a>
+                <a href="#financieros" class="hover:text-white transition-colors" data-i18n="nav-finance">Finanzas</a>
             </div>
             <div class="flex gap-2">
                 <button onclick="handlePrint()" id="btnImprimir" class="bg-orange/90 hover:bg-orange text-white px-4 py-2 rounded-lg text-xs font-bold transition-all shadow-lg flex items-center gap-2">
                     <i data-lucide="download" class="w-4 h-4 btn-icon"></i>
-                    <span class="btn-text">DESCARGAR PDF</span>
+                    <span class="btn-text" data-i18n="btn-download">DESCARGAR PDF</span>
                     <span class="loader" style="display: none;"></span>
                 </button>
                 <button onclick="toggleLanguage()" class="bg-white/10 border border-white/20 text-white px-3 py-1.5 rounded text-[10px] font-bold" id="langBtn">ES | <span class="opacity-50">EN</span></button>
@@ -252,13 +208,12 @@
                 </div>
             </div>
             
-            <!-- Tarjeta de Refuerzo de Tesis Comercial -->
             <div class="glass-card p-10 rounded-[3rem] mt-10 border-t-4 border-green-800 bg-white/60 flex flex-col md:flex-row items-center gap-8 shadow-xl">
                 <div class="w-20 h-20 bg-green-900/10 rounded-full flex-shrink-0 flex items-center justify-center text-green-800"><i data-lucide="line-chart" class="w-10 h-10"></i></div>
                 <div>
-                    <h3 class="text-2xl font-black text-green-900 uppercase mb-2">Validación de Recuperación en V</h3>
-                    <p class="text-lg text-gray-600 leading-relaxed">
-                        La tesis comercial se confirma con una **recuperación ya observable en 2024 y 2025**. El incremento en la producción biológica, sumado a la entrada de capital estratégico, permite capitalizar las inversiones realizadas en infraestructura. Se proyecta una progresión ascendente sostenida gracias a la optimización operativa y el posicionamiento premium de la marca Sotaroni.
+                    <h3 class="text-2xl font-black text-green-900 uppercase mb-2" data-i18n="v-recovery-title">Validación de Recuperación en V</h3>
+                    <p class="text-lg text-gray-600 leading-relaxed" data-i18n="v-recovery-desc">
+                        La tesis comercial se confirma con una recuperación ya observable en 2024 y 2025. El incremento en la producción biológica, sumado a la entrada de capital estratégico, permite capitalizar las inversiones realizadas en infraestructura. Se proyecta una progresión ascendente sostenida gracias a la optimización operativa y el posicionamiento premium de la marca Sotaroni.
                     </p>
                 </div>
             </div>
@@ -273,19 +228,18 @@
                         <tr><th class="p-6" data-i18n="tab-crop">Cultivo</th><th class="p-6" data-i18n="tab-ha">Hectáreas</th><th class="p-6" data-i18n="tab-trees">Censo Árboles</th><th class="p-6" data-i18n="tab-status">Estatus 2026</th></tr>
                     </thead>
                     <tbody class="divide-y divide-green-900/10">
-                        <tr><td class="p-6 font-bold text-green-900">Olivar Ecológico</td><td class="p-6">70 Ha</td><td class="p-6">16.655</td><td class="p-6 text-green-700 font-bold">Producción Ascendente</td></tr>
-                        <tr><td class="p-6 font-bold text-green-900">Almendro Ecológico</td><td class="p-6">30 Ha</td><td class="p-6">6.533</td><td class="p-6 text-orange font-bold">Crecimiento</td></tr>
-                        <tr><td class="p-6 font-bold text-green-900">Cerezo IGP</td><td class="p-6">25 Ha</td><td class="p-6">10.782</td><td class="p-6 text-blue-700 font-bold">70% de Producción</td></tr>
-                        <tr><td class="p-6 font-bold text-green-900">Manzanos</td><td class="p-6">5 Ha</td><td class="p-6">2.500</td><td class="p-6 text-blue-700 font-bold">70% de Producción</td></tr>
-                        <tr><td class="p-6 font-bold text-green-900">Libres</td><td class="p-6">35 Ha</td><td class="p-6">----</td><td class="p-6 text-blue-700 font-bold">Preparadas para ampliar cultivos</td></tr>
+                        <tr><td class="p-6 font-bold text-green-900" data-i18n="crop-olive">Olivar Ecológico</td><td class="p-6">70 Ha</td><td class="p-6">16.655</td><td class="p-6 text-green-700 font-bold" data-i18n="stat-asc">Producción Ascendente</td></tr>
+                        <tr><td class="p-6 font-bold text-green-900" data-i18n="crop-almond">Almendro Ecológico</td><td class="p-6">30 Ha</td><td class="p-6">6.533</td><td class="p-6 text-orange font-bold" data-i18n="stat-grow">Crecimiento</td></tr>
+                        <tr><td class="p-6 font-bold text-green-900" data-i18n="crop-cherry">Cerezo IGP</td><td class="p-6">25 Ha</td><td class="p-6">10.782</td><td class="p-6 text-blue-700 font-bold" data-i18n="stat-70">70% de Producción</td></tr>
+                        <tr><td class="p-6 font-bold text-green-900" data-i18n="crop-apple">Manzanos</td><td class="p-6">5 Ha</td><td class="p-6">2.500</td><td class="p-6 text-blue-700 font-bold" data-i18n="stat-70">70% de Producción</td></tr>
+                        <tr><td class="p-6 font-bold text-green-900" data-i18n="crop-free">Libres</td><td class="p-6">35 Ha</td><td class="p-6">----</td><td class="p-6 text-blue-700 font-bold" data-i18n="stat-prepared">Preparadas para ampliar cultivos</td></tr>
                         <tr class="bg-green-900/5 font-black text-green-900">
-                            <td class="p-6">TOTAL</td><td class="p-6">165 Ha</td><td class="p-6">37.750</td><td class="p-6">Gestionados</td>
+                            <td class="p-6" data-i18n="tab-total">TOTAL</td><td class="p-6">165 Ha</td><td class="p-6">37.750</td><td class="p-6" data-i18n="stat-managed">Gestionados</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
 
-            <!-- Nueva Tarjeta de Imagen (Punto 03) -->
             <div class="glass-card p-4 rounded-[3rem] mt-8 overflow-hidden border border-green-900/10 bg-white/40 shadow-xl">
                 <img src="https://cdn.shopify.com/s/files/1/0323/6095/5948/files/Bebop2_20170807114847_0200.jpg?v=1614325390" 
                      alt="[Imagen de Vista Aérea de la Finca]" 
@@ -297,86 +251,81 @@
     <div style="page-break-before: always; width: 100%; display: block;"></div>
     <section id="infraestructura" class="py-24 px-6 bg-white">
         <div class="max-w-7xl mx-auto">
-            <h2 class="text-4xl font-black uppercase italic mb-12 text-center text-green-900">04. Infraestructura Agrícola: <span class="text-orange">Equipamiento Integral</span></h2>
+            <h2 class="text-4xl font-black uppercase italic mb-12 text-center text-green-900" data-i18n="sec-infra-title">04. Infraestructura Agrícola: <span class="text-orange">Equipamiento Integral</span></h2>
 
             <div class="grid grid-cols-1 gap-6">
-                <!-- Tarjeta 1: Maquinaria -->
                 <div class="glass-card p-10 rounded-[3rem] border-l-8 border-green-800 flex flex-col md:flex-row items-center justify-between gap-8">
                     <div class="flex items-center gap-6 md:w-1/3">
                         <div class="w-20 h-20 bg-green-900/10 rounded-full flex-shrink-0 flex items-center justify-center text-green-800"><i data-lucide="tractor" class="w-10 h-10"></i></div>
-                        <h3 class="text-2xl font-black text-green-900 uppercase leading-tight">Parque de<br>Maquinaria</h3>
+                        <h3 class="text-2xl font-black text-green-900 uppercase leading-tight" data-i18n="infra-machinery-title">Parque de<br>Maquinaria</h3>
                     </div>
                     <div class="md:w-2/3 w-full">
                         <ul class="infra-list grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-1 w-full text-left">
-                            <li><strong>Tractor 130 CV</strong></li>
-                            <li><strong>2x Tractor 90 CV</strong></li>
-                            <li>Trituradora Forestal</li>
-                            <li>Trituradora de Brazo</li>
-                            <li>Cultivador Extensible</li>
+                            <li data-i18n="item-tractor-130"><strong>Tractor 130 CV</strong></li>
+                            <li data-i18n="item-tractor-90"><strong>2x Tractor 90 CV</strong></li>
+                            <li data-i18n="item-shredder-f">Trituradora Forestal</li>
+                            <li data-i18n="item-shredder-a">Trituradora de Brazo</li>
+                            <li data-i18n="item-cultivator">Cultivador Extensible</li>
                         </ul>
                     </div>
                 </div>
 
-                <!-- Tarjeta 2: Riego -->
                 <div class="glass-card p-10 rounded-[3rem] border-l-8 border-blue-600 flex flex-col md:flex-row items-center justify-between gap-8">
                     <div class="flex items-center gap-6 md:w-1/3">
                         <div class="w-20 h-20 bg-blue-900/10 rounded-full flex-shrink-0 flex items-center justify-center text-blue-700"><i data-lucide="settings" class="w-10 h-10"></i></div>
-                        <h3 class="text-2xl font-black text-green-900 uppercase leading-tight">Tecnología de<br>Riego</h3>
+                        <h3 class="text-2xl font-black text-green-900 uppercase leading-tight" data-i18n="infra-irrigation-title">Tecnología de<br>Riego</h3>
                     </div>
                     <div class="md:w-2/3 w-full">
                         <ul class="infra-list grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-1 w-full text-left">
-                            <li><strong>Cabezal Riego</strong></li>
-                            <li>3 Bombas Impulsoras</li>
-                            <li>3 Depósitos 2.000 L</li>
-                            <li>Programador Digital</li>
-                            <li><strong>18 Sectores</strong></li>
+                            <li data-i18n="item-irr-head"><strong>Cabezal Riego</strong></li>
+                            <li data-i18n="item-pumps">3 Bombas Impulsoras</li>
+                            <li data-i18n="item-tanks">3 Depósitos 2.000 L</li>
+                            <li data-i18n="item-timer">Programador Digital</li>
+                            <li data-i18n="item-sectors"><strong>18 Sectores</strong></li>
                         </ul>
                     </div>
                 </div>
 
-                <!-- Tarjeta 3: Instalaciones -->
                 <div class="glass-card p-10 rounded-[3rem] border-l-8 border-orange flex flex-col md:flex-row items-center justify-between gap-8">
                     <div class="flex items-center gap-6 md:w-1/3">
                         <div class="w-20 h-20 bg-orange/10 rounded-full flex-shrink-0 flex items-center justify-center text-orange"><i data-lucide="home" class="w-10 h-10"></i></div>
-                        <h3 class="text-2xl font-black text-green-900 uppercase leading-tight">Instalaciones<br>Fijas</h3>
+                        <h3 class="text-2xl font-black text-green-900 uppercase leading-tight" data-i18n="infra-facilities-title">Instalaciones<br>Fijas</h3>
                     </div>
                     <div class="md:w-2/3 w-full">
                         <ul class="infra-list grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-1 w-full text-left">
-                            <li><strong>Nave Agrícola</strong></li>
-                            <li>Taller Mantenimiento</li>
-                            <li>Almacén Insumos</li>
-                            <li><strong>Bodega Propia</strong></li>
-                            <li>Viviendas Personal</li>
+                            <li data-i18n="item-warehouse"><strong>Nave Agrícola</strong></li>
+                            <li data-i18n="item-workshop">Taller Mantenimiento</li>
+                            <li data-i18n="item-supplies">Almacén Insumos</li>
+                            <li data-i18n="item-winery"><strong>Bodega Propia</strong></li>
+                            <li data-i18n="item-housing">Viviendas Personal</li>
                         </ul>
                     </div>
                 </div>
             </div>              
         </div>
         
-        <!-- Bloque de Infraestructura Hídrica Añadido con Espacio y Título -->
         <div class="max-w-7xl mx-auto mt-24">
-            <h3 class="text-3xl font-black uppercase italic mb-12 text-center text-green-900">INFRASTRUCTURA HÍDRICA DE GARANTIA</h3>
+            <h3 class="text-3xl font-black uppercase italic mb-12 text-center text-green-900" data-i18n="sec-water-guarantee">INFRASTRUCTURA HÍDRICA DE GARANTIA</h3>
             
-            <!-- Tarjeta 4: Capacidad Operativa (Movida aquí debajo del título) -->
             <div class="glass-card p-10 rounded-[3rem] border-l-8 border-green-900 flex flex-col md:flex-row items-center justify-between gap-8 mb-12">
                 <div class="flex items-center gap-6 md:w-1/3">
                     <div class="w-20 h-20 bg-green-900/10 rounded-full flex-shrink-0 flex items-center justify-center text-green-800"><i data-lucide="activity" class="w-10 h-10"></i></div>
-                    <h3 class="text-2xl font-black text-green-900 uppercase leading-tight">Capacidad<br>Operativa</h3>
+                    <h3 class="text-2xl font-black text-green-900 uppercase leading-tight" data-i18n="cap-op-title">Capacidad<br>Operativa</h3>
                 </div>
                 <div class="md:w-2/3 w-full">
-                    <p class="text-2xl font-black text-orange uppercase italic">infrastuctura actual: 300.000 m3/año</p>
+                    <p class="text-2xl font-black text-orange uppercase italic" data-i18n="cap-op-actual">infrastuctura actual: 300.000 m3/año</p>
                 </div>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
                  <div class="glass-card p-8 rounded-[2.5rem] border-l-4 border-blue-700/50">
-                    <div class="flex items-center gap-4 mb-6"><div class="p-3 bg-blue-700/10 rounded-full text-blue-800"><i data-lucide="droplets"></i></div><h4 class="text-2xl font-black text-green-900 uppercase">Dotación Actual</h4></div>
-                    <div class="text-center py-6"><span class="text-5xl font-black text-orange block mb-2">50.000 <span class="text-lg">m³/año</span></span><p class="text-sm text-gray-500 font-bold uppercase tracking-widest">2 Pozos Operativos (8 l/s)</p></div>
+                    <div class="flex items-center gap-4 mb-6"><div class="p-3 bg-blue-700/10 rounded-full text-blue-800"><i data-lucide="droplets"></i></div><h4 class="text-2xl font-black text-green-900 uppercase" data-i18n="dot-actual-title">Dotación Actual</h4></div>
+                    <div class="text-center py-6"><span class="text-5xl font-black text-orange block mb-2">50.000 <span class="text-lg">m³/año</span></span><p class="text-sm text-gray-500 font-bold uppercase tracking-widest" data-i18n="dot-actual-desc">2 Pozos Operativos (8 l/s)</p></div>
                  </div>
                  <div class="glass-card p-8 rounded-[2.5rem] border-l-4 border-green-700/50 relative overflow-hidden">
-                    <div class="absolute top-0 right-0 bg-orange text-white text-[10px] font-bold px-3 py-1 rounded-bl-xl uppercase">Proyecto Expansión</div>
-                    <div class="flex items-center gap-4 mb-6"><div class="p-3 bg-green-700/10 rounded-full text-green-800"><i data-lucide="waves"></i></div><h4 class="text-2xl font-black text-green-900 uppercase">Acuífero La Cabranta</h4></div>
-                     <div class="text-center py-6"><span class="text-5xl font-black text-green-900 block mb-2">+150.000 <span class="text-lg">m³/año</span></span><p class="text-sm text-gray-500 font-bold uppercase tracking-widest">Avalado por Ingeniería Rodes</p></div>
+                    <div class="absolute top-0 right-0 bg-orange text-white text-[10px] font-bold px-3 py-1 rounded-bl-xl uppercase" data-i18n="sec7-tag">Proyecto Expansión</div>
+                    <div class="flex items-center gap-4 mb-6"><div class="p-3 bg-green-700/10 rounded-full text-green-800"><i data-lucide="waves"></i></div><h4 class="text-2xl font-black text-green-900 uppercase" data-i18n="sec7-project">Acuífero La Cabranta</h4></div>
+                     <div class="text-center py-6"><span class="text-5xl font-black text-green-900 block mb-2">+150.000 <span class="text-lg">m³/año</span></span><p class="text-sm text-gray-500 font-bold uppercase tracking-widest" data-i18n="sec7-study">Avalado por Ingeniería Rodes</p></div>
                  </div>
             </div>
         </div>
@@ -392,28 +341,25 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-                <!-- Tarjeta 1: Deuda -->
                 <div class="glass-card p-10 rounded-[3rem] flex flex-col items-center">
                     <div class="w-16 h-16 bg-green-700/10 rounded-full flex items-center justify-center mb-6 text-orange"><i data-lucide="shield-check"></i></div>
                     <h4 class="font-black text-5xl mb-2 text-green-900 uppercase">60%</h4>
-                    <span class="block text-2xl font-light text-orange mb-4">900.000 € DEUDA</span>
-                    <p class="text-sm text-gray-500 leading-relaxed max-w-[220px]">Cancelación total de pasivos y regularización de acreedores.</p>
+                    <span class="block text-2xl font-light text-orange mb-4" data-i18n="sec4-debt">900.000 € DEUDA</span>
+                    <p class="text-sm text-gray-500 leading-relaxed max-w-[220px]" data-i18n="sec4-debt-desc">Cancelación total de pasivos y regularización de acreedores.</p>
                 </div>
 
-                <!-- Tarjeta 2: CAPEX -->
                 <div class="glass-card p-10 rounded-[3rem] flex flex-col items-center">
                     <div class="w-16 h-16 bg-blue-700/10 rounded-full flex items-center justify-center mb-6 text-blue-800"><i data-lucide="droplets"></i></div>
                     <h4 class="font-black text-5xl mb-2 text-green-900 uppercase">25%</h4>
-                    <span class="block text-2xl font-light text-blue-700 mb-4">350.000 € CAPEX</span>
-                    <p class="text-sm text-gray-500 leading-relaxed max-w-[220px]">Infraestructuras hídricas y mantenimiento biológico.</p>
+                    <span class="block text-2xl font-light text-blue-700 mb-4" data-i18n="sec4-capex">350.000 € CAPEX</span>
+                    <p class="text-sm text-gray-500 leading-relaxed max-w-[220px]" data-i18n="sec4-capex-desc">Infraestructuras hídricas y mantenimiento biológico.</p>
                 </div>
 
-                <!-- Tarjeta 3: Marketing -->
                 <div class="glass-card p-10 rounded-[3rem] flex flex-col items-center">
                     <div class="w-16 h-16 bg-purple-700/10 rounded-full flex items-center justify-center mb-6 text-purple-800"><i data-lucide="trending-up"></i></div>
                     <h4 class="font-black text-5xl mb-2 text-green-900 uppercase">15%</h4>
-                    <span class="block text-2xl font-light text-purple-700 mb-4">225.000 € MKT</span>
-                    <p class="text-sm text-gray-500 leading-relaxed max-w-[220px]">Expansión internacional B2C de la marca Sotaroni.</p>
+                    <span class="block text-2xl font-light text-purple-700 mb-4" data-i18n="sec4-mkt">225.000 € MKT</span>
+                    <p class="text-sm text-gray-500 leading-relaxed max-w-[220px]" data-i18n="sec4-mkt-desc">Expansión internacional B2C de la marca Sotaroni.</p>
                 </div>
             </div>
         </div>
@@ -427,8 +373,8 @@
                     <div class="flex justify-between items-center mb-6">
                         <h3 class="text-xl font-black text-green-900 uppercase" data-i18n="sec5-chart-title">Evolución de Resultados</h3>
                         <div class="flex gap-2 text-[9px] font-bold uppercase">
-                            <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-green-700"></span> Ingresos</span>
-                            <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-red-800"></span> Gastos</span>
+                            <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-green-700"></span> <span data-i18n="legend-income">Ingresos</span></span>
+                            <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-red-800"></span> <span data-i18n="legend-expenses">Gastos</span></span>
                         </div>
                     </div>
                     <div class="flex-grow min-h-[350px]">
@@ -439,14 +385,14 @@
                     <h3 class="text-xl font-black text-green-900 uppercase mb-6" data-i18n="sec5-table-title">Cuenta de Explotación Detallada</h3>
                     <div class="overflow-x-auto">
                         <table class="w-full text-right pyg-table">
-                            <thead><tr><th class="text-left">Partida (€)</th><th>2024</th><th>2023</th><th>2022</th><th>2021</th><th>2020</th><th>2019</th></tr></thead>
+                            <thead><tr><th class="text-left" data-i18n="tab-partida">Partida (€)</th><th>2024</th><th>2023</th><th>2022</th><th>2021</th><th>2020</th><th>2019</th></tr></thead>
                             <tbody>
-                                <tr><td class="text-left font-bold text-gray-700">Ingresos Explotación</td><td>358.612</td><td>176.639</td><td>290.953</td><td>465.123</td><td>514.949</td><td>389.000</td></tr>
-                                <tr><td class="text-left text-gray-500">Aprovisionamientos</td><td class="negative-val">-140.068</td><td class="negative-val">-171.012</td><td class="negative-val">-124.280</td><td class="negative-val">-275.444</td><td class="negative-val">-158.000</td><td class="negative-val">-205.158</td></tr>
-                                <tr><td class="text-left text-gray-500">Gtos. Estructura y Otros</td><td class="negative-val">-179.645</td><td class="negative-val">-119.749</td><td class="negative-val">-233.642</td><td class="negative-val">-187.626</td><td class="negative-val">-292.800</td><td class="negative-val">-173.417</td></tr>
-                                <tr class="pyg-row-subtotal"><td class="text-left">RESULTADO EXPLOTACIÓN</td><td class="positive-val">38.899</td><td class="negative-val">-114.122</td><td class="negative-val">-66.969</td><td class="positive-val">2.053</td><td class="positive-val">64.149</td><td class="positive-val">10.425</td></tr>
-                                <tr><td class="text-left text-blue-700">Ingresos Financieros</td><td>31.803</td><td>36.878</td><td>20.921</td><td>35.876</td><td>748</td><td>68.302</td></tr>
-                                <tr class="pyg-row-total bg-green-50"><td class="text-left text-green-900">RES. ANTES IMPUESTOS</td><td class="positive-val">70.702</td><td class="negative-val">-77.244</td><td class="negative-val">-46.048</td><td class="positive-val">37.929</td><td class="positive-val">64.897</td><td class="positive-val">78.727</td></tr>
+                                <tr><td class="text-left font-bold text-gray-700" data-i18n="pyg-op-income">Ingresos Explotación</td><td>358.612</td><td>176.639</td><td>290.953</td><td>465.123</td><td>514.949</td><td>389.000</td></tr>
+                                <tr><td class="text-left text-gray-500" data-i18n="pyg-supplies">Aprovisionamientos</td><td class="negative-val">-140.068</td><td class="negative-val">-171.012</td><td class="negative-val">-124.280</td><td class="negative-val">-275.444</td><td class="negative-val">-158.000</td><td class="negative-val">-205.158</td></tr>
+                                <tr><td class="text-left text-gray-500" data-i18n="pyg-structure">Gtos. Estructura y Otros</td><td class="negative-val">-179.645</td><td class="negative-val">-119.749</td><td class="negative-val">-233.642</td><td class="negative-val">-187.626</td><td class="negative-val">-292.800</td><td class="negative-val">-173.417</td></tr>
+                                <tr class="pyg-row-subtotal"><td class="text-left" data-i18n="pyg-op-result">RESULTADO EXPLOTACIÓN</td><td class="positive-val">38.899</td><td class="negative-val">-114.122</td><td class="negative-val">-66.969</td><td class="positive-val">2.053</td><td class="positive-val">64.149</td><td class="positive-val">10.425</td></tr>
+                                <tr><td class="text-left text-blue-700" data-i18n="pyg-fin-income">Ingresos Financieros</td><td>31.803</td><td>36.878</td><td>20.921</td><td>35.876</td><td>748</td><td>68.302</td></tr>
+                                <tr class="pyg-row-total bg-green-50"><td class="text-left text-green-900" data-i18n="pyg-pretax">RES. ANTES IMPUESTOS</td><td class="positive-val">70.702</td><td class="negative-val">-77.244</td><td class="negative-val">-46.048</td><td class="positive-val">37.929</td><td class="positive-val">64.897</td><td class="positive-val">78.727</td></tr>
                             </tbody>
                         </table>
                     </div>
@@ -457,20 +403,24 @@
     <div style="page-break-before: always; height: 0px; width: 100%; visibility: hidden;"></div>
     <section id="estrategia-contexto" class="py-24 px-6 bg-green-900/5">
         <div class="max-w-7xl mx-auto">
-            <h2 class="text-4xl font-black uppercase italic mb-12 text-center text-green-900">Contexto Estratégico & <span class="text-orange">Recuperación</span></h2>
+            <h2 class="text-4xl font-black uppercase italic mb-12 text-center text-green-900" data-i18n="context-main-title">Contexto Estratégico & <span class="text-orange">Recuperación</span></h2>
             <div class="grid grid-cols-1 lg:grid-cols-1 gap-8">
                 <div class="glass-card p-10 rounded-[3rem] border-l-8 border-orange bg-white">
-                    <div class="flex items-center gap-4 mb-6"><div class="p-3 bg-orange/10 rounded-full text-orange"><i data-lucide="history" class="w-8 h-8"></i></div><h3 class="text-2xl font-black text-green-900 uppercase">Reestructuración 2021</h3></div>
-                    <p class="text-sm text-gray-600 mb-6 leading-relaxed">En 2021 se ejecutó una reestructuración integral hacia <strong>cultivo ecológico certificado</strong>. Esta decisión estratégica implicó la eliminación selectiva de plantas para mejorar la calidad y estabilizar la producción.</p>
-                    <div class="bg-green-50 p-4 rounded-xl border border-green-100 mb-6"><p class="text-xs font-bold text-green-800 uppercase mb-2">Impacto en Tesorería</p><p class="text-sm text-gray-600">Esta reconversión causó la tensión de tesorería observada, cuya recuperación ya es visible en 2024.</p></div>
-                    <div class="bg-green-50 p-4 rounded-xl border border-green-100 mb-6"><p class="text-xs font-bold text-green-800 uppercase mb-2">Recuperación Productiva</p><p class="text-sm text-gray-600">Desde 2024 la recuperacon productiva del Olivar en prdución es un hecho que ayudara al aumento de los ingresos.</p></div>
-                    <div class="flex justify-between items-end mt-4"><div class="text-center"><span class="block text-3xl font-black text-gray-400">25%</span><span class="text-[20px] font-bold uppercase text-gray-500">Operativa 2025</span></div><div class="h-1 flex-grow mx-4 bg-gray-200 rounded relative overflow-hidden"><div class="absolute left-0 top-0 h-full bg-orange w-1/4"></div><div class="absolute left-1/4 top-0 h-full bg-green-500 w-3/4 opacity-20 dashed-line"></div></div><div class="text-center"><span class="block text-3xl font-black text-green-900">80%</span><span class="text-[20px] font-bold uppercase text-green-700">Objetivo 2030</span></div></div>
+                    <div class="flex items-center gap-4 mb-6"><div class="p-3 bg-orange/10 rounded-full text-orange"><i data-lucide="history" class="w-8 h-8"></i></div><h3 class="text-2xl font-black text-green-900 uppercase" data-i18n="context-rest-title">Reestructuración 2021</h3></div>
+                    <p class="text-sm text-gray-600 mb-6 leading-relaxed" data-i18n="context-rest-desc">En 2021 se ejecutó una reestructuración integral hacia <strong>cultivo ecológico certificado</strong>. Esta decisión estratégica implicó la eliminación selectiva de plantas para mejorar la calidad y estabilizar la producción.</p>
+                    <div class="bg-green-50 p-4 rounded-xl border border-green-100 mb-6"><p class="text-xs font-bold text-green-800 uppercase mb-2" data-i18n="context-impact-label">Impacto en Tesorería</p><p class="text-sm text-gray-600" data-i18n="context-impact-desc">Esta reconversión causó la tensión de tesorería observada, cuya recuperación ya es visible en 2024.</p></div>
+                    <div class="bg-green-50 p-4 rounded-xl border border-green-100 mb-6"><p class="text-xs font-bold text-green-800 uppercase mb-2" data-i18n="context-rec-label">Recuperación Productiva</p><p class="text-sm text-gray-600" data-i18n="context-rec-desc">Desde 2024 la recuperacon productiva del Olivar en prdución es un hecho que ayudara al aumento de los ingresos.</p></div>
+                    <div class="flex justify-between items-end mt-4">
+                        <div class="text-center"><span class="block text-3xl font-black text-gray-400">25%</span><span class="text-[20px] font-bold uppercase text-gray-500" data-i18n="progress-2025">Operativa 2025</span></div>
+                        <div class="h-1 flex-grow mx-4 bg-gray-200 rounded relative overflow-hidden"><div class="absolute left-0 top-0 h-full bg-orange w-1/4"></div></div>
+                        <div class="text-center"><span class="block text-3xl font-black text-green-900">80%</span><span class="text-[20px] font-bold uppercase text-green-700" data-i18n="progress-2030">Objetivo 2030</span></div>
+                    </div>
                 </div>
                 <div class="glass-card p-10 rounded-[3rem] border-l-8 border-green-700 bg-white">
-                    <div class="flex items-center gap-4 mb-6"><div class="p-3 bg-green-700/10 rounded-full text-green-700"><i data-lucide="scaling" class="w-8 h-8"></i></div><h3 class="text-2xl font-black text-green-900 uppercase">Expansión & Eficiencia 2021</h3></div>
+                    <div class="flex items-center gap-4 mb-6"><div class="p-3 bg-green-700/10 rounded-full text-green-700"><i data-lucide="scaling" class="w-8 h-8"></i></div><h3 class="text-2xl font-black text-green-900 uppercase" data-i18n="exp-eff-title">Expansión & Eficiencia 2021</h3></div>
                     <ul class="space-y-4">
-                        <li class="flex gap-4"><i data-lucide="sprout" class="w-5 h-5 text-orange flex-shrink-0 mt-1"></i><div><span class="block font-bold text-green-900 text-sm uppercase">Arrendamiento Estratégico (+100 Ha)</span><span class="text-xs text-gray-600">Nuevas plantaciones de Olivar Ecológico para aumentar rentabilidad.</span></div></li>
-                        <li class="flex gap-4"><i data-lucide="droplets" class="w-5 h-5 text-blue-600 flex-shrink-0 mt-1"></i><div><span class="block font-bold text-green-900 text-sm uppercase">Inversión Hídrica</span><span class="text-xs text-gray-600">Modernización total del sistema de riego con <strong>gotero subterráneo</strong>.</span></div></li>
+                        <li class="flex gap-4"><i data-lucide="sprout" class="w-5 h-5 text-orange flex-shrink-0 mt-1"></i><div><span class="block font-bold text-green-900 text-sm uppercase" data-i18n="exp-lease-title">Arrendamiento Estratégico (+100 Ha)</span><span class="text-xs text-gray-600" data-i18n="exp-lease-desc">Nuevas plantaciones de Olivar Ecológico para aumentar rentabilidad.</span></div></li>
+                        <li class="flex gap-4"><i data-lucide="droplets" class="w-5 h-5 text-blue-600 flex-shrink-0 mt-1"></i><div><span class="block font-bold text-green-900 text-sm uppercase" data-i18n="exp-water-title">Inversión Hídrica</span><span class="text-xs text-gray-600" data-i18n="exp-water-desc">Modernización total del sistema de riego con <strong>gotero subterráneo</strong>.</span></div></li>
                     </ul>
                 </div>
             </div>
@@ -482,22 +432,20 @@
             <h2 class="text-4xl font-black uppercase italic mb-12 text-center text-green-900" data-i18n="sec6-title">07. Valor de Marca: <span class="text-orange">Sotaroni</span></h2>
             <div class="grid grid-cols-1 lg:grid-cols-1 gap-12 items-center text-left">
                 <div class="space-y-6">
-                    <p class="text-xl text-gray-600 font-light" data-i18n="sec5-desc">Sotaroni es una marca gourmet consolidada con presencia en el canal HORECA premium y mercados de exportación.</p>
+                    <p class="text-xl text-gray-600 font-light" data-i18n="sec6-desc">Sotaroni es una marca gourmet consolidada con presencia en el canal HORECA premium y mercados de exportación.</p>
                     <div class="grid grid-cols-2 gap-4">
-                        <div class="p-4 border-l-2 border-orange bg-white/40"><span class="block text-2xl font-black text-green-900">AOVE & PX</span><span class="text-[10px] text-gray-500 uppercase font-bold">Productos Insignia</span></div>
-                        <div class="p-4 border-l-2 border-orange bg-white/40"><span class="block text-2xl font-black text-green-900">Gourmet</span><span class="text-[10px] text-gray-500 uppercase font-bold">Posicionamiento</span></div>
+                        <div class="p-4 border-l-2 border-orange bg-white/40"><span class="block text-2xl font-black text-green-900" data-i18n="sec6-prod">AOVE & PX</span><span class="text-[10px] text-gray-500 uppercase font-bold" data-i18n="sec6-prod-tag">Productos Insignia</span></div>
+                        <div class="p-4 border-l-2 border-orange bg-white/40"><span class="block text-2xl font-black text-green-900" data-i18n="sec6-pos">Gourmet</span><span class="text-[10px] text-gray-500 uppercase font-bold" data-i18n="sec6-pos-tag">Posicionamiento</span></div>
                     </div>
                 </div>
                 <div class="relative group">
                     <a href="https://sotaroni.es" target="_blank" rel="noopener noreferrer" class="block">
                         <div class="relative glass-card p-8 rounded-3xl border border-green-900/10 text-center">
                             <span class="text-orange font-black text-5xl">sotaroni.es</span>
-                            <p class="mt-4 uppercase font-bold tracking-widest text-xs text-gray-600">Brand Equity Auditado</p>
+                            <p class="mt-4 uppercase font-bold tracking-widest text-xs text-gray-600" data-i18n="brand-audit">Brand Equity Auditado</p>
                         </div>
                     </a>
                 </div>
-                
-                <!-- Nueva Tarjeta de Imagen (Una Columna) -->
                 <div class="glass-card p-4 rounded-[3rem] overflow-hidden border border-green-900/10 bg-white/40 shadow-xl">
                     <img src="https://cdn.shopify.com/s/files/1/0323/6095/5948/files/Gemini_Generated_Image_t7w8e7t7w8e7t7w8.png?v=1768593823" 
                          alt="[Imagen de Marca Sotaroni]" 
@@ -510,31 +458,31 @@
     <div style="page-break-before: always; height: 0px; width: 100%; visibility: hidden;"></div>
     <section id="exit" class="py-24 px-6">
         <div class="max-w-7xl mx-auto">
-            <h2 class="text-4xl font-black uppercase italic mb-12 text-center text-green-900">08. Estrategia de Gestión y Salida</h2>
+            <h2 class="text-4xl font-black uppercase italic mb-12 text-center text-green-900" data-i18n="exit-main-title">08. Estrategia de Gestión y Salida</h2>
             <div class="grid grid-cols-1 gap-6">
                 <div class="glass-card p-12 rounded-[3rem] text-center border-t-4 border-orange">
-                    <h4 class="text-orange font-black text-3xl mb-6 uppercase">Dividendo Recurrente</h4>
-                    <p class="text-xl text-gray-600">Reparto del 40% del EBITDA a partir de 2027.</p>
+                    <h4 class="text-orange font-black text-3xl mb-6 uppercase" data-i18n="exit-div-title">Dividendo Recurrente</h4>
+                    <p class="text-xl text-gray-600" data-i18n="exit-div-desc">Reparto del 40% del EBITDA a partir de 2027.</p>
                 </div>
                 <div class="glass-card p-12 rounded-[3rem] text-center border-t-4 border-green-800">
-                    <h4 class="text-green-900 font-black text-3xl mb-6 uppercase">Opción Buy-Back</h4>
-                    <p class="text-xl text-gray-600">Compromiso de recompra por la propiedad (Año 5-7).</p>
+                    <h4 class="text-green-900 font-black text-3xl mb-6 uppercase" data-i18n="exit-buy-title">Opción Buy-Back</h4>
+                    <p class="text-xl text-gray-600" data-i18n="exit-buy-desc">Compromiso de recompra por la propiedad (Año 5-7).</p>
                 </div>
                 <div class="glass-card p-12 rounded-[3rem] text-center border-t-4 border-green-600">
-                    <h4 class="text-green-700 font-black text-3xl mb-6 uppercase">Venta ESG</h4>
-                    <p class="text-xl text-gray-600">Salida a fondos de agricultura regenerativa.</p>
+                    <h4 class="text-green-700 font-black text-3xl mb-6 uppercase" data-i18n="exit-esg-title">Venta ESG</h4>
+                    <p class="text-xl text-gray-600" data-i18n="exit-esg-desc">Salida a fondos de agricultura regenerativa.</p>
                 </div>
                 <div class="glass-card p-12 rounded-[3rem] text-center border-t-4 border-blue-800">
-                    <h4 class="text-blue-900 font-black text-3xl mb-6 uppercase">Gobierno corporativo</h4>
-                    <p class="text-xl text-gray-600">Crear un consejo asesor (o de administración) con representación del fondo y expertos en agroindustria y distribución premium.</p>
+                    <h4 class="text-blue-900 font-black text-3xl mb-6 uppercase" data-i18n="exit-gov-title">Gobierno corporativo</h4>
+                    <p class="text-xl text-gray-600" data-i18n="exit-gov-desc">Crear un consejo asesor (o de administración) con representación del fondo y expertos en agroindustria y distribución premium.</p>
                 </div>
                 <div class="glass-card p-12 rounded-[3rem] text-center border-t-4 border-purple-800">
-                    <h4 class="text-purple-900 font-black text-3xl mb-6 uppercase">Reporting financiero estructurado</h4>
-                    <p class="text-xl text-gray-600">Auditoría anual externa, KPIs mensuales sobre producción, ventas, márgenes, EBITDA, rentabilidad por hectárea.</p>
+                    <h4 class="text-purple-900 font-black text-3xl mb-6 uppercase" data-i18n="exit-rep-title">Reporting financiero estructurado</h4>
+                    <p class="text-xl text-gray-600" data-i18n="exit-rep-desc">Auditoría anual externa, KPIs mensuales sobre producción, ventas, márgenes, EBITDA, rentabilidad por hectárea.</p>
                 </div>
                 <div class="glass-card p-12 rounded-[3rem] text-center border-t-4 border-green-900 bg-white/40">
-                    <h4 class="text-green-900 font-black text-3xl mb-6 uppercase">Plan de negocio a 5 años</h4>
-                    <p class="text-xl text-gray-600 leading-relaxed">
+                    <h4 class="text-green-900 font-black text-3xl mb-6 uppercase" data-i18n="exit-plan-title">Plan de negocio a 5 años</h4>
+                    <p class="text-xl text-gray-600 leading-relaxed" data-i18n="exit-plan-desc">
                         Con escenarios conservador, medio y agresivo. Incluye: Expansión del área ecológica, industrialización propia o acuerdos para embotellado/marca blanca, desarrollo del canal e-commerce and exportación, y activación del agroturismo rural premium.
                     </p>
                 </div>
@@ -547,48 +495,40 @@
             <h2 class="text-4xl font-black uppercase italic mb-12 text-center text-green-900" data-i18n="sec9-title">09. Ubicación y Logística <span class="text-orange">Estratégica</span></h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
                 <div class="glass-card p-8 rounded-[2.5rem] border-t-4 border-green-700">
-                    <h3 class="text-2xl font-black text-green-900 uppercase mb-6">Geografía & Clima</h3>
-                    <p class="text-sm text-gray-600 mb-8">Valle de Polop, Alcoy (Alicante). Enclave privilegiado entre los Parques Naturales de Font Roja y Sierra de Mariola.</p>
+                    <h3 class="text-2xl font-black text-green-900 uppercase mb-6" data-i18n="geo-title">Geografía & Clima</h3>
+                    <p class="text-sm text-gray-600 mb-8" data-i18n="geo-desc">Valle de Polop, Alcoy (Alicante). Enclave privilegiado entre los Parques Naturales de Font Roja y Sierra de Mariola.</p>
                     <div class="grid grid-cols-2 gap-6">
-                        <div class="bg-white/40 p-4 rounded-2xl"><span class="block text-xs text-gray-500 font-bold uppercase">Altitud Media</span><span class="text-2xl font-black text-green-900">850 m</span></div>
-                        <div class="bg-white/40 p-4 rounded-2xl"><span class="block text-xs text-gray-500 font-bold uppercase">Pluviometría</span><span class="text-2xl font-black text-blue-700">600 mm</span></div>
-                        <div class="bg-white/40 p-4 rounded-2xl"><span class="block text-xs text-gray-500 font-bold uppercase">Horas Frío</span><span class="text-2xl font-black text-orange">1200 h</span></div>
-                        <div class="bg-white/40 p-4 rounded-2xl"><span class="block text-xs text-gray-500 font-bold uppercase">Clima</span><span class="text-lg font-bold text-green-900 uppercase leading-none mt-1">Mediterráneo Montaña</span></div>
+                        <div class="bg-white/40 p-4 rounded-2xl"><span class="block text-xs text-gray-500 font-bold uppercase" data-i18n="geo-alt-label">Altitud Media</span><span class="text-2xl font-black text-green-900">850 m</span></div>
+                        <div class="bg-white/40 p-4 rounded-2xl"><span class="block text-xs text-gray-500 font-bold uppercase" data-i18n="geo-rain-label">Pluviometría</span><span class="text-2xl font-black text-blue-700">600 mm</span></div>
+                        <div class="bg-white/40 p-4 rounded-2xl"><span class="block text-xs text-gray-500 font-bold uppercase" data-i18n="geo-cold-label">Horas Frío</span><span class="text-2xl font-black text-orange">1200 h</span></div>
+                        <div class="bg-white/40 p-4 rounded-2xl"><span class="block text-xs text-gray-500 font-bold uppercase" data-i18n="geo-clima-label">Clima</span><span class="text-lg font-bold text-green-900 uppercase leading-none mt-1" data-i18n="geo-clima-type">Mediterráneo Montaña</span></div>
                     </div>
                 </div>
                 <div class="glass-card p-8 rounded-[2.5rem] border-t-4 border-orange">
-                    <h3 class="text-2xl font-black text-green-900 uppercase mb-6">Conectividad Global</h3>
+                    <h3 class="text-2xl font-black text-green-900 uppercase mb-6" data-i18n="log-title">Conectividad Global</h3>
                     <ul class="space-y-6">
-                        <li class="flex items-center gap-4"><div class="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center text-red-700"><i data-lucide="hospital"></i></div><div><span class="block font-bold text-green-900 uppercase text-sm">Alcoy (Hospital general)</span><span class="text-gray-600 text-xs">Cercanía estratégica (10 min)</span></div></li>
-                        <li class="flex items-center gap-4"><div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-700"><i data-lucide="anchor"></i></div><div><span class="block font-bold text-green-900 uppercase text-sm">Puertos Mercantiles</span><span class="text-gray-600 text-xs">Alicante (50 min) - Valencia (1h 15m)</span></div></li>
-                        <li class="flex items-center gap-4"><div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center text-orange"><i data-lucide="plane"></i></div><div><span class="block font-bold text-green-900 uppercase text-sm">Aeropuertos Internacionales</span><span class="text-gray-600 text-xs">ALC Alicante (45 min) - VLC Valencia (1h 10m)</span></div></li>
-                        <li class="flex items-center gap-4"><div class="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center text-purple-700"><i data-lucide="train"></i></div><div><span class="block font-bold text-green-900 uppercase text-sm">Alta Velocidad (AVE)</span><span class="text-gray-600 text-xs">Estación Villena (30 min)</span></div></li>
+                        <li class="flex items-center gap-4"><div class="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center text-red-700"><i data-lucide="hospital"></i></div><div><span class="block font-bold text-green-900 uppercase text-sm" data-i18n="log-hosp">Alcoy (Hospital general)</span><span class="text-gray-600 text-xs" data-i18n="log-hosp-dist">Cercanía estratégica (10 min)</span></div></li>
+                        <li class="flex items-center gap-4"><div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-700"><i data-lucide="anchor"></i></div><div><span class="block font-bold text-green-900 uppercase text-sm" data-i18n="log-ports">Puertos Mercantiles</span><span class="text-gray-600 text-xs" data-i18n="log-ports-dist">Alicante (50 min) - Valencia (1h 15m)</span></div></li>
+                        <li class="flex items-center gap-4"><div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center text-orange"><i data-lucide="plane"></i></div><div><span class="block font-bold text-green-900 uppercase text-sm" data-i18n="log-air">Aeropuertos Internacionales</span><span class="text-gray-600 text-xs" data-i18n="log-air-dist">ALC Alicante (45 min) - VLC Valencia (1h 10m)</span></div></li>
+                        <li class="flex items-center gap-4"><div class="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center text-purple-700"><i data-lucide="train"></i></div><div><span class="block font-bold text-green-900 uppercase text-sm" data-i18n="log-ave">Alta Velocidad (AVE)</span><span class="text-gray-600 text-xs" data-i18n="log-ave-dist">Estación Villena (30 min)</span></div></li>
                     </ul>
                 </div>
             </div>
 
-            <!-- Tarjeta Google Maps Satelital Actualizada -->
             <div class="glass-card p-4 rounded-[3rem] mt-8 overflow-hidden border border-green-900/10 bg-white/40 shadow-xl">
                 <div class="flex items-center gap-4 mb-6 px-6 pt-4">
                     <div class="p-3 bg-red-100 rounded-full text-red-600"><i data-lucide="map-pin" class="w-6 h-6"></i></div>
                     <div>
-                        <h3 class="text-2xl font-black text-green-900 uppercase">Localización & Acceso Finca</h3>
-                        <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Sotaroni Aceites y Vinagres | Partida Polop Alt, 31, 03819 Alcoi</p>
+                        <h3 class="text-2xl font-black text-green-900 uppercase" data-i18n="maps-title">Localización & Acceso Finca</h3>
+                        <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest" data-i18n="maps-addr">Sotaroni Aceites y Vinagres | Partida Polop Alt, 31, 03819 Alcoi</p>
                     </div>
                 </div>
                 <div class="w-full h-[450px] rounded-[2rem] overflow-hidden border border-green-900/10">
-                    <iframe 
-                        width="100%" 
-                        height="100%" 
-                        frameborder="0" 
-                        style="border:0" 
-                        src="https://maps.google.com/maps?q=Sotaroni+Aceites+y+Vinagres+Alcoi&t=k&z=17&output=embed" 
-                        allowfullscreen>
-                    </iframe>
+                    <iframe width="100%" height="100%" frameborder="0" style="border:0" src="https://maps.google.com/maps?q=Sotaroni+Aceites+y+Vinagres+Alcoi&t=k&z=17&output=embed" allowfullscreen></iframe>
                 </div>
                 <div class="mt-6 text-center pb-4">
                     <a href="https://www.google.com/maps/dir/?api=1&destination=Sotaroni+Aceites+y+Vinagres+Alcoi" target="_blank" class="inline-flex items-center gap-2 bg-green-900 text-white px-8 py-3 rounded-2xl font-bold text-sm hover:scale-105 transition-all">
-                        <i data-lucide="navigation" class="w-4 h-4"></i> CÓMO LLEGAR A TORREVELLA
+                        <i data-lucide="navigation" class="w-4 h-4"></i> <span data-i18n="btn-maps">CÓMO LLEGAR A TORREVELLA</span>
                     </a>
                 </div>
             </div>
@@ -596,23 +536,20 @@
             <div class="glass-card p-8 rounded-[2.5rem] mt-8 border-t-4 border-green-800">
                 <div class="flex items-center gap-4 mb-6">
                     <div class="p-3 bg-green-800/10 rounded-full text-green-800"><i data-lucide="mountain" class="w-6 h-6"></i></div>
-                    <h3 class="text-2xl font-black text-green-900 uppercase">Orografía del Terreno</h3>
+                    <h3 class="text-2xl font-black text-green-900 uppercase" data-i18n="oro-title">Orografía del Terreno</h3>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
                     <div class="bg-white/50 p-6 rounded-2xl border border-green-100">
                         <span class="block text-4xl font-black text-green-700 mb-2">30%</span>
-                        <span class="text-xs font-bold uppercase tracking-widest text-gray-500">Terrenos Llanos</span>
-                        <div class="w-full h-1 bg-green-200 mt-3 rounded-full"><div class="w-full h-full bg-green-600 rounded-full"></div></div>
+                        <span class="text-xs font-bold uppercase tracking-widest text-gray-500" data-i18n="oro-flat">Terrenos Llanos</span>
                     </div>
                     <div class="bg-white/50 p-6 rounded-2xl border border-green-100">
                         <span class="block text-4xl font-black text-orange mb-2">50%</span>
-                        <span class="text-xs font-bold uppercase tracking-widest text-gray-500">Pendiente Media</span>
-                        <div class="w-full h-1 bg-orange/20 mt-3 rounded-full"><div class="w-full h-full bg-orange rounded-full"></div></div>
+                        <span class="text-xs font-bold uppercase tracking-widest text-gray-500" data-i18n="oro-mid">Pendiente Media</span>
                     </div>
                     <div class="bg-white/50 p-6 rounded-2xl border border-green-100">
                         <span class="block text-4xl font-black text-green-900 mb-2">20%</span>
-                        <span class="text-xs font-bold uppercase tracking-widest text-gray-500">Pendiente Elevada / Bancales</span>
-                        <div class="w-full h-1 bg-green-900/20 mt-3 rounded-full"><div class="w-full h-full bg-green-900 rounded-full"></div></div>
+                        <span class="text-xs font-bold uppercase tracking-widest text-gray-500" data-i18n="oro-high">Pendiente Elevada / Bancales</span>
                     </div>
                 </div>
             </div>
@@ -622,7 +559,7 @@
     <footer class="py-24 px-6 text-center border-t border-green-900/5">
         <p class="text-3xl font-black mb-4 tracking-tighter">media@torrevella.com</p>
         <p class="text-[11px] text-gray-500 uppercase font-bold tracking-[0.4em]" data-i18n="footer">Torrevella S.L. | Relación con Inversores 2026</p>
-        <p class="text-[12px] text-green-900 font-bold mt-6">creado por Nicolás Sanjuán Pérez Administrador Único</p>
+        <p class="text-[12px] text-green-900 font-bold mt-6" data-i18n="footer-admin">creado por Nicolás Sanjuán Pérez Administrador Único</p>
         <p class="text-[12px] text-green-900 font-bold">WhatsApp: +34 616582106</p>
     </footer>
 
@@ -633,7 +570,8 @@
 
         const translations = {
             es: {
-                "nav-tesis": "Tesis", "nav-analysis": "Análisis", "nav-saneamiento": "Saneamiento", "nav-finance": "Finanzas", "nav-sotaroni": "Sotaroni",
+                "nav-tesis": "Tesis", "nav-analysis": "Análisis", "nav-infra": "Infraestructura", "nav-restructuring": "Saneamiento", "nav-finance": "Finanzas",
+                "btn-download": "DESCARGAR PDF",
                 "hero-tag": "Investment Round 2026 | Confidencial",
                 "hero-title": "Patrimonio Bio Ecológico <br><span class='text-orange text-5xl md:text-7xl'>En Expansión.</span>",
                 "hero-sub": "Participación estratégica del <span class='font-bold text-green-900'>30% del equity</span>. <br>Respaldo patrimonial de <span class='font-bold text-green-900'>8,6M€ en activos reales auditados</span>.",
@@ -644,89 +582,142 @@
                 "sec1-risk": "Riesgo Financiero", "sec1-backing": "Respaldo Activos",
                 "sec1-assets-title": "Desglose Técnico de Activos",
                 "asset-land": "Suelo Agrícola", "asset-land-desc": "135 Ha Productivas",
-                "asset-build": "Edif., Maquinaria e Infra. Agrícola", "asset-build-desc": "NAVES, MAQUINARIA, INFRASTUCTURA HÍDRICA",
+                "asset-build": "Infraestructura", "asset-build-desc": "Naves e Infra.",
                 "asset-forest": "Masa Biológica", "asset-forest-desc": "35.250 Árboles",
                 "asset-house": "Vivienda Señorial", "asset-house-desc": "Patrimonio Histórico",
                 "asset-total": "Total Activos Reales",
                 "sec2-title": "02. Validación Comercial: <span class='text-orange'>Picos de Venta</span>",
                 "sec2-cherry": "Pico Cerezas IGP", "sec2-oil": "Pico Aceite AOVE", "sec2-vinegar": "Pico Vinagres PX",
+                "v-recovery-title": "Validación de Recuperación en V",
+                "v-recovery-desc": "La tesis comercial se confirma con una recuperación ya observable en 2024 y 2025. El incremento en la producción biológica, sumado a la entrada de capital estratégico, permite capitalizar las inversiones realizadas en infraestructura. Se proyecta una progresión ascendente sostenida gracias a la optimización operativa y el posicionamiento premium de la marca Sotaroni.",
                 "sec3-title": "03. Inventario Biológico: <span class='text-orange'>37.750 Árboles</span>",
                 "tab-crop": "Cultivo", "tab-ha": "Hectáreas", "tab-trees": "Censo Árboles", "tab-status": "Estatus 2026",
-                "crop-olive": "Olivar Ecológico", "stat-asc": "Producción Ascendente", "crop-almond": "Almendro Ecológico", "stat-grow": "Crecimiento", "crop-cherry": "Cerezo IGP", "stat-70": "70% de Producción",
+                "crop-olive": "Olivar Ecológico", "stat-asc": "Producción Ascendente", "crop-almond": "Almendro Ecológico", "stat-grow": "Crecimiento", "crop-cherry": "Cerezo IGP", "crop-apple": "Manzanos", "stat-70": "70% de Producción",
+                "crop-free": "Libres", "stat-prepared": "Preparadas para ampliar cultivos", "tab-total": "TOTAL", "stat-managed": "Gestionados",
+                "sec-infra-title": "04. Infraestructura Agrícola: <span class='text-orange'>Equipamiento Integral</span>",
+                "infra-machinery-title": "Parque de<br>Maquinaria",
+                "item-tractor-130": "Tractor 130 CV", "item-tractor-90": "2x Tractor 90 CV", "item-shredder-f": "Trituradora Forestal", "item-shredder-a": "Trituradora de Brazo", "item-cultivator": "Cultivador Extensible",
+                "infra-irrigation-title": "Tecnología de<br>Riego",
+                "item-irr-head": "Cabezal Riego", "item-pumps": "3 Bombas Impulsoras", "item-tanks": "3 Depósitos 2.000 L", "item-timer": "Programador Digital", "item-sectors": "18 Sectores",
+                "infra-facilities-title": "Instalaciones<br>Fijas",
+                "item-warehouse": "Nave Agrícola", "item-workshop": "Taller Mantenimiento", "item-supplies": "Almacén Insumos", "item-winery": "Bodega Propia", "item-housing": "Viviendas Personal",
+                "sec-water-guarantee": "INFRASTRUCTURA HÍDRICA DE GARANTIA",
+                "cap-op-title": "Capacidad<br>Operativa", "cap-op-actual": "infrastuctura actual: 300.000 m3/año",
+                "dot-actual-title": "Dotación Actual", "dot-actual-desc": "2 Pozos Operativos (8 l/s)", "sec7-tag": "Proyecto Expansión", "sec7-project": "Acuífero La Cabranta", "sec7-study": "Avalado por Ingeniería Rodes",
                 "sec4-title": "05. Estrategia de <span class='text-orange'>Saneamiento</span>",
                 "sec4-total-label": "Importe Operación",
-                "sec4-debt": "60% Deuda", "sec4-debt-desc": "Cancelación total de pasivos y regularización de acreedores.",
-                "sec4-capex-desc": "Infraestructuras hídricas y mantenimiento biológico.",
-                "sec4-mkt": "15% Marketing", "sec4-mkt-desc": "Expansión internacional B2C de la marca Sotaroni.",
-                "sec5-title": "06. Desempeño Financiero: <span class='text-orange'>PyG 2019-2024</span>",
-                "sec5-chart-title": "Evolución de Resultados", "sec5-table-title": "Cuenta de Explotación Detallada",
+                "sec4-debt": "900.000 € DEUDA", "sec4-debt-desc": "Cancelación total de pasivos y regularización de acreedores.",
+                "sec4-capex": "350.000 € CAPEX", "sec4-capex-desc": "Infraestructuras hídricas y mantenimiento biológico.",
+                "sec4-mkt": "225.000 € MKT", "sec4-mkt-desc": "Expansión internacional B2C de la marca Sotaroni.",
+                "sec5-title": "06. Cuenta de Explotación: <span class='text-orange'>PyG 2019-2024</span>",
+                "sec5-chart-title": "Evolución de Resultados", "legend-income": "Ingresos", "legend-expenses": "Gastos",
+                "sec5-table-title": "Cuenta de Explotación Detallada", "tab-partida": "Partida (€)",
+                "pyg-op-income": "Ingresos Explotación", "pyg-supplies": "Aprovisionamientos", "pyg-structure": "Gtos. Estructura y Otros", "pyg-op-result": "RESULTADO EXPLOTACIÓN", "pyg-fin-income": "Ingresos Financieros", "pyg-pretax": "RES. ANTES IMPUESTOS",
+                "context-main-title": "Contexto Estratégico & <span class='text-orange'>Recuperación</span>",
+                "context-rest-title": "Reestructuración 2021", "context-rest-desc": "En 2021 se ejecutó una reestructuración integral hacia <strong>cultivo ecológico certificado</strong>.",
+                "context-impact-label": "Impacto en Tesorería", "context-impact-desc": "Esta reconversión causó la tensión de tesorería observada.",
+                "context-rec-label": "Recuperación Productiva", "context-rec-desc": "Desde 2024 la recuperacon productiva es un hecho.",
+                "progress-2025": "Operativa 2025", "progress-2030": "Objetivo 2030",
+                "exp-eff-title": "Expansión & Eficiencia 2021", "exp-lease-title": "Arrendamiento Estratégico (+100 Ha)", "exp-lease-desc": "Nuevas plantaciones de Olivar Ecológico.", "exp-water-title": "Inversión Hídrica", "exp-water-desc": "Modernización total del sistema de riego.",
                 "sec6-title": "07. Valor de Marca: <span class='text-orange'>Sotaroni</span>",
-                "sec5-desc": "Sotaroni es una marca gourmet consolidada con presencia en el canal HORECA premium y mercados de exportación (EEUU, Europa).",
-                "sec5-prod": "Productos Insignia", "sec5-pos": "Posicionamiento", "sec5-equity": "Audited Brand Equity",
-                "sec7-title": "08. Estrategia de <span class='text-orange'>Salida</span>",
-                "sec6-div": "Recurring Dividend", "sec6-div-desc": "Reparto del 40% del EBITDA a partir de 2027.",
-                "sec6-buy": "Opción Buy-Back", "sec6-buy-desc": "Compromiso de recompra por la propiedad (Año 5-7).",
-                "sec6-esg": "Venta ESG", "sec6-esg-desc": "Salida a fondos de agricultura regenerativa.",
-                "sec8-title": "09. Infraestructura Hídrica: <span class='text-orange'>Garantía</span>",
-                "sec7-current": "Dotación Actual", "sec7-wells": "2 Pozos Operativos (8 l/s)",
-                "sec7-tag": "Proyecto Expansión", "sec7-project": "Acuífero La Cabranta", "sec7-study": "Avalado por Ingeniería Rodes",
-                "sec9-title": "10. Ubicación y Logística <span class='text-orange'>Estratégica</span>",
-                "footer": "Torrevella S.L. | Relación con Inversores 2026"
+                "sec6-desc": "Sotaroni es una marca gourmet consolidada con presencia en el canal HORECA premium.",
+                "sec6-prod": "AOVE & PX", "sec6-prod-tag": "Productos Insignia", "sec6-pos": "Gourmet", "sec6-pos-tag": "Posicionamiento", "brand-audit": "Brand Equity Auditado",
+                "exit-main-title": "08. Estrategia de Gestión y Salida",
+                "exit-div-title": "Dividendo Recurrente", "exit-div-desc": "Reparto del 40% del EBITDA a partir de 2027.",
+                "exit-buy-title": "Opción Buy-Back", "exit-buy-desc": "Compromiso de recompra por la propiedad (Año 5-7).",
+                "exit-esg-title": "Venta ESG", "exit-esg-desc": "Salida a fondos de agricultura regenerativa.",
+                "exit-gov-title": "Gobierno corporativo", "exit-gov-desc": "Crear un consejo asesor con representación del fondo.",
+                "exit-rep-title": "Reporting financiero estructurado", "exit-rep-desc": "Auditoría anual externa y KPIs mensuales.",
+                "exit-plan-title": "Plan de negocio a 5 años", "exit-plan-desc": "Incluye expansión ecológica, industrialización y agroturismo.",
+                "sec9-title": "09. Ubicación y Logística <span class='text-orange'>Estratégica</span>",
+                "geo-title": "Geografía & Clima", "geo-desc": "Valle de Polop, Alcoy (Alicante). Entre Parques Naturales.",
+                "geo-alt-label": "Altitud Media", "geo-rain-label": "Pluviometría", "geo-cold-label": "Horas Frío", "geo-clima-label": "Clima", "geo-clima-type": "Mediterráneo Montaña",
+                "log-title": "Conectividad Global", "log-hosp": "Alcoy (Hospital general)", "log-hosp-dist": "Cercanía estratégica (10 min)", "log-ports": "Puertos Mercantiles", "log-ports-dist": "Alicante (50 min) - Valencia (1h 15m)", "log-air": "Aeropuertos Internacionales", "log-air-dist": "Alicante (45 min) - Valencia (1h 10m)", "log-ave": "Alta Velocidad (AVE)", "log-ave-dist": "Estación Villena (30 min)",
+                "maps-title": "Localización & Acceso Finca", "maps-addr": "Sotaroni Aceites y Vinagres | Alcoi", "btn-maps": "CÓMO LLEGAR A TORREVELLA",
+                "oro-title": "Orografía del Terreno", "oro-flat": "Terrenos Llanos", "oro-mid": "Pendiente Media", "oro-high": "Pendiente Elevada / Bancales",
+                "footer": "Torrevella S.L. | Relación con Inversores 2026", "footer-admin": "creado por Nicolás Sanjuán Pérez Administrador Único"
             },
             en: {
-                "nav-tesis": "Thesis", "nav-analysis": "Analysis", "nav-saneamiento": "Restructuring", "nav-finance": "Finance", "nav-sotaroni": "Sotaroni",
+                "nav-tesis": "Thesis", "nav-analysis": "Analysis", "nav-infra": "Infrastructure", "nav-restructuring": "Restructuring", "nav-finance": "Finance",
+                "btn-download": "DOWNLOAD PDF",
                 "hero-tag": "Investment Round 2026 | Confidential",
                 "hero-title": "Bio-Organic Heritage <br><span class='text-orange text-5xl md:text-7xl'>Expanding.</span>",
                 "hero-sub": "Strategic <span class='font-bold text-green-900'>30% equity stake</span>. <br>Asset backing of <span class='font-bold text-green-900'>€8.6M in audited real assets</span>.",
                 "btn-pitch": "Investment Pitch", "btn-val": "Market Validation", "btn-rep": "Executive Report", "btn-sim": "Exit Simulation",
                 "sec1-title": "01. Investment Thesis: <span class='text-orange'>Opportunity</span>",
                 "sec1-p1": "Torrevella S.L. has completed its biological CAPEX phase. Investors join at the inflection point where the <strong>Margin of Safety is 50%</strong> relative to gross assets.",
-                "sec1-req-label": "Capital Requested", "sec1-equity-detail": "For a 30% Equity Stake",
+                "sec1-req-label": "Requested Capital", "sec1-equity-detail": "For a 30% Equity Stake",
                 "sec1-risk": "Financial Risk", "sec1-backing": "Asset Backing",
                 "sec1-assets-title": "Technical Asset Breakdown",
                 "asset-land": "Agricultural Land", "asset-land-desc": "135 Productive Ha",
-                "asset-build": "Infrastructure & Machinery", "asset-build-desc": "PLANT, MACHINERY, WATER SYSTEMS",
-                "asset-forest": "Biological Assets", "asset-forest-desc": "37,750 Trees",
+                "asset-build": "Infrastructure", "asset-build-desc": "Facilities & Infra.",
+                "asset-forest": "Biological Assets", "asset-forest-desc": "35,250 Trees",
                 "asset-house": "Manor House", "asset-house-desc": "Historical Heritage",
                 "asset-total": "Total Real Assets",
                 "sec2-title": "02. Market Validation: <span class='text-orange'>Sales Peaks</span>",
                 "sec2-cherry": "PGI Cherry Peak", "sec2-oil": "EVOO Oil Peak", "sec2-vinegar": "PX Vinegar Peak",
+                "v-recovery-title": "V-Shaped Recovery Validation",
+                "v-recovery-desc": "The commercial thesis is confirmed by a recovery already observable in 2024 and 2025. The increase in biological production, added to the strategic capital entry, allows for capitalizing on previous infrastructure investments. A sustained upward progression is projected thanks to operational optimization and Sotaroni's premium brand positioning.",
                 "sec3-title": "03. Biological Inventory: <span class='text-orange'>37,750 Trees</span>",
                 "tab-crop": "Crop", "tab-ha": "Hectares", "tab-trees": "Tree Census", "tab-status": "2026 Status",
-                "crop-olive": "Organic Olive", "stat-asc": "Rising Yields", "crop-almond": "Organic Almond", "stat-grow": "Growth Phase", "crop-cherry": "PGI Cherry", "stat-70": "70% Production",
+                "crop-olive": "Organic Olive", "stat-asc": "Rising Production", "crop-almond": "Organic Almond", "stat-grow": "Growth Phase", "crop-cherry": "PGI Cherry", "crop-apple": "Apple Trees", "stat-70": "70% Yield",
+                "crop-free": "Available Land", "stat-prepared": "Prepared for crop expansion", "tab-total": "TOTAL", "stat-managed": "Managed",
+                "sec-infra-title": "04. Agricultural Infrastructure: <span class='text-orange'>Full Equipment</span>",
+                "infra-machinery-title": "Machinery<br>Park",
+                "item-tractor-130": "130 HP Tractor", "item-tractor-90": "2x 90 HP Tractor", "item-shredder-f": "Forestry Shredder", "item-shredder-a": "Boom Shredder", "item-cultivator": "Extendable Cultivator",
+                "infra-irrigation-title": "Irrigation<br>Technology",
+                "item-irr-head": "Irrigation Head", "item-pumps": "3 Booster Pumps", "item-tanks": "3x 2,000L Tanks", "item-timer": "Digital Timer", "item-sectors": "18 Sectors",
+                "infra-facilities-title": "Fixed<br>Facilities",
+                "item-warehouse": "Agricultural Plant", "item-workshop": "Maintenance Workshop", "item-supplies": "Supply Storage", "item-winery": "Private Winery", "item-housing": "Staff Housing",
+                "sec-water-guarantee": "GUARANTEED WATER INFRASTRUCTURE",
+                "cap-op-title": "Operational<br>Capacity", "cap-op-actual": "current infrastructure: 300,000 m3/year",
+                "dot-actual-title": "Current Supply", "dot-actual-desc": "2 Operational Wells (8 l/s)", "sec7-tag": "Expansion Project", "sec7-project": "La Cabranta Aquifer", "sec7-study": "Rodes Engineering Verified",
                 "sec4-title": "05. Restructuring <span class='text-orange'>Strategy</span>",
                 "sec4-total-label": "Total Operation Amount",
-                "sec4-debt": "60% Debt", "sec4-debt-desc": "Full liability clearance and creditor settlement.",
-                "sec4-capex-desc": "Water infrastructure and biological upkeep.",
-                "sec4-mkt": "15% Marketing", "sec4-mkt-desc": "Sotaroni brand B2C international expansion.",
-                "sec5-title": "06. Financial Performance: <span class='text-orange'>P&L 2019-2024</span>",
-                "sec5-chart-title": "Performance Trends", "sec5-table-title": "Income Statement Breakdown",
+                "sec4-debt": "€900,000 DEBT", "sec4-debt-desc": "Full liability clearance and creditor settlement.",
+                "sec4-capex": "€350,000 CAPEX", "sec4-capex-desc": "Water infrastructure and biological upkeep.",
+                "sec4-mkt": "€225,000 MKT", "sec4-mkt-desc": "International B2C expansion for Sotaroni brand.",
+                "sec5-title": "06. Income Statement: <span class='text-orange'>P&L 2019-2024</span>",
+                "sec5-chart-title": "Performance Trends", "legend-income": "Revenue", "legend-expenses": "Expenses",
+                "sec5-table-title": "Detailed Income Statement", "tab-partid": "Entry (€)",
+                "pyg-op-income": "Operating Revenue", "pyg-supplies": "Supplies", "pyg-structure": "Structure & Other Costs", "pyg-op-result": "OPERATING RESULT", "pyg-fin-income": "Financial Income", "pyg-pretax": "RESULT BEFORE TAX",
+                "context-main-title": "Strategic Context & <span class='text-orange'>Recovery</span>",
+                "context-rest-title": "2021 Restructuring", "context-rest-desc": "In 2021, a full restructuring towards <strong>certified organic crops</strong> was executed.",
+                "context-impact-label": "Cash Flow Impact", "context-impact-desc": "This conversion caused the observed treasury tension.",
+                "context-rec-label": "Production Recovery", "context-rec-desc": "Since 2024, production recovery is an established fact.",
+                "progress-2025": "2025 Operations", "progress-2030": "2030 Objective",
+                "exp-eff-title": "2021 Expansion & Efficiency", "exp-lease-title": "Strategic Leasing (+100 Ha)", "exp-lease-desc": "New Organic Olive plantations.", "exp-water-title": "Water Investment", "exp-water-desc": "Full modernization of irrigation systems.",
                 "sec6-title": "07. Brand Equity: <span class='text-orange'>Sotaroni</span>",
-                "sec5-desc": "Sotaroni is a consolidated gourmet brand present in premium HORECA channels and global export markets (USA, EU).",
-                "sec5-prod": "Flagship Products", "sec5-pos": "Market Positioning", "sec5-equity": "Audited Brand Equity",
-                "sec7-title": "08. Exit <span class='text-orange'>Strategy</span>",
-                "sec6-div": "Recurring Dividend", "sec6-div-desc": "40% EBITDA distribution starting in 2027.",
-                "sec6-buy": "Buy-Back Option", "sec6-buy-desc": "Buy-back commitment by current ownership (Year 5-7).",
-                "sec6-esg": "ESG Sale", "sec6-esg-desc": "Exit to regenerative agriculture funds.",
-                "sec8-title": "09. Water Infrastructure: <span class='text-orange'>Reliability</span>",
-                "sec7-current": "Current Supply", "sec7-wells": "2 Operational Wells (8 l/s)",
-                "sec7-tag": "Expansion Project", "sec7-project": "La Cabranta Aquifer", "sec7-study": "Rodes Engineering Verified",
-                "sec9-title": "10. Strategic Location & <span class='text-orange'>Logistics</span>",
-                "footer": "Torrevella S.L. | Investor Relations 2026"
+                "sec6-desc": "Sotaroni is a consolidated gourmet brand with a presence in the premium HORECA channel.",
+                "sec6-prod": "EVOO & PX", "sec6-prod-tag": "Flagship Products", "sec6-pos": "Gourmet", "sec6-pos-tag": "Market Positioning", "brand-audit": "Audited Brand Equity",
+                "exit-main-title": "08. Management and Exit Strategy",
+                "exit-div-title": "Recurring Dividend", "exit-div-desc": "40% EBITDA distribution starting in 2027.",
+                "exit-buy-title": "Buy-Back Option", "exit-buy-desc": "Buy-back commitment by current ownership (Years 5-7).",
+                "exit-esg-title": "ESG Sale", "exit-esg-desc": "Exit to regenerative agriculture funds.",
+                "exit-gov-title": "Corporate Governance", "exit-gov-desc": "Creation of an advisory board with fund representation.",
+                "exit-rep-title": "Structured Financial Reporting", "exit-rep-desc": "External annual audit and monthly KPIs.",
+                "exit-plan-title": "5-Year Business Plan", "exit-plan-desc": "Includes organic expansion, industrialization, and agrotourism.",
+                "sec9-title": "09. Strategic Location & <span class='text-orange'>Logistics</span>",
+                "geo-title": "Geography & Climate", "geo-desc": "Polop Valley, Alcoy (Alicante). Situated between Natural Parks.",
+                "geo-alt-label": "Mean Altitude", "geo-rain-label": "Rainfall", "geo-cold-label": "Cold Hours", "geo-clima-label": "Climate", "geo-clima-type": "Mountain Mediterranean",
+                "log-title": "Global Connectivity", "log-hosp": "Alcoy (General Hospital)", "log-hosp-dist": "Strategic Proximity (10 min)", "log-ports": "Merchant Ports", "log-ports-dist": "Alicante (50 min) - Valencia (1h 15m)", "log-air": "International Airports", "log-air-dist": "Alicante (45 min) - Valencia (1h 10m)", "log-ave": "High Speed Train (AVE)", "log-ave-dist": "Villena Station (30 min)",
+                "maps-title": "Location & Farm Access", "maps-addr": "Sotaroni Oils and Vinegars | Alcoi", "btn-maps": "HOW TO GET TO TORREVELLA",
+                "oro-title": "Terrain Orography", "oro-flat": "Flat Lands", "oro-mid": "Medium Slope", "oro-high": "High Slope / Terraces",
+                "footer": "Torrevella S.L. | Investor Relations 2026", "footer-admin": "Created by Nicolás Sanjuán Pérez - Sole Administrator"
             }
         };
 
         const guiones = {
             es: {
-                pitch: "Informe de inversión Torrevella Sociedad Limitada. Se ofrece una participación del treinta por ciento del capital social por uno coma tres millones de euros. La operación está respaldada por activos reales auditados de ocho coma seis millones.",
+                pitch: "Informe de inversión Torrevella Sociedad Limitada. Se ofrece una participación del treinta por ciento del capital social por uno coma cinco millones de euros. La operación está respaldada por activos reales auditados de ocho coma seis millones.",
                 validacion: "Análisis comercial histórico. Torrevella alcanzó picos de facturación superiores a los quinientos mil euros anuales, certificando la tracción de la marca Sotaroni en el canal gourmet premium.",
-                reporte: "Resumen operativo. El ejercicio dos mil veinticuatro confirma la recuperación técnica con EBITDA positivo de ciento dos mil euros. La certificación ecológica íntegra en dos mil veintiséis elevará la rentabilidad.",
+                reporte: "Resumen operativo. El ejercicio dos mil veinticuatro confirma la recuperación técnica con EBITDA positivo. La certificación ecológica íntegra en dos mil veintiséis elevará la rentabilidad.",
                 simulacion: "Estrategia de salida. Contemplamos reparto del cuarenta por ciento del EBITDA o una opción de recompra por la propiedad original a un múltiplo de seis veces EBITDA."
             },
             en: {
                 pitch: "Torrevella Limited Liability Company Investment Report. We offer a thirty percent equity stake for one point five million euros. The operation is backed by audited real assets valued at eight point six million euros.",
                 validacion: "Historical commercial analysis. Torrevella reached sales peaks exceeding five hundred thousand euros annually, certifying the traction of the Sotaroni brand in the premium gourmet market.",
-                reporte: "Operational summary. The 2024 fiscal year confirms technical recovery with a positive EBITDA of one hundred and two thousand euros. Full organic certification by 2026 will significantly boost profitability.",
+                reporte: "Operational summary. The 2024 fiscal year confirms technical recovery with positive EBITDA. Full organic certification by 2026 will significantly boost profitability.",
                 simulacion: "Exit strategy. We contemplate a forty percent EBITDA distribution or a buy-back option by the original ownership at a multiple of six times EBITDA."
             }
         };
@@ -751,7 +742,7 @@
             const originalText = btnText.innerText;
 
             btn.disabled = true;
-            btnText.innerText = "GENERANDO...";
+            btnText.innerText = currentLang === 'es' ? "GENERANDO..." : "GENERATING...";
             loader.style.display = "inline-block";
             if(icon) icon.style.display = "none";
             document.body.classList.add('print-mode');
@@ -775,17 +766,7 @@
                     margin:       [5, 5, 5, 5],
                     filename:     'Torrevella_Inversion_2026.pdf',
                     image:        { type: 'jpeg', quality: 0.98 },
-                    html2canvas:  { 
-                        scale: 2, 
-                        useCORS: true, 
-                        ignoreElements: (element) => {
-                            return element.classList.contains('no-print') || 
-                                   element.classList.contains('quick-action-btn') || 
-                                   element.tagName === 'NAV' || 
-                                   element.tagName === 'FOOTER' ||
-                                   (element.tagName === 'BUTTON' && element.id !== 'fakeBtn'); 
-                        }
-                    },
+                    html2canvas:  { scale: 2, useCORS: true },
                     jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
                 };
 
@@ -843,61 +824,71 @@
             });
         }
 
-        async function fetchWithRetry(url, options, maxRetries = 5) {
-            let delay = 1000;
-            for (let i = 0; i < maxRetries; i++) {
-                try {
-                    const response = await fetch(url, options);
-                    if (response.ok) return response;
-                } catch (e) {}
-                await new Promise(res => setTimeout(res, delay));
-                delay *= 2;
-            }
-            throw new Error("Error.");
-        }
-
-        async function playStaticAudio(type) {
+        /**
+         * Nueva función playStaticAudio usando Web Speech API nativa.
+         * Elimina la dependencia de Gemini TTS y mejora el control de estados del botón.
+         */
+        function playStaticAudio(type) {
             const btn = document.getElementById(`btn-${type}`);
             const btnText = btn.querySelector('.btn-text');
             const btnIcon = btn.querySelector('.btn-icon');
             const progressContainer = btn.querySelector('.audio-progress-container');
-            const originalText = translations[currentLang][`btn-${type.substring(0,3)}`] || btnText.textContent;
+            
+            // Obtener el texto original mapeando las claves de traducción
+            let translationKey = `btn-${type}`;
+            // Mapeo especial por inconsistencia de nombres en la estructura i18n
+            if (type === 'validacion') translationKey = 'btn-val';
+            if (type === 'reporte') translationKey = 'btn-rep';
+            if (type === 'simulacion') translationKey = 'btn-sim';
+            
+            const originalText = translations[currentLang][translationKey] || btnText.textContent;
             const originalIcon = btnIcon.getAttribute('data-lucide');
-            const text = guiones[currentLang][type];
+            const textToSpeak = guiones[currentLang][type];
+
+            // 1. Estado inicial: Mostrar cargando
             btn.classList.add('anim-loading');
             btnText.textContent = currentLang === 'es' ? "Procesando..." : "Processing...";
             btnIcon.setAttribute('data-lucide', 'loader-2');
             progressContainer.style.display = 'block';
-            initIcons();
-            try {
-                let voiceInstruction = currentLang === 'es' ? `Diga con acento de Madrid, tono ejecutivo: ${text}` : `Speak in a professional British accent: ${text}`;
-                const response = await fetchWithRetry(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${apiKey}`, {
-                    method: 'POST', headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ contents: [{ parts: [{ text: voiceInstruction }] }], generationConfig: { responseModalities: ["AUDIO"], speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: "Charon" } } } } })
-                });
-                const result = await response.json();
-                const pcmData = result.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
-                if (pcmData) {
-                    const audio = new Audio(URL.createObjectURL(pcmToWav(pcmData, 24000)));
-                    btn.classList.remove('anim-loading');
-                    btn.classList.add('playing-pulse');
-                    btnText.textContent = currentLang === 'es' ? "Escuchando..." : "Listening...";
-                    btnIcon.setAttribute('data-lucide', 'volume-2');
-                    progressContainer.style.display = 'none';
-                    initIcons();
-                    audio.onended = () => resetButton();
-                    audio.play();
-                } else { resetButton(); }
-            } catch (e) { resetButton(); }
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+
+            // 2. Configurar Síntesis de Voz
+            const utterance = new SpeechSynthesisUtterance(textToSpeak);
+            utterance.lang = currentLang === 'es' ? 'es-ES' : 'en-GB';
+            utterance.rate = 1.0;
+            utterance.pitch = 1.0;
+
+            // Función de limpieza común
             function resetButton() {
                 btn.classList.remove('anim-loading', 'playing-pulse');
                 btnText.textContent = originalText;
                 btnIcon.setAttribute('data-lucide', originalIcon);
                 progressContainer.style.display = 'none';
-                initIcons();
+                if (typeof lucide !== 'undefined') lucide.createIcons();
             }
+
+            // Eventos de la síntesis
+            utterance.onstart = () => {
+                btn.classList.remove('anim-loading');
+                btn.classList.add('playing-pulse');
+                btnText.textContent = currentLang === 'es' ? "Escuchando..." : "Listening...";
+                btnIcon.setAttribute('data-lucide', 'volume-2');
+                progressContainer.style.display = 'none';
+                if (typeof lucide !== 'undefined') lucide.createIcons();
+            };
+
+            utterance.onend = resetButton;
+            utterance.onerror = resetButton;
+
+            // 3. Ejecutar
+            window.speechSynthesis.cancel(); // Cancelar cualquier audio previo
+            window.speechSynthesis.speak(utterance);
         }
 
+        /**
+         * Mantenida por compatibilidad futura pero actualmente en desuso 
+         * debido al cambio a Web Speech API nativa.
+         */
         function pcmToWav(base64Pcm, sampleRate) {
             const buffer = Uint8Array.from(atob(base64Pcm), c => c.charCodeAt(0)).buffer;
             const wavBuffer = new ArrayBuffer(44 + buffer.byteLength);
