@@ -1,1 +1,918 @@
-<!DOCTYPE html><html lang="es"><head>    <meta charset="UTF-8">    <meta name="viewport" content="width=device-width, initial-scale=1.0">    <title>Torrevella S.L. - Master Investment Dashboard</title>    <script src="https://cdn.tailwindcss.com"></script>    <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@300;400;600;700;800&family=Poppins:wght@700&display=swap" rel="stylesheet">    <script src="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.0/lucide.min.js"></script>    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>        <style>        body { font-family: 'Urbanist', sans-serif; background-color: #F9F5E6; color: #336600; scroll-behavior: smooth; }        .glass-card { background: rgba(20, 30, 10, 0.05); backdrop-filter: blur(12px); border: 1px solid rgba(51, 102, 0, 0.1); transition: all 0.4s ease; }        .glass-card:hover { border-color: #666600; background: rgba(20, 30, 10, 0.1); transform: translateY(-5px); }        .text-orange { color: #556B2F; }        .bg-orange { background-color: #556B2F; }        nav { background-color: rgba(40, 45, 30, 0.95) !important; border-bottom: 1px solid rgba(255,255,255,0.1); }        .quick-action-btn { background: rgba(51, 102, 0, 0.05); border: 1px solid rgba(51, 102, 0, 0.2); padding: 14px 28px; border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; transition: all 0.3s; cursor: pointer; min-width: 220px; color: #336600; position: relative; overflow: hidden; }        .audio-progress-container { position: absolute; bottom: 0; left: 0; width: 100%; height: 4px; background: rgba(51, 102, 0, 0.1); display: none; }        .audio-progress-fill { height: 100%; width: 35%; background: #556B2F; position: absolute; left: -35%; }        .anim-loading .audio-progress-fill { animation: loading-bar 1.5s infinite linear; }        @keyframes loading-bar { 0% { left: -35%; } 100% { left: 100%; } }        .chat-container { height: 320px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; padding: 15px; }        .message { padding: 12px 16px; border-radius: 14px; font-size: 13px; max-width: 85%; line-height: 1.4; }        .user-msg { align-self: flex-end; background: #556B2F; color: #F9F5E6; font-weight: 700; }        .ai-msg { align-self: flex-start; background: #E6E2D3; color: #333300; border: 1px solid #CCC; }        .custom-scroll::-webkit-scrollbar { width: 5px; }        .custom-scroll::-webkit-scrollbar-thumb { background: #888877; border-radius: 10px; }                /* Table Styles for PyG */        .pyg-table th { font-size: 10px; text-transform: uppercase; color: #556B2F; padding: 8px 12px; font-weight: 800; letter-spacing: 0.05em; border-bottom: 2px solid rgba(51, 102, 0, 0.1); }        .pyg-table td { padding: 8px 12px; font-size: 11px; border-bottom: 1px solid rgba(51, 102, 0, 0.05); white-space: nowrap; }        .pyg-table tr:hover td { background: rgba(51, 102, 0, 0.02); }        .pyg-row-total td { font-weight: 800; background: rgba(51, 102, 0, 0.05); border-top: 1px solid rgba(51, 102, 0, 0.2); }        .pyg-row-subtotal td { font-weight: 700; color: #444; background: rgba(0,0,0,0.01); }        .negative-val { color: #993333; }        .positive-val { color: #336600; }                .infra-list li { margin-bottom: 8px; font-size: 18px; display: flex; align-items: flex-start; gap: 8px; color: #444; }        .infra-list li::before { content: '•'; color: #556B2F; font-weight: bold; }        /* --- LOADER STYLE --- */        .loader {            width: 14px;            height: 14px;            border: 2px solid #fff;            border-bottom-color: transparent;            border-radius: 50%;            display: inline-block;            animation: rotation 1s linear infinite;            vertical-align: middle;            margin-left: 8px;        }        @keyframes rotation { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }        /* --- ESTILOS FORZADOS PARA HTML2PDF (.print-mode) --- */                .print-mode nav,         .print-mode footer,         .print-mode button,         .print-mode .no-print,         .print-mode #hub,        .print-mode .quick-action-btn {             display: none !important;         }        .print-mode body {             background-color: #ffffff !important;             color: #111 !important;        }        .print-mode .glass-card {             background: #ffffff !important;             border: 1px solid #ddd !important;             box-shadow: none !important;             backdrop-filter: none !important;        }        .print-mode section {            page-break-after: always !important;            break-after: page !important;            min-height: 100vh !important;            display: flex !important;            flex-direction: column !important;            justify-content: flex-start !important;            padding: 10px !important;             box-sizing: border-box !important;        }        .print-mode section h2 {            margin-top: 20px !important;            margin-bottom: 20px !important;            color: #1a410b !important;        }        .print-mode canvas { display: none !important; }        .print-mode .print-chart-image {             display: block !important;             max-width: 90% !important;             margin: 20px auto !important;         }                .print-mode header {            padding-top: 20px !important;            justify-content: center !important;            min-height: 100vh !important;            page-break-after: always !important;        }        @media print {            @page { margin: 0; }            nav, .quick-action-btn, #langBtn, .no-print, button, #chatInput, .loader, #hub, #btnImprimir { display: none !important; }            body { background-color: #ffffff !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; margin: 0 !important; padding: 0 !important; }            section { page-break-after: always !important; break-after: page !important; min-height: 100vh !important; display: flex !important; flex-direction: column !important; justify-content: flex-start !important; align-items: flex-start !important; padding: 0 40px !important; box-sizing: border-box !important; }            section::before { content: "" !important; display: block !important; width: 100% !important; height: 150px !important; flex-shrink: 0 !important; }            section h1, section h2, section h3 { margin-top: 0 !important; margin-bottom: 50px !important; width: 100% !important; text-align: left !important; }            header { page-break-after: always !important; break-after: page !important; min-height: 100vh !important; display: flex !important; flex-direction: column !important; justify-content: center !important; }            .glass-card { background: #ffffff !important; backdrop-filter: none !important; border: 1px solid #ddd !important; box-shadow: none !important; break-inside: avoid !important; }            .print-chart-image { display: block !important; width: 100% !important; max-height: 400px; object-fit: contain; margin: 10px auto; }            canvas { display: none !important; }        }        .print-chart-image { display: none; }    </style></head><body class="antialiased" id="contentToPrint">    <nav class="fixed top-0 w-full z-50 py-5 px-10 flex justify-between items-center no-print">        <div class="font-black text-2xl tracking-tighter uppercase text-white">TORREVELLA <span class="text-orange">S.L.</span></div>        <div class="flex items-center gap-6">            <div class="hidden lg:flex gap-5 text-[10px] uppercase font-bold tracking-[0.2em] text-white/70">                <a href="#tesis" class="hover:text-white transition-colors">Tesis</a>                <a href="#analisis" class="hover:text-white transition-colors">Análisis</a>                <a href="#infraestructura" class="hover:text-white transition-colors text-orange">Infraestructura</a>                <a href="#saneamiento" class="hover:text-white transition-colors">Saneamiento</a>                <a href="#financieros" class="hover:text-white transition-colors">Finanzas</a>            </div>            <div class="flex gap-2">                <button onclick="handlePrint()" id="btnImprimir" class="bg-orange/90 hover:bg-orange text-white px-4 py-2 rounded-lg text-xs font-bold transition-all shadow-lg flex items-center gap-2">                    <i data-lucide="download" class="w-4 h-4 btn-icon"></i>                    <span class="btn-text">DESCARGAR PDF</span>                    <span class="loader" style="display: none;"></span>                </button>                <button onclick="toggleLanguage()" class="bg-white/10 border border-white/20 text-white px-3 py-1.5 rounded text-[10px] font-bold" id="langBtn">ES | <span class="opacity-50">EN</span></button>            </div>        </div>    </nav>    <header class="pt-52 pb-24 px-6 text-center">        <div class="max-w-6xl mx-auto">            <span class="inline-block px-5 py-1.5 border border-green-700/30 text-green-800 rounded-full text-[9px] font-bold uppercase tracking-[0.3em] mb-10 bg-green-700/5" data-i18n="hero-tag">Investment Round 2026 | Confidencial</span>            <h1 class="text-6xl md:text-8xl font-black mb-10 tracking-tighter uppercase font-[Poppins] italic leading-none text-green-900" data-i18n="hero-title">                Patrimonio Bio Ecológico <br><span class="text-orange text-5xl md:text-7xl">En Expansión.</span>            </h1>            <p class="text-xl md:text-2xl text-gray-500 font-light max-w-4xl mx-auto mb-20 leading-snug" data-i18n="hero-sub">                Participación estratégica del <span class="font-bold text-green-900">30% del equity</span>. <br>                Respaldo patrimonial de <span class="font-bold text-green-900">8,6M€ en activos reales auditados</span>.            </p>            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 max-w-7xl mx-auto">                <button onclick="playStaticAudio('pitch')" class="quick-action-btn" id="btn-pitch">                    <div class="flex items-center gap-3"><i data-lucide="play-circle" class="btn-icon w-4 h-4"></i> <span class="btn-text" data-i18n="btn-pitch">Pitch Inversión</span></div>                    <div class="audio-progress-container"><div class="audio-progress-fill"></div></div>                </button>                <button onclick="playStaticAudio('validacion')" class="quick-action-btn" id="btn-validacion">                    <div class="flex items-center gap-3"><i data-lucide="shield-check" class="btn-icon w-4 h-4"></i> <span class="btn-text" data-i18n="btn-val">Validación Comercial</span></div>                    <div class="audio-progress-container"><div class="audio-progress-fill"></div></div>                </button>                <button onclick="playStaticAudio('reporte')" class="quick-action-btn" id="btn-reporte">                    <div class="flex items-center gap-3"><i data-lucide="file-text" class="btn-icon w-4 h-4"></i> <span class="btn-text" data-i18n="btn-rep">Reporte Ejecutivo</span></div>                    <div class="audio-progress-container"><div class="audio-progress-fill"></div></div>                </button>                <button onclick="playStaticAudio('simulacion')" class="quick-action-btn" id="btn-simulacion">                    <div class="flex items-center gap-3"><i data-lucide="trending-up" class="btn-icon w-4 h-4"></i> <span class="btn-text" data-i18n="btn-sim">Simulación Exit</span></div>                    <div class="audio-progress-container"><div class="audio-progress-fill"></div></div>                </button>            </div>        </div>    </header>    <section id="tesis" class="py-24 px-6 bg-green-900/5">        <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">            <div>                <h2 class="text-4xl font-black uppercase italic mb-8 text-green-900" data-i18n="sec1-title">01. Tesis de Inversión: <span class="text-orange">Oportunidad</span></h2>                <div class="space-y-6 text-gray-500 leading-relaxed">                    <p data-i18n="sec1-p1">Torrevella S.L. ha completado su fase de CAPEX biológico. El inversor entra en el punto de inflexión donde el <strong>Margen de Seguridad es del 50%</strong> respecto a los activos brutos.</p>                    <div class="p-8 bg-white border-l-8 border-orange rounded-r-3xl shadow-sm">                        <p class="text-[11px] uppercase font-bold text-gray-400 mb-1" data-i18n="sec1-req-label">Capital Solicitado</p>                        <p class="text-4xl font-black text-green-900">1.500.000 €</p>                        <p class="text-sm font-bold text-orange uppercase tracking-widest mt-1" data-i18n="sec1-equity-detail">Por el 30% Participación Social (Equity)</p>                    </div>                    <div class="grid grid-cols-2 gap-4">                        <div class="glass-card p-4 rounded-xl text-center">                            <p class="text-orange font-black text-2xl">LTV < 15%</p>                            <p class="text-[10px] uppercase font-bold text-gray-500" data-i18n="sec1-risk">Riesgo Financiero</p>                        </div>                        <div class="glass-card p-4 rounded-xl text-center">                            <p class="text-green-900 font-black text-2xl">8,6M €</p>                            <p class="text-[10px] uppercase font-bold text-gray-500" data-i18n="sec1-backing">Respaldo Activos</p>                        </div>                    </div>                </div>            </div>            <div>                <h3 class="text-xs font-black text-gray-400 uppercase tracking-[0.2em] mb-8" data-i18n="sec1-assets-title">Desglose Técnico de Activos</h3>                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">                    <div class="glass-card p-6 rounded-3xl bg-white/60 flex flex-col justify-between h-full">                        <div class="flex items-center gap-3 mb-2">                            <div class="p-2 bg-green-900/10 rounded-full text-green-800"><i data-lucide="map" class="w-5 h-5"></i></div>                            <span class="text-[10px] text-gray-400 font-bold uppercase" data-i18n="asset-land-desc">135 Ha Productivas</span>                        </div>                        <div><span class="block text-green-900 font-black text-lg leading-tight" data-i18n="asset-land">Suelo Agrícola</span><span class="text-3xl font-black text-orange mt-1 block">3,30 M€</span></div>                    </div>                    <div class="glass-card p-6 rounded-3xl bg-white/60 flex flex-col justify-between h-full">                        <div class="flex items-center gap-3 mb-2">                            <div class="p-2 bg-blue-900/10 rounded-full text-blue-800"><i data-lucide="warehouse" class="w-5 h-5"></i></div>                            <span class="text-[10px] text-gray-400 font-bold uppercase" data-i18n="asset-build-desc">Naves e Infra.</span>                        </div>                        <div><span class="block text-green-900 font-black text-lg leading-tight" data-i18n="asset-build">Infraestructura</span><span class="text-3xl font-black text-blue-900 mt-1 block">1,60 M€</span></div>                    </div>                    <div class="glass-card p-6 rounded-3xl bg-white/60 flex flex-col justify-between h-full">                        <div class="flex items-center gap-3 mb-2">                            <div class="p-2 bg-green-600/10 rounded-full text-green-600"><i data-lucide="trees" class="w-5 h-5"></i></div>                            <span class="text-[10px] text-gray-400 font-bold uppercase" data-i18n="asset-forest-desc">35.250 Árboles</span>                        </div>                        <div><span class="block text-green-900 font-black text-lg leading-tight" data-i18n="asset-forest">Masa Biológica</span><span class="text-3xl font-black text-green-700 mt-1 block">1,50 M€</span></div>                    </div>                    <div class="glass-card p-6 rounded-3xl bg-white/60 flex flex-col justify-between h-full">                        <div class="flex items-center gap-3 mb-2">                            <div class="p-2 bg-orange/10 rounded-full text-orange"><i data-lucide="castle" class="w-5 h-5"></i></div>                            <span class="text-[10px] text-gray-400 font-bold uppercase" data-i18n="asset-house-desc">Patrimonio Histórico</span>                        </div>                        <div><span class="block text-green-900 font-black text-lg leading-tight" data-i18n="asset-house">Vivienda Señorial</span><span class="text-3xl font-black text-orange mt-1 block">2,20 M€</span></div>                    </div>                </div>                <div class="mt-6 glass-card p-6 rounded-2xl bg-green-900/5 border border-green-900/10 flex justify-between items-center">                    <span class="text-sm font-black text-gray-500 uppercase" data-i18n="asset-total">Total Activos Reales</span>                    <span class="text-4xl font-black text-green-900">8,60 M€</span>                </div>            </div>        </div>    </section>    <div style="page-break-before: always; height: 0px; width: 100%; visibility: hidden;"></div>    <section id="analisis" class="py-24 px-6">        <div class="max-w-7xl mx-auto">            <h2 class="text-4xl font-black uppercase italic mb-12 text-center text-green-900" data-i18n="sec2-title">02. Validación Comercial: <span class="text-orange">Picos de Venta</span></h2>            <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">                <div class="lg:col-span-2 h-[400px] glass-card rounded-2xl p-4">                    <canvas id="historicalChart"></canvas>                </div>                <div class="space-y-4">                    <div class="glass-card p-6 rounded-2xl border-l-4 border-red-800/60"><p class="text-[10px] uppercase font-bold text-gray-500" data-i18n="sec2-cherry">Pico Cerezas IGP</p><p class="text-3xl font-black text-green-900">300.000 €</p></div>                    <div class="glass-card p-6 rounded-2xl border-l-4 border-green-800/60"><p class="text-[10px] uppercase font-bold text-gray-500" data-i18n="sec2-oil">Pico Aceite AOVE</p><p class="text-3xl font-black text-green-900">180.000 €</p></div>                    <div class="glass-card p-6 rounded-2xl border-l-4 border-purple-800/60"><p class="text-[10px] uppercase font-bold text-gray-500" data-i18n="sec2-vinegar">Pico Vinagres PX</p><p class="text-3xl font-black text-green-900">110.000 €</p></div>                </div>            </div>                        <!-- Tarjeta de Refuerzo de Tesis Comercial -->            <div class="glass-card p-10 rounded-[3rem] mt-10 border-t-4 border-green-800 bg-white/60 flex flex-col md:flex-row items-center gap-8 shadow-xl">                <div class="w-20 h-20 bg-green-900/10 rounded-full flex-shrink-0 flex items-center justify-center text-green-800"><i data-lucide="line-chart" class="w-10 h-10"></i></div>                <div>                    <h3 class="text-2xl font-black text-green-900 uppercase mb-2">Validación de Recuperación en V</h3>                    <p class="text-lg text-gray-600 leading-relaxed">                        La tesis comercial se confirma con una **recuperación ya observable en 2024 y 2025**. El incremento en la producción biológica, sumado a la entrada de capital estratégico, permite capitalizar las inversiones realizadas en infraestructura. Se proyecta una progresión ascendente sostenida gracias a la optimización operativa y el posicionamiento premium de la marca Sotaroni.                    </p>                </div>            </div>        </div>    </section>    <section id="inventario" class="py-24 px-6 bg-green-900/5">        <div class="max-w-7xl mx-auto">            <h2 class="text-4xl font-black uppercase italic mb-12 text-center text-green-900" data-i18n="sec3-title">03. Inventario Biológico: <span class="text-orange">37.750 Árboles</span></h2>            <div class="overflow-x-auto glass-card rounded-3xl">                <table class="w-full text-left text-sm">                    <thead class="bg-green-900/5 text-orange uppercase text-[10px] tracking-widest font-bold">                        <tr><th class="p-6" data-i18n="tab-crop">Cultivo</th><th class="p-6" data-i18n="tab-ha">Hectáreas</th><th class="p-6" data-i18n="tab-trees">Censo Árboles</th><th class="p-6" data-i18n="tab-status">Estatus 2026</th></tr>                    </thead>                    <tbody class="divide-y divide-green-900/10">                        <tr><td class="p-6 font-bold text-green-900">Olivar Ecológico</td><td class="p-6">70 Ha</td><td class="p-6">16.655</td><td class="p-6 text-green-700 font-bold">Producción Ascendente</td></tr>                        <tr><td class="p-6 font-bold text-green-900">Almendro Ecológico</td><td class="p-6">30 Ha</td><td class="p-6">6.533</td><td class="p-6 text-orange font-bold">Crecimiento</td></tr>                        <tr><td class="p-6 font-bold text-green-900">Cerezo IGP</td><td class="p-6">25 Ha</td><td class="p-6">10.782</td><td class="p-6 text-blue-700 font-bold">70% de Producción</td></tr>                        <tr><td class="p-6 font-bold text-green-900">Manzanos</td><td class="p-6">5 Ha</td><td class="p-6">2.500</td><td class="p-6 text-blue-700 font-bold">70% de Producción</td></tr>                        <tr><td class="p-6 font-bold text-green-900">Libres</td><td class="p-6">35 Ha</td><td class="p-6">----</td><td class="p-6 text-blue-700 font-bold">Preparadas para ampliar cultivos</td></tr>                        <tr class="bg-green-900/5 font-black text-green-900">                            <td class="p-6">TOTAL</td><td class="p-6">165 Ha</td><td class="p-6">37.750</td><td class="p-6">Gestionados</td>                        </tr>                    </tbody>                </table>            </div>            <!-- Nueva Tarjeta de Imagen (Punto 03) -->            <div class="glass-card p-4 rounded-[3rem] mt-8 overflow-hidden border border-green-900/10 bg-white/40 shadow-xl">                <img src="https://cdn.shopify.com/s/files/1/0323/6095/5948/files/Bebop2_20170807114847_0200.jpg?v=1614325390"                      alt="[Imagen de Vista Aérea de la Finca]"                      class="w-full h-auto rounded-[2.5rem] object-cover"                     onerror="this.src='https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&q=80&w=1200'">            </div>        </div>    </section>    <div style="page-break-before: always; width: 100%; display: block;"></div>    <section id="infraestructura" class="py-24 px-6 bg-white">        <div class="max-w-7xl mx-auto">            <h2 class="text-4xl font-black uppercase italic mb-12 text-center text-green-900">04. Infraestructura Agrícola: <span class="text-orange">Equipamiento Integral</span></h2>            <div class="grid grid-cols-1 gap-6">                <!-- Tarjeta 1: Maquinaria -->                <div class="glass-card p-10 rounded-[3rem] border-l-8 border-green-800 flex flex-col md:flex-row items-center justify-between gap-8">                    <div class="flex items-center gap-6 md:w-1/3">                        <div class="w-20 h-20 bg-green-900/10 rounded-full flex-shrink-0 flex items-center justify-center text-green-800"><i data-lucide="tractor" class="w-10 h-10"></i></div>                        <h3 class="text-2xl font-black text-green-900 uppercase leading-tight">Parque de<br>Maquinaria</h3>                    </div>                    <div class="md:w-2/3 w-full">                        <ul class="infra-list grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-1 w-full text-left">                            <li><strong>Tractor 130 CV</strong></li>                            <li><strong>2x Tractor 90 CV</strong></li>                            <li>Trituradora Forestal</li>                            <li>Trituradora de Brazo</li>                            <li>Cultivador Extensible</li>                        </ul>                    </div>                </div>                <!-- Tarjeta 2: Riego -->                <div class="glass-card p-10 rounded-[3rem] border-l-8 border-blue-600 flex flex-col md:flex-row items-center justify-between gap-8">                    <div class="flex items-center gap-6 md:w-1/3">                        <div class="w-20 h-20 bg-blue-900/10 rounded-full flex-shrink-0 flex items-center justify-center text-blue-700"><i data-lucide="settings" class="w-10 h-10"></i></div>                        <h3 class="text-2xl font-black text-green-900 uppercase leading-tight">Tecnología de<br>Riego</h3>                    </div>                    <div class="md:w-2/3 w-full">                        <ul class="infra-list grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-1 w-full text-left">                            <li><strong>Cabezal Riego</strong></li>                            <li>3 Bombas Impulsoras</li>                            <li>3 Depósitos 2.000 L</li>                            <li>Programador Digital</li>                            <li><strong>18 Sectores</strong></li>                        </ul>                    </div>                </div>                <!-- Tarjeta 3: Instalaciones -->                <div class="glass-card p-10 rounded-[3rem] border-l-8 border-orange flex flex-col md:flex-row items-center justify-between gap-8">                    <div class="flex items-center gap-6 md:w-1/3">                        <div class="w-20 h-20 bg-orange/10 rounded-full flex-shrink-0 flex items-center justify-center text-orange"><i data-lucide="home" class="w-10 h-10"></i></div>                        <h3 class="text-2xl font-black text-green-900 uppercase leading-tight">Instalaciones<br>Fijas</h3>                    </div>                    <div class="md:w-2/3 w-full">                        <ul class="infra-list grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-1 w-full text-left">                            <li><strong>Nave Agrícola</strong></li>                            <li>Taller Mantenimiento</li>                            <li>Almacén Insumos</li>                            <li><strong>Bodega Propia</strong></li>                            <li>Viviendas Personal</li>                        </ul>                    </div>                </div>            </div>                      </div>                <!-- Bloque de Infraestructura Hídrica Añadido con Espacio y Título -->        <div class="max-w-7xl mx-auto mt-24">            <h3 class="text-3xl font-black uppercase italic mb-12 text-center text-green-900">INFRASTRUCTURA HÍDRICA DE GARANTIA</h3>                        <!-- Tarjeta 4: Capacidad Operativa (Movida aquí debajo del título) -->            <div class="glass-card p-10 rounded-[3rem] border-l-8 border-green-900 flex flex-col md:flex-row items-center justify-between gap-8 mb-12">                <div class="flex items-center gap-6 md:w-1/3">                    <div class="w-20 h-20 bg-green-900/10 rounded-full flex-shrink-0 flex items-center justify-center text-green-800"><i data-lucide="activity" class="w-10 h-10"></i></div>                    <h3 class="text-2xl font-black text-green-900 uppercase leading-tight">Capacidad<br>Operativa</h3>                </div>                <div class="md:w-2/3 w-full">                    <p class="text-2xl font-black text-orange uppercase italic">infrastuctura actual: 300.000 m3/año</p>                </div>            </div>            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">                 <div class="glass-card p-8 rounded-[2.5rem] border-l-4 border-blue-700/50">                    <div class="flex items-center gap-4 mb-6"><div class="p-3 bg-blue-700/10 rounded-full text-blue-800"><i data-lucide="droplets"></i></div><h4 class="text-2xl font-black text-green-900 uppercase">Dotación Actual</h4></div>                    <div class="text-center py-6"><span class="text-5xl font-black text-orange block mb-2">50.000 <span class="text-lg">m?/año</span></span><p class="text-sm text-gray-500 font-bold uppercase tracking-widest">2 Pozos Operativos (8 l/s)</p></div>                 </div>                 <div class="glass-card p-8 rounded-[2.5rem] border-l-4 border-green-700/50 relative overflow-hidden">                    <div class="absolute top-0 right-0 bg-orange text-white text-[10px] font-bold px-3 py-1 rounded-bl-xl uppercase">Proyecto Expansión</div>                    <div class="flex items-center gap-4 mb-6"><div class="p-3 bg-green-700/10 rounded-full text-green-800"><i data-lucide="waves"></i></div><h4 class="text-2xl font-black text-green-900 uppercase">Acuífero La Cabranta</h4></div>                     <div class="text-center py-6"><span class="text-5xl font-black text-green-900 block mb-2">+150.000 <span class="text-lg">m?/año</span></span><p class="text-sm text-gray-500 font-bold uppercase tracking-widest">Avalado por Ingeniería Rodes</p></div>                 </div>            </div>        </div>    </section>    <div style="page-break-before: always; width: 100%; display: block;"></div>    <section id="saneamiento" class="py-24 px-6 bg-green-900/5">        <div class="max-w-7xl mx-auto">            <h2 class="text-4xl font-black uppercase italic mb-12 text-center text-green-900" data-i18n="sec4-title">05. Estrategia de <span class="text-orange">Saneamiento</span></h2>                        <div class="glass-card p-8 rounded-[2rem] text-center mb-12 max-w-xl mx-auto border-2 border-orange/20 bg-white/60">                <span class="block text-xs font-bold text-gray-400 uppercase tracking-[0.2em] mb-2" data-i18n="sec4-total-label">Importe Operación</span>                <span class="block text-5xl font-black text-green-900">1.500.000 €</span>            </div>            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">                <!-- Tarjeta 1: Deuda -->                <div class="glass-card p-10 rounded-[3rem] flex flex-col items-center">                    <div class="w-16 h-16 bg-green-700/10 rounded-full flex items-center justify-center mb-6 text-orange"><i data-lucide="shield-check"></i></div>                    <h4 class="font-black text-5xl mb-2 text-green-900 uppercase">60%</h4>                    <span class="block text-2xl font-light text-orange mb-4">900.000 € DEUDA</span>                    <p class="text-sm text-gray-500 leading-relaxed max-w-[220px]">Cancelación total de pasivos y regularización de acreedores.</p>                </div>                <!-- Tarjeta 2: CAPEX -->                <div class="glass-card p-10 rounded-[3rem] flex flex-col items-center">                    <div class="w-16 h-16 bg-blue-700/10 rounded-full flex items-center justify-center mb-6 text-blue-800"><i data-lucide="droplets"></i></div>                    <h4 class="font-black text-5xl mb-2 text-green-900 uppercase">25%</h4>                    <span class="block text-2xl font-light text-blue-700 mb-4">350.000 € CAPEX</span>                    <p class="text-sm text-gray-500 leading-relaxed max-w-[220px]">Infraestructuras hídricas y mantenimiento biológico.</p>                </div>                <!-- Tarjeta 3: Marketing -->                <div class="glass-card p-10 rounded-[3rem] flex flex-col items-center">                    <div class="w-16 h-16 bg-purple-700/10 rounded-full flex items-center justify-center mb-6 text-purple-800"><i data-lucide="trending-up"></i></div>                    <h4 class="font-black text-5xl mb-2 text-green-900 uppercase">15%</h4>                    <span class="block text-2xl font-light text-purple-700 mb-4">225.000 € MKT</span>                    <p class="text-sm text-gray-500 leading-relaxed max-w-[220px]">Expansión internacional B2C de la marca Sotaroni.</p>                </div>            </div>        </div>    </section>    <div style="page-break-before: always; height: 0px; width: 100%; visibility: hidden;"></div>    <section id="financieros" class="py-24 px-6 bg-white">        <div class="max-w-7xl mx-auto">            <h2 class="text-4xl font-black uppercase italic mb-12 text-center text-green-900" data-i18n="sec5-title">06. Cuenta de Explotación: <span class="text-orange">PyG 2019-2024</span></h2>            <div class="grid grid-cols-1 lg:grid-cols-1 gap-12">                <div class="glass-card p-8 rounded-[2.5rem] flex flex-col">                    <div class="flex justify-between items-center mb-6">                        <h3 class="text-xl font-black text-green-900 uppercase" data-i18n="sec5-chart-title">Evolución de Resultados</h3>                        <div class="flex gap-2 text-[9px] font-bold uppercase">                            <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-green-700"></span> Ingresos</span>                            <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-red-800"></span> Gastos</span>                        </div>                    </div>                    <div class="flex-grow min-h-[350px]">                        <canvas id="financeChart"></canvas>                    </div>                </div>                <div class="glass-card p-8 rounded-[2.5rem] overflow-hidden">                    <h3 class="text-xl font-black text-green-900 uppercase mb-6" data-i18n="sec5-table-title">Cuenta de Explotación Detallada</h3>                    <div class="overflow-x-auto">                        <table class="w-full text-right pyg-table">                            <thead><tr><th class="text-left">Partida (€)</th><th>2024</th><th>2023</th><th>2022</th><th>2021</th><th>2020</th><th>2019</th></tr></thead>                            <tbody>                                <tr><td class="text-left font-bold text-gray-700">Ingresos Explotación</td><td>358.612</td><td>176.639</td><td>290.953</td><td>465.123</td><td>514.949</td><td>389.000</td></tr>                                <tr><td class="text-left text-gray-500">Aprovisionamientos</td><td class="negative-val">-140.068</td><td class="negative-val">-171.012</td><td class="negative-val">-124.280</td><td class="negative-val">-275.444</td><td class="negative-val">-158.000</td><td class="negative-val">-205.158</td></tr>                                <tr><td class="text-left text-gray-500">Gtos. Estructura y Otros</td><td class="negative-val">-179.645</td><td class="negative-val">-119.749</td><td class="negative-val">-233.642</td><td class="negative-val">-187.626</td><td class="negative-val">-292.800</td><td class="negative-val">-173.417</td></tr>                                <tr class="pyg-row-subtotal"><td class="text-left">RESULTADO EXPLOTACIÓN</td><td class="positive-val">38.899</td><td class="negative-val">-114.122</td><td class="negative-val">-66.969</td><td class="positive-val">2.053</td><td class="positive-val">64.149</td><td class="positive-val">10.425</td></tr>                                <tr><td class="text-left text-blue-700">Ingresos Financieros</td><td>31.803</td><td>36.878</td><td>20.921</td><td>35.876</td><td>748</td><td>68.302</td></tr>                                <tr class="pyg-row-total bg-green-50"><td class="text-left text-green-900">RES. ANTES IMPUESTOS</td><td class="positive-val">70.702</td><td class="negative-val">-77.244</td><td class="negative-val">-46.048</td><td class="positive-val">37.929</td><td class="positive-val">64.897</td><td class="positive-val">78.727</td></tr>                            </tbody>                        </table>                    </div>                </div>            </div>        </div>    </section>    <div style="page-break-before: always; height: 0px; width: 100%; visibility: hidden;"></div>    <section id="estrategia-contexto" class="py-24 px-6 bg-green-900/5">        <div class="max-w-7xl mx-auto">            <h2 class="text-4xl font-black uppercase italic mb-12 text-center text-green-900">Contexto Estratégico & <span class="text-orange">Recuperación</span></h2>            <div class="grid grid-cols-1 lg:grid-cols-1 gap-8">                <div class="glass-card p-10 rounded-[3rem] border-l-8 border-orange bg-white">                    <div class="flex items-center gap-4 mb-6"><div class="p-3 bg-orange/10 rounded-full text-orange"><i data-lucide="history" class="w-8 h-8"></i></div><h3 class="text-2xl font-black text-green-900 uppercase">Reestructuración 2021</h3></div>                    <p class="text-sm text-gray-600 mb-6 leading-relaxed">En 2021 se ejecutó una reestructuración integral hacia <strong>cultivo ecológico certificado</strong>. Esta decisión estratégica implicó la eliminación selectiva de plantas para mejorar la calidad y estabilizar la producción.</p>                    <div class="bg-green-50 p-4 rounded-xl border border-green-100 mb-6"><p class="text-xs font-bold text-green-800 uppercase mb-2">Impacto en Tesorería</p><p class="text-sm text-gray-600">Esta reconversión causó la tensión de tesorería observada, cuya recuperación ya es visible en 2024.</p></div>                    <div class="bg-green-50 p-4 rounded-xl border border-green-100 mb-6"><p class="text-xs font-bold text-green-800 uppercase mb-2">Recuperación Productiva</p><p class="text-sm text-gray-600">Desde 2024 la recuperacon productiva del Olivar en prdución es un hecho que ayudara al aumento de los ingresos.</p></div>                    <div class="flex justify-between items-end mt-4"><div class="text-center"><span class="block text-3xl font-black text-gray-400">25%</span><span class="text-[20px] font-bold uppercase text-gray-500">Operativa 2025</span></div><div class="h-1 flex-grow mx-4 bg-gray-200 rounded relative overflow-hidden"><div class="absolute left-0 top-0 h-full bg-orange w-1/4"></div><div class="absolute left-1/4 top-0 h-full bg-green-500 w-3/4 opacity-20 dashed-line"></div></div><div class="text-center"><span class="block text-3xl font-black text-green-900">80%</span><span class="text-[20px] font-bold uppercase text-green-700">Objetivo 2030</span></div></div>                </div>                <div class="glass-card p-10 rounded-[3rem] border-l-8 border-green-700 bg-white">                    <div class="flex items-center gap-4 mb-6"><div class="p-3 bg-green-700/10 rounded-full text-green-700"><i data-lucide="scaling" class="w-8 h-8"></i></div><h3 class="text-2xl font-black text-green-900 uppercase">Expansión & Eficiencia 2021</h3></div>                    <ul class="space-y-4">                        <li class="flex gap-4"><i data-lucide="sprout" class="w-5 h-5 text-orange flex-shrink-0 mt-1"></i><div><span class="block font-bold text-green-900 text-sm uppercase">Arrendamiento Estratégico (+100 Ha)</span><span class="text-xs text-gray-600">Nuevas plantaciones de Olivar Ecológico para aumentar rentabilidad.</span></div></li>                        <li class="flex gap-4"><i data-lucide="droplets" class="w-5 h-5 text-blue-600 flex-shrink-0 mt-1"></i><div><span class="block font-bold text-green-900 text-sm uppercase">Inversión Hídrica</span><span class="text-xs text-gray-600">Modernización total del sistema de riego con <strong>gotero subterráneo</strong>.</span></div></li>                    </ul>                </div>            </div>        </div>    </section>    <div style="page-break-before: always; height: 0px; width: 100%; visibility: hidden;"></div>    <section id="marca" class="py-24 px-6 bg-green-900/5">        <div class="max-w-7xl mx-auto">            <h2 class="text-4xl font-black uppercase italic mb-12 text-center text-green-900" data-i18n="sec6-title">07. Valor de Marca: <span class="text-orange">Sotaroni</span></h2>            <div class="grid grid-cols-1 lg:grid-cols-1 gap-12 items-center text-left">                <div class="space-y-6">                    <p class="text-xl text-gray-600 font-light" data-i18n="sec5-desc">Sotaroni es una marca gourmet consolidada con presencia en el canal HORECA premium y mercados de exportación.</p>                    <div class="grid grid-cols-2 gap-4">                        <div class="p-4 border-l-2 border-orange bg-white/40"><span class="block text-2xl font-black text-green-900">AOVE & PX</span><span class="text-[10px] text-gray-500 uppercase font-bold">Productos Insignia</span></div>                        <div class="p-4 border-l-2 border-orange bg-white/40"><span class="block text-2xl font-black text-green-900">Gourmet</span><span class="text-[10px] text-gray-500 uppercase font-bold">Posicionamiento</span></div>                    </div>                </div>                <div class="relative group">                    <a href="https://sotaroni.es" target="_blank" rel="noopener noreferrer" class="block">                        <div class="relative glass-card p-8 rounded-3xl border border-green-900/10 text-center">                            <span class="text-orange font-black text-5xl">sotaroni.es</span>                            <p class="mt-4 uppercase font-bold tracking-widest text-xs text-gray-600">Brand Equity Auditado</p>                        </div>                    </a>                </div>                                <!-- Nueva Tarjeta de Imagen (Una Columna) -->                <div class="glass-card p-4 rounded-[3rem] overflow-hidden border border-green-900/10 bg-white/40 shadow-xl">                    <img src="https://cdn.shopify.com/s/files/1/0323/6095/5948/files/Gemini_Generated_Image_t7w8e7t7w8e7t7w8.png?v=1768593823"                          alt="[Imagen de Marca Sotaroni]"                          class="w-full h-auto rounded-[2.5rem] object-cover"                         onerror="this.src='https://images.unsplash.com/photo-1474440692490-2e83af13a443?auto=format&fit=crop&q=80&w=1200'">                </div>            </div>        </div>    </section>    <div style="page-break-before: always; height: 0px; width: 100%; visibility: hidden;"></div>    <section id="exit" class="py-24 px-6">        <div class="max-w-7xl mx-auto">            <h2 class="text-4xl font-black uppercase italic mb-12 text-center text-green-900">08. Estrategia de Gestión y Salida</h2>            <div class="grid grid-cols-1 gap-6">                <div class="glass-card p-12 rounded-[3rem] text-center border-t-4 border-orange">                    <h4 class="text-orange font-black text-3xl mb-6 uppercase">Dividendo Recurrente</h4>                    <p class="text-xl text-gray-600">Reparto del 40% del EBITDA a partir de 2027.</p>                </div>                <div class="glass-card p-12 rounded-[3rem] text-center border-t-4 border-green-800">                    <h4 class="text-green-900 font-black text-3xl mb-6 uppercase">Opción Buy-Back</h4>                    <p class="text-xl text-gray-600">Compromiso de recompra por la propiedad (Año 5-7).</p>                </div>                <div class="glass-card p-12 rounded-[3rem] text-center border-t-4 border-green-600">                    <h4 class="text-green-700 font-black text-3xl mb-6 uppercase">Venta ESG</h4>                    <p class="text-xl text-gray-600">Salida a fondos de agricultura regenerativa.</p>                </div>                <div class="glass-card p-12 rounded-[3rem] text-center border-t-4 border-blue-800">                    <h4 class="text-blue-900 font-black text-3xl mb-6 uppercase">Gobierno corporativo</h4>                    <p class="text-xl text-gray-600">Crear un consejo asesor (o de administración) con representación del fondo y expertos en agroindustria y distribución premium.</p>                </div>                <div class="glass-card p-12 rounded-[3rem] text-center border-t-4 border-purple-800">                    <h4 class="text-purple-900 font-black text-3xl mb-6 uppercase">Reporting financiero estructurado</h4>                    <p class="text-xl text-gray-600">Auditoría anual externa, KPIs mensuales sobre producción, ventas, márgenes, EBITDA, rentabilidad por hectárea.</p>                </div>                <div class="glass-card p-12 rounded-[3rem] text-center border-t-4 border-green-900 bg-white/40">                    <h4 class="text-green-900 font-black text-3xl mb-6 uppercase">Plan de negocio a 5 años</h4>                    <p class="text-xl text-gray-600 leading-relaxed">                        Con escenarios conservador, medio y agresivo. Incluye: Expansión del área ecológica, industrialización propia o acuerdos para embotellado/marca blanca, desarrollo del canal e-commerce and exportación, y activación del agroturismo rural premium.                    </p>                </div>            </div>        </div>    </section>    <div style="page-break-before: always; height: 0px; width: 100%; visibility: hidden;"></div>    <section id="ubicacion" class="py-24 px-6">        <div class="max-w-7xl mx-auto">            <h2 class="text-4xl font-black uppercase italic mb-12 text-center text-green-900" data-i18n="sec9-title">09. Ubicación y Logística <span class="text-orange">Estratégica</span></h2>            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">                <div class="glass-card p-8 rounded-[2.5rem] border-t-4 border-green-700">                    <h3 class="text-2xl font-black text-green-900 uppercase mb-6">Geografía & Clima</h3>                    <p class="text-sm text-gray-600 mb-8">Valle de Polop, Alcoy (Alicante). Enclave privilegiado entre los Parques Naturales de Font Roja y Sierra de Mariola.</p>                    <div class="grid grid-cols-2 gap-6">                        <div class="bg-white/40 p-4 rounded-2xl"><span class="block text-xs text-gray-500 font-bold uppercase">Altitud Media</span><span class="text-2xl font-black text-green-900">850 m</span></div>                        <div class="bg-white/40 p-4 rounded-2xl"><span class="block text-xs text-gray-500 font-bold uppercase">Pluviometría</span><span class="text-2xl font-black text-blue-700">600 mm</span></div>                        <div class="bg-white/40 p-4 rounded-2xl"><span class="block text-xs text-gray-500 font-bold uppercase">Horas Frío</span><span class="text-2xl font-black text-orange">1200 h</span></div>                        <div class="bg-white/40 p-4 rounded-2xl"><span class="block text-xs text-gray-500 font-bold uppercase">Clima</span><span class="text-lg font-bold text-green-900 uppercase leading-none mt-1">Mediterráneo Montaña</span></div>                    </div>                </div>                <div class="glass-card p-8 rounded-[2.5rem] border-t-4 border-orange">                    <h3 class="text-2xl font-black text-green-900 uppercase mb-6">Conectividad Global</h3>                    <ul class="space-y-6">                        <li class="flex items-center gap-4"><div class="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center text-red-700"><i data-lucide="hospital"></i></div><div><span class="block font-bold text-green-900 uppercase text-sm">Alcoy (Hospital general)</span><span class="text-gray-600 text-xs">Cercanía estratégica (10 min)</span></div></li>                        <li class="flex items-center gap-4"><div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-700"><i data-lucide="anchor"></i></div><div><span class="block font-bold text-green-900 uppercase text-sm">Puertos Mercantiles</span><span class="text-gray-600 text-xs">Alicante (50 min) - Valencia (1h 15m)</span></div></li>                        <li class="flex items-center gap-4"><div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center text-orange"><i data-lucide="plane"></i></div><div><span class="block font-bold text-green-900 uppercase text-sm">Aeropuertos Internacionales</span><span class="text-gray-600 text-xs">ALC Alicante (45 min) - VLC Valencia (1h 10m)</span></div></li>                        <li class="flex items-center gap-4"><div class="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center text-purple-700"><i data-lucide="train"></i></div><div><span class="block font-bold text-green-900 uppercase text-sm">Alta Velocidad (AVE)</span><span class="text-gray-600 text-xs">Estación Villena (30 min)</span></div></li>                    </ul>                </div>            </div>            <!-- Tarjeta Google Maps Satelital Actualizada -->            <div class="glass-card p-4 rounded-[3rem] mt-8 overflow-hidden border border-green-900/10 bg-white/40 shadow-xl">                <div class="flex items-center gap-4 mb-6 px-6 pt-4">                    <div class="p-3 bg-red-100 rounded-full text-red-600"><i data-lucide="map-pin" class="w-6 h-6"></i></div>                    <div>                        <h3 class="text-2xl font-black text-green-900 uppercase">Localización & Acceso Finca</h3>                        <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Sotaroni Aceites y Vinagres | Partida Polop Alt, 31, 03819 Alcoi</p>                    </div>                </div>                <div class="w-full h-[450px] rounded-[2rem] overflow-hidden border border-green-900/10">                    <iframe                         width="100%"                         height="100%"                         frameborder="0"                         style="border:0"                         src="https://maps.google.com/maps?q=Sotaroni+Aceites+y+Vinagres+Alcoi&t=k&z=17&output=embed"                         allowfullscreen>                    </iframe>                </div>                <div class="mt-6 text-center pb-4">                    <a href="https://www.google.com/maps/dir/?api=1&destination=Sotaroni+Aceites+y+Vinagres+Alcoi" target="_blank" class="inline-flex items-center gap-2 bg-green-900 text-white px-8 py-3 rounded-2xl font-bold text-sm hover:scale-105 transition-all">                        <i data-lucide="navigation" class="w-4 h-4"></i> CÓMO LLEGAR A TORREVELLA                    </a>                </div>            </div>                        <div class="glass-card p-8 rounded-[2.5rem] mt-8 border-t-4 border-green-800">                <div class="flex items-center gap-4 mb-6">                    <div class="p-3 bg-green-800/10 rounded-full text-green-800"><i data-lucide="mountain" class="w-6 h-6"></i></div>                    <h3 class="text-2xl font-black text-green-900 uppercase">Orografía del Terreno</h3>                </div>                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">                    <div class="bg-white/50 p-6 rounded-2xl border border-green-100">                        <span class="block text-4xl font-black text-green-700 mb-2">30%</span>                        <span class="text-xs font-bold uppercase tracking-widest text-gray-500">Terrenos Llanos</span>                        <div class="w-full h-1 bg-green-200 mt-3 rounded-full"><div class="w-full h-full bg-green-600 rounded-full"></div></div>                    </div>                    <div class="bg-white/50 p-6 rounded-2xl border border-green-100">                        <span class="block text-4xl font-black text-orange mb-2">50%</span>                        <span class="text-xs font-bold uppercase tracking-widest text-gray-500">Pendiente Media</span>                        <div class="w-full h-1 bg-orange/20 mt-3 rounded-full"><div class="w-full h-full bg-orange rounded-full"></div></div>                    </div>                    <div class="bg-white/50 p-6 rounded-2xl border border-green-100">                        <span class="block text-4xl font-black text-green-900 mb-2">20%</span>                        <span class="text-xs font-bold uppercase tracking-widest text-gray-500">Pendiente Elevada / Bancales</span>                        <div class="w-full h-1 bg-green-900/20 mt-3 rounded-full"><div class="w-full h-full bg-green-900 rounded-full"></div></div>                    </div>                </div>            </div>        </div>    </section>    <div style="page-break-before: always; width: 100%; display: block;"></div>    <footer class="py-24 px-6 text-center border-t border-green-900/5">        <p class="text-3xl font-black mb-4 tracking-tighter">media@torrevella.com</p>        <p class="text-[11px] text-gray-500 uppercase font-bold tracking-[0.4em]" data-i18n="footer">Torrevella S.L. | Relación con Inversores 2026</p>        <p class="text-[12px] text-green-900 font-bold mt-6">creado por Nicolás Sanjuán Pérez Administrador Único</p>        <p class="text-[12px] text-green-900 font-bold">WhatsApp: +34 616582106</p>    </footer>    <script>        const apiKey = "";         let currentLang = 'es';        let myChart, financeChart;        const translations = {            es: {                "nav-tesis": "Tesis", "nav-analysis": "Análisis", "nav-saneamiento": "Saneamiento", "nav-finance": "Finanzas", "nav-sotaroni": "Sotaroni",                "hero-tag": "Investment Round 2026 | Confidencial",                "hero-title": "Patrimonio Bio Ecológico <br><span class='text-orange text-5xl md:text-7xl'>En Expansión.</span>",                "hero-sub": "Participación estratégica del <span class='font-bold text-green-900'>30% del equity</span>. <br>Respaldo patrimonial de <span class='font-bold text-green-900'>8,6M€ en activos reales auditados</span>.",                "btn-pitch": "Pitch Inversión", "btn-val": "Validación Comercial", "btn-rep": "Reporte Ejecutivo", "btn-sim": "Simulación Exit",                "sec1-title": "01. Tesis de Inversión: <span class='text-orange'>Oportunidad</span>",                "sec1-p1": "Torrevella S.L. ha completado su fase de CAPEX biológico. El inversor entra en el punto de inflexión donde el <strong>Margen de Seguridad es del 50%</strong> respecto a los activos brutos.",                "sec1-req-label": "Capital Solicitado", "sec1-equity-detail": "Por el 30% Participación Social (Equity)",                "sec1-risk": "Riesgo Financiero", "sec1-backing": "Respaldo Activos",                "sec1-assets-title": "Desglose Técnico de Activos",                "asset-land": "Suelo Agrícola", "asset-land-desc": "135 Ha Productivas",                "asset-build": "Edif., Maquinaria e Infra. Agrícola", "asset-build-desc": "NAVES, MAQUINARIA, INFRASTUCTURA HÍDRICA",                "asset-forest": "Masa Biológica", "asset-forest-desc": "35.250 Árboles",                "asset-house": "Vivienda Señorial", "asset-house-desc": "Patrimonio Histórico",                "asset-total": "Total Activos Reales",                "sec2-title": "02. Validación Comercial: <span class='text-orange'>Picos de Venta</span>",                "sec2-cherry": "Pico Cerezas IGP", "sec2-oil": "Pico Aceite AOVE", "sec2-vinegar": "Pico Vinagres PX",                "sec3-title": "03. Inventario Biológico: <span class='text-orange'>37.750 Árboles</span>",                "tab-crop": "Cultivo", "tab-ha": "Hectáreas", "tab-trees": "Censo Árboles", "tab-status": "Estatus 2026",                "crop-olive": "Olivar Ecológico", "stat-asc": "Producción Ascendente", "crop-almond": "Almendro Ecológico", "stat-grow": "Crecimiento", "crop-cherry": "Cerezo IGP", "stat-70": "70% de Producción",                "sec4-title": "05. Estrategia de <span class='text-orange'>Saneamiento</span>",                "sec4-total-label": "Importe Operación",                "sec4-debt": "60% Deuda", "sec4-debt-desc": "Cancelación total de pasivos y regularización de acreedores.",                "sec4-capex-desc": "Infraestructuras hídricas y mantenimiento biológico.",                "sec4-mkt": "15% Marketing", "sec4-mkt-desc": "Expansión internacional B2C de la marca Sotaroni.",                "sec5-title": "06. Desempeño Financiero: <span class='text-orange'>PyG 2019-2024</span>",                "sec5-chart-title": "Evolución de Resultados", "sec5-table-title": "Cuenta de Explotación Detallada",                "sec6-title": "07. Valor de Marca: <span class='text-orange'>Sotaroni</span>",                "sec5-desc": "Sotaroni es una marca gourmet consolidada con presencia en el canal HORECA premium y mercados de exportación (EEUU, Europa).",                "sec5-prod": "Productos Insignia", "sec5-pos": "Posicionamiento", "sec5-equity": "Audited Brand Equity",                "sec7-title": "08. Estrategia de <span class='text-orange'>Salida</span>",                "sec6-div": "Recurring Dividend", "sec6-div-desc": "Reparto del 40% del EBITDA a partir de 2027.",                "sec6-buy": "Opción Buy-Back", "sec6-buy-desc": "Compromiso de recompra por la propiedad (Año 5-7).",                "sec6-esg": "Venta ESG", "sec6-esg-desc": "Salida a fondos de agricultura regenerativa.",                "sec8-title": "09. Infraestructura Hídrica: <span class='text-orange'>Garantía</span>",                "sec7-current": "Dotación Actual", "sec7-wells": "2 Pozos Operativos (8 l/s)",                "sec7-tag": "Proyecto Expansión", "sec7-project": "Acuífero La Cabranta", "sec7-study": "Avalado por Ingeniería Rodes",                "sec9-title": "10. Ubicación y Logística <span class='text-orange'>Estratégica</span>",                "footer": "Torrevella S.L. | Relación con Inversores 2026"            },            en: {                "nav-tesis": "Thesis", "nav-analysis": "Analysis", "nav-saneamiento": "Restructuring", "nav-finance": "Finance", "nav-sotaroni": "Sotaroni",                "hero-tag": "Investment Round 2026 | Confidential",                "hero-title": "Bio-Organic Heritage <br><span class='text-orange text-5xl md:text-7xl'>Expanding.</span>",                "hero-sub": "Strategic <span class='font-bold text-green-900'>30% equity stake</span>. <br>Asset backing of <span class='font-bold text-green-900'>€8.6M in audited real assets</span>.",                "btn-pitch": "Investment Pitch", "btn-val": "Market Validation", "btn-rep": "Executive Report", "btn-sim": "Exit Simulation",                "sec1-title": "01. Investment Thesis: <span class='text-orange'>Opportunity</span>",                "sec1-p1": "Torrevella S.L. has completed its biological CAPEX phase. Investors join at the inflection point where the <strong>Margin of Safety is 50%</strong> relative to gross assets.",                "sec1-req-label": "Capital Requested", "sec1-equity-detail": "For a 30% Equity Stake",                "sec1-risk": "Financial Risk", "sec1-backing": "Asset Backing",                "sec1-assets-title": "Technical Asset Breakdown",                "asset-land": "Agricultural Land", "asset-land-desc": "135 Productive Ha",                "asset-build": "Infrastructure & Machinery", "asset-build-desc": "PLANT, MACHINERY, WATER SYSTEMS",                "asset-forest": "Biological Assets", "asset-forest-desc": "37,750 Trees",                "asset-house": "Manor House", "asset-house-desc": "Historical Heritage",                "asset-total": "Total Real Assets",                "sec2-title": "02. Market Validation: <span class='text-orange'>Sales Peaks</span>",                "sec2-cherry": "PGI Cherry Peak", "sec2-oil": "EVOO Oil Peak", "sec2-vinegar": "PX Vinegar Peak",                "sec3-title": "03. Biological Inventory: <span class='text-orange'>37,750 Trees</span>",                "tab-crop": "Crop", "tab-ha": "Hectares", "tab-trees": "Tree Census", "tab-status": "2026 Status",                "crop-olive": "Organic Olive", "stat-asc": "Rising Yields", "crop-almond": "Organic Almond", "stat-grow": "Growth Phase", "crop-cherry": "PGI Cherry", "stat-70": "70% Production",                "sec4-title": "05. Restructuring <span class='text-orange'>Strategy</span>",                "sec4-total-label": "Total Operation Amount",                "sec4-debt": "60% Debt", "sec4-debt-desc": "Full liability clearance and creditor settlement.",                "sec4-capex-desc": "Water infrastructure and biological upkeep.",                "sec4-mkt": "15% Marketing", "sec4-mkt-desc": "Sotaroni brand B2C international expansion.",                "sec5-title": "06. Financial Performance: <span class='text-orange'>P&L 2019-2024</span>",                "sec5-chart-title": "Performance Trends", "sec5-table-title": "Income Statement Breakdown",                "sec6-title": "07. Brand Equity: <span class='text-orange'>Sotaroni</span>",                "sec5-desc": "Sotaroni is a consolidated gourmet brand present in premium HORECA channels and global export markets (USA, EU).",                "sec5-prod": "Flagship Products", "sec5-pos": "Market Positioning", "sec5-equity": "Audited Brand Equity",                "sec7-title": "08. Exit <span class='text-orange'>Strategy</span>",                "sec6-div": "Recurring Dividend", "sec6-div-desc": "40% EBITDA distribution starting in 2027.",                "sec6-buy": "Buy-Back Option", "sec6-buy-desc": "Buy-back commitment by current ownership (Year 5-7).",                "sec6-esg": "ESG Sale", "sec6-esg-desc": "Exit to regenerative agriculture funds.",                "sec8-title": "09. Water Infrastructure: <span class='text-orange'>Reliability</span>",                "sec7-current": "Current Supply", "sec7-wells": "2 Operational Wells (8 l/s)",                "sec7-tag": "Expansion Project", "sec7-project": "La Cabranta Aquifer", "sec7-study": "Rodes Engineering Verified",                "sec9-title": "10. Strategic Location & <span class='text-orange'>Logistics</span>",                "footer": "Torrevella S.L. | Investor Relations 2026"            }        };        const guiones = {            es: {                pitch: "Informe de inversión Torrevella Sociedad Limitada. Se ofrece una participación del treinta por ciento del capital social por uno coma tres millones de euros. La operación está respaldada por activos reales auditados de ocho coma seis millones.",                validacion: "Análisis comercial histórico. Torrevella alcanzó picos de facturación superiores a los quinientos mil euros anuales, certificando la tracción de la marca Sotaroni en el canal gourmet premium.",                reporte: "Resumen operativo. El ejercicio dos mil veinticuatro confirma la recuperación técnica con EBITDA positivo de ciento dos mil euros. La certificación ecológica íntegra en dos mil veintiséis elevará la rentabilidad.",                simulacion: "Estrategia de salida. Contemplamos reparto del cuarenta por ciento del EBITDA o una opción de recompra por la propiedad original a un múltiplo de seis veces EBITDA."            },            en: {                pitch: "Torrevella Limited Liability Company Investment Report. We offer a thirty percent equity stake for one point five million euros. The operation is backed by audited real assets valued at eight point six million euros.",                validacion: "Historical commercial analysis. Torrevella reached sales peaks exceeding five hundred thousand euros annually, certifying the traction of the Sotaroni brand in the premium gourmet market.",                reporte: "Operational summary. The 2024 fiscal year confirms technical recovery with a positive EBITDA of one hundred and two thousand euros. Full organic certification by 2026 will significantly boost profitability.",                simulacion: "Exit strategy. We contemplate a forty percent EBITDA distribution or a buy-back option by the original ownership at a multiple of six times EBITDA."            }        };        function toggleLanguage() {            currentLang = currentLang === 'es' ? 'en' : 'es';            document.getElementById('langBtn').innerHTML = currentLang === 'es' ? 'ES | <span class="opacity-50">EN</span>' : '<span class="opacity-50">ES</span> | EN';            document.querySelectorAll('[data-i18n]').forEach(el => {                const key = el.getAttribute('data-i18n');                if (translations[currentLang][key]) el.innerHTML = translations[currentLang][key];            });            updateCharts();        }        function initIcons() { if (typeof lucide !== 'undefined') lucide.createIcons(); }        async function handlePrint() {            const btn = document.getElementById('btnImprimir');            const btnText = btn.querySelector('.btn-text');            const loader = btn.querySelector('.loader');            const icon = btn.querySelector('.btn-icon');            const originalText = btnText.innerText;            btn.disabled = true;            btnText.innerText = "GENERANDO...";            loader.style.display = "inline-block";            if(icon) icon.style.display = "none";            document.body.classList.add('print-mode');            try {                const canvases = document.querySelectorAll('canvas');                canvases.forEach(canvas => {                    canvas.style.display = 'none';                    if (!canvas.nextElementSibling || !canvas.nextElementSibling.classList.contains('print-chart-image')) {                        const img = new Image();                        img.src = canvas.toDataURL('image/png', 1.0);                        img.className = 'print-chart-image';                        img.style.width = '100%';                        img.style.display = 'block';                        canvas.parentNode.insertBefore(img, canvas.nextSibling);                    }                });                const element = document.body;                const opt = {                    margin:       [5, 5, 5, 5],                    filename:     'Torrevella_Inversion_2026.pdf',                    image:        { type: 'jpeg', quality: 0.98 },                    html2canvas:  {                         scale: 2,                         useCORS: true,                         ignoreElements: (element) => {                            return element.classList.contains('no-print') ||                                    element.classList.contains('quick-action-btn') ||                                    element.tagName === 'NAV' ||                                    element.tagName === 'FOOTER' ||                                   (element.tagName === 'BUTTON' && element.id !== 'fakeBtn');                         }                    },                    jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }                };                await html2pdf().set(opt).from(element).save();            } catch (error) {                console.error("Error PDF:", error);            } finally {                document.body.classList.remove('print-mode');                const canvases = document.querySelectorAll('canvas');                canvases.forEach(canvas => {                    canvas.style.display = 'block';                    if (canvas.nextElementSibling && canvas.nextElementSibling.classList.contains('print-chart-image')) {                        canvas.nextElementSibling.remove();                    }                });                btnText.innerText = originalText;                loader.style.display = "none";                if(icon) icon.style.display = "inline-block";                btn.disabled = false;            }        }        function updateCharts() {            const ctx = document.getElementById('historicalChart').getContext('2d');            if (myChart) myChart.destroy();            myChart = new Chart(ctx, {                type: 'line',                data: {                    labels: ['2019', '2020', '2021', '2023', '2024', '2026 Est.'],                    datasets: [{                        label: currentLang === 'es' ? 'Facturación (€)' : 'Revenue (€)',                        data: [366000, 515000, 465123, 176639, 358612, 590000],                        borderColor: '#556B2F', backgroundColor: 'rgba(85, 107, 47, 0.2)', fill: true, tension: 0.4                    }]                },                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, grid: { color: 'rgba(51, 102, 0, 0.1)' }, ticks: { color: '#336600' } }, x: { grid: { display: false }, ticks: { color: '#336600' } } } }            });            const ctx2 = document.getElementById('financeChart').getContext('2d');            if (financeChart) financeChart.destroy();            financeChart = new Chart(ctx2, {                type: 'bar',                data: {                    labels: ['2019', '2020', '2021', '2022', '2023', '2024'],                    datasets: [                        { type: 'line', label: currentLang === 'es' ? 'Res. Antes Impuestos' : 'EBT', data: [78727, 64897, 37929, -46048, -77244, 70702], borderColor: '#1e3a8a', borderWidth: 2, pointRadius: 4, pointBackgroundColor: '#1e3a8a', tension: 0.2, yAxisID: 'y' },                        { type: 'line', label: currentLang === 'es' ? 'EBITDA / Explotación' : 'EBITDA / Operating', data: [10425, 64149, 2053, -66969, -114122, 38899], borderColor: '#f97316', borderWidth: 3, pointBackgroundColor: '#f97316', tension: 0.3, yAxisID: 'y' },                        { type: 'bar', label: currentLang === 'es' ? 'Ingresos Totales' : 'Total Revenue', data: [389000, 514949, 465123, 290953, 176639, 358612], backgroundColor: 'rgba(21, 128, 61, 0.7)', borderRadius: 4, yAxisID: 'y' },                        { type: 'bar', label: currentLang === 'es' ? 'Gastos Operativos' : 'OpEx', data: [378575, 450800, 463070, 357922, 290761, 319713], backgroundColor: 'rgba(153, 27, 27, 0.5)', borderRadius: 4, yAxisID: 'y' }                    ]                },                options: { responsive: true, maintainAspectRatio: false, interaction: { mode: 'index', intersect: false }, scales: { y: { grid: { color: 'rgba(0,0,0,0.05)' } }, x: { grid: { display: false } } }, plugins: { legend: { position: 'bottom', labels: { usePointStyle: true, font: { size: 10 } } } } }            });        }        async function fetchWithRetry(url, options, maxRetries = 5) {            let delay = 1000;            for (let i = 0; i < maxRetries; i++) {                try {                    const response = await fetch(url, options);                    if (response.ok) return response;                } catch (e) {}                await new Promise(res => setTimeout(res, delay));                delay *= 2;            }            throw new Error("Error.");        }        async function playStaticAudio(type) {            const btn = document.getElementById(`btn-${type}`);            const btnText = btn.querySelector('.btn-text');            const btnIcon = btn.querySelector('.btn-icon');            const progressContainer = btn.querySelector('.audio-progress-container');            const originalText = translations[currentLang][`btn-${type.substring(0,3)}`] || btnText.textContent;            const originalIcon = btnIcon.getAttribute('data-lucide');            const text = guiones[currentLang][type];            btn.classList.add('anim-loading');            btnText.textContent = currentLang === 'es' ? "Procesando..." : "Processing...";            btnIcon.setAttribute('data-lucide', 'loader-2');            progressContainer.style.display = 'block';            initIcons();            try {                let voiceInstruction = currentLang === 'es' ? `Diga con acento de Madrid, tono ejecutivo: ${text}` : `Speak in a professional British accent: ${text}`;                const response = await fetchWithRetry(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${apiKey}`, {                    method: 'POST', headers: { 'Content-Type': 'application/json' },                    body: JSON.stringify({ contents: [{ parts: [{ text: voiceInstruction }] }], generationConfig: { responseModalities: ["AUDIO"], speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: "Charon" } } } } })                });                const result = await response.json();                const pcmData = result.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;                if (pcmData) {                    const audio = new Audio(URL.createObjectURL(pcmToWav(pcmData, 24000)));                    btn.classList.remove('anim-loading');                    btn.classList.add('playing-pulse');                    btnText.textContent = currentLang === 'es' ? "Escuchando..." : "Listening...";                    btnIcon.setAttribute('data-lucide', 'volume-2');                    progressContainer.style.display = 'none';                    initIcons();                    audio.onended = () => resetButton();                    audio.play();                } else { resetButton(); }            } catch (e) { resetButton(); }            function resetButton() {                btn.classList.remove('anim-loading', 'playing-pulse');                btnText.textContent = originalText;                btnIcon.setAttribute('data-lucide', originalIcon);                progressContainer.style.display = 'none';                initIcons();            }        }        function pcmToWav(base64Pcm, sampleRate) {            const buffer = Uint8Array.from(atob(base64Pcm), c => c.charCodeAt(0)).buffer;            const wavBuffer = new ArrayBuffer(44 + buffer.byteLength);            const view = new DataView(wavBuffer);            const writeString = (o, s) => { for(let i=0;i<s.length;i++) view.setUint8(o+i, s.charCodeAt(i)); };            writeString(0, 'RIFF'); view.setUint32(4, 36 + buffer.byteLength, true); writeString(8, 'WAVE'); writeString(12, 'fmt ');            view.setUint32(16, 16, true); view.setUint16(20, 1, true); view.setUint16(22, 1, true); view.setUint32(24, sampleRate, true);            view.setUint32(28, sampleRate * 2, true); view.setUint16(32, 2, true); view.setUint16(34, 16, true); writeString(36, 'data');            view.setUint32(40, buffer.byteLength, true);            const pcmView = new DataView(buffer);            for(let i=0;i<buffer.byteLength;i++) view.setUint8(44+i, pcmView.getUint8(i));            return new Blob([wavBuffer], { type: 'audio/wav' });        }        window.onload = () => { initIcons(); updateCharts(); };    </script></body></html>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Torrevella S.L. - Master Investment Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@300;400;600;700;800&family=Poppins:wght@700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.0/lucide.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    
+    <style>
+        body { font-family: 'Urbanist', sans-serif; background-color: #F9F5E6; color: #336600; scroll-behavior: smooth; }
+        .glass-card { background: rgba(20, 30, 10, 0.05); backdrop-filter: blur(12px); border: 1px solid rgba(51, 102, 0, 0.1); transition: all 0.4s ease; }
+        .glass-card:hover { border-color: #666600; background: rgba(20, 30, 10, 0.1); transform: translateY(-5px); }
+        .text-orange { color: #556B2F; }
+        .bg-orange { background-color: #556B2F; }
+        nav { background-color: rgba(40, 45, 30, 0.95) !important; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .quick-action-btn { background: rgba(51, 102, 0, 0.05); border: 1px solid rgba(51, 102, 0, 0.2); padding: 14px 28px; border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; transition: all 0.3s; cursor: pointer; min-width: 220px; color: #336600; position: relative; overflow: hidden; }
+        .audio-progress-container { position: absolute; bottom: 0; left: 0; width: 100%; height: 4px; background: rgba(51, 102, 0, 0.1); display: none; }
+        .audio-progress-fill { height: 100%; width: 35%; background: #556B2F; position: absolute; left: -35%; }
+        .anim-loading .audio-progress-fill { animation: loading-bar 1.5s infinite linear; }
+        @keyframes loading-bar { 0% { left: -35%; } 100% { left: 100%; } }
+        .chat-container { height: 320px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; padding: 15px; }
+        .message { padding: 12px 16px; border-radius: 14px; font-size: 13px; max-width: 85%; line-height: 1.4; }
+        .user-msg { align-self: flex-end; background: #556B2F; color: #F9F5E6; font-weight: 700; }
+        .ai-msg { align-self: flex-start; background: #E6E2D3; color: #333300; border: 1px solid #CCC; }
+        .custom-scroll::-webkit-scrollbar { width: 5px; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #888877; border-radius: 10px; }
+        
+        /* Table Styles for PyG */
+        .pyg-table th { font-size: 10px; text-transform: uppercase; color: #556B2F; padding: 8px 12px; font-weight: 800; letter-spacing: 0.05em; border-bottom: 2px solid rgba(51, 102, 0, 0.1); }
+        .pyg-table td { padding: 8px 12px; font-size: 11px; border-bottom: 1px solid rgba(51, 102, 0, 0.05); white-space: nowrap; }
+        .pyg-table tr:hover td { background: rgba(51, 102, 0, 0.02); }
+        .pyg-row-total td { font-weight: 800; background: rgba(51, 102, 0, 0.05); border-top: 1px solid rgba(51, 102, 0, 0.2); }
+        .pyg-row-subtotal td { font-weight: 700; color: #444; background: rgba(0,0,0,0.01); }
+        .negative-val { color: #993333; }
+        .positive-val { color: #336600; }
+        
+        .infra-list li { margin-bottom: 8px; font-size: 18px; display: flex; align-items: flex-start; gap: 8px; color: #444; }
+        .infra-list li::before { content: '‚Ä¢'; color: #556B2F; font-weight: bold; }
+
+        /* --- LOADER STYLE --- */
+        .loader {
+            width: 14px;
+            height: 14px;
+            border: 2px solid #fff;
+            border-bottom-color: transparent;
+            border-radius: 50%;
+            display: inline-block;
+            animation: rotation 1s linear infinite;
+            vertical-align: middle;
+            margin-left: 8px;
+        }
+        @keyframes rotation { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        /* --- ESTILOS FORZADOS PARA HTML2PDF (.print-mode) --- */
+        
+        .print-mode nav, 
+        .print-mode footer, 
+        .print-mode button, 
+        .print-mode .no-print, 
+        .print-mode #hub,
+        .print-mode .quick-action-btn { 
+            display: none !important; 
+        }
+
+        .print-mode body { 
+            background-color: #ffffff !important; 
+            color: #111 !important;
+        }
+
+        .print-mode .glass-card { 
+            background: #ffffff !important; 
+            border: 1px solid #ddd !important; 
+            box-shadow: none !important; 
+            backdrop-filter: none !important;
+        }
+
+        .print-mode section {
+            page-break-after: always !important;
+            break-after: page !important;
+            min-height: 100vh !important;
+            display: flex !important;
+            flex-direction: column !important;
+            justify-content: flex-start !important;
+            padding: 10px !important; 
+            box-sizing: border-box !important;
+        }
+
+        .print-mode section h2 {
+            margin-top: 20px !important;
+            margin-bottom: 20px !important;
+            color: #1a410b !important;
+        }
+
+        .print-mode canvas { display: none !important; }
+        .print-mode .print-chart-image { 
+            display: block !important; 
+            max-width: 90% !important; 
+            margin: 20px auto !important; 
+        }
+        
+        .print-mode header {
+            padding-top: 20px !important;
+            justify-content: center !important;
+            min-height: 100vh !important;
+            page-break-after: always !important;
+        }
+
+        @media print {
+            @page { margin: 0; }
+            nav, .quick-action-btn, #langBtn, .no-print, button, #chatInput, .loader, #hub, #btnImprimir { display: none !important; }
+            body { background-color: #ffffff !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; margin: 0 !important; padding: 0 !important; }
+            section { page-break-after: always !important; break-after: page !important; min-height: 100vh !important; display: flex !important; flex-direction: column !important; justify-content: flex-start !important; align-items: flex-start !important; padding: 0 40px !important; box-sizing: border-box !important; }
+            section::before { content: "" !important; display: block !important; width: 100% !important; height: 150px !important; flex-shrink: 0 !important; }
+            section h1, section h2, section h3 { margin-top: 0 !important; margin-bottom: 50px !important; width: 100% !important; text-align: left !important; }
+            header { page-break-after: always !important; break-after: page !important; min-height: 100vh !important; display: flex !important; flex-direction: column !important; justify-content: center !important; }
+            .glass-card { background: #ffffff !important; backdrop-filter: none !important; border: 1px solid #ddd !important; box-shadow: none !important; break-inside: avoid !important; }
+            .print-chart-image { display: block !important; width: 100% !important; max-height: 400px; object-fit: contain; margin: 10px auto; }
+            canvas { display: none !important; }
+        }
+        .print-chart-image { display: none; }
+    </style>
+</head>
+<body class="antialiased" id="contentToPrint">
+    <nav class="fixed top-0 w-full z-50 py-5 px-10 flex justify-between items-center no-print">
+        <div class="font-black text-2xl tracking-tighter uppercase text-white">TORREVELLA <span class="text-orange">S.L.</span></div>
+        <div class="flex items-center gap-6">
+            <div class="hidden lg:flex gap-5 text-[10px] uppercase font-bold tracking-[0.2em] text-white/70">
+                <a href="#tesis" class="hover:text-white transition-colors">Tesis</a>
+                <a href="#analisis" class="hover:text-white transition-colors">An√°lisis</a>
+                <a href="#infraestructura" class="hover:text-white transition-colors text-orange">Infraestructura</a>
+                <a href="#saneamiento" class="hover:text-white transition-colors">Saneamiento</a>
+                <a href="#financieros" class="hover:text-white transition-colors">Finanzas</a>
+            </div>
+            <div class="flex gap-2">
+                <button onclick="handlePrint()" id="btnImprimir" class="bg-orange/90 hover:bg-orange text-white px-4 py-2 rounded-lg text-xs font-bold transition-all shadow-lg flex items-center gap-2">
+                    <i data-lucide="download" class="w-4 h-4 btn-icon"></i>
+                    <span class="btn-text">DESCARGAR PDF</span>
+                    <span class="loader" style="display: none;"></span>
+                </button>
+                <button onclick="toggleLanguage()" class="bg-white/10 border border-white/20 text-white px-3 py-1.5 rounded text-[10px] font-bold" id="langBtn">ES | <span class="opacity-50">EN</span></button>
+            </div>
+        </div>
+    </nav>
+    <header class="pt-52 pb-24 px-6 text-center">
+        <div class="max-w-6xl mx-auto">
+            <span class="inline-block px-5 py-1.5 border border-green-700/30 text-green-800 rounded-full text-[9px] font-bold uppercase tracking-[0.3em] mb-10 bg-green-700/5" data-i18n="hero-tag">Investment Round 2026 | Confidencial</span>
+            <h1 class="text-6xl md:text-8xl font-black mb-10 tracking-tighter uppercase font-[Poppins] italic leading-none text-green-900" data-i18n="hero-title">
+                Patrimonio Bio Ecol√≥gico <br><span class="text-orange text-5xl md:text-7xl">En Expansi√≥n.</span>
+            </h1>
+            <p class="text-xl md:text-2xl text-gray-500 font-light max-w-4xl mx-auto mb-20 leading-snug" data-i18n="hero-sub">
+                Participaci√≥n estrat√©gica del <span class="font-bold text-green-900">30% del equity</span>. <br>
+                Respaldo patrimonial de <span class="font-bold text-green-900">8,6M‚Ç¨ en activos reales auditados</span>.
+            </p>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 max-w-7xl mx-auto">
+                <button onclick="playStaticAudio('pitch')" class="quick-action-btn" id="btn-pitch">
+                    <div class="flex items-center gap-3"><i data-lucide="play-circle" class="btn-icon w-4 h-4"></i> <span class="btn-text" data-i18n="btn-pitch">Pitch Inversi√≥n</span></div>
+                    <div class="audio-progress-container"><div class="audio-progress-fill"></div></div>
+                </button>
+                <button onclick="playStaticAudio('validacion')" class="quick-action-btn" id="btn-validacion">
+                    <div class="flex items-center gap-3"><i data-lucide="shield-check" class="btn-icon w-4 h-4"></i> <span class="btn-text" data-i18n="btn-val">Validaci√≥n Comercial</span></div>
+                    <div class="audio-progress-container"><div class="audio-progress-fill"></div></div>
+                </button>
+                <button onclick="playStaticAudio('reporte')" class="quick-action-btn" id="btn-reporte">
+                    <div class="flex items-center gap-3"><i data-lucide="file-text" class="btn-icon w-4 h-4"></i> <span class="btn-text" data-i18n="btn-rep">Reporte Ejecutivo</span></div>
+                    <div class="audio-progress-container"><div class="audio-progress-fill"></div></div>
+                </button>
+                <button onclick="playStaticAudio('simulacion')" class="quick-action-btn" id="btn-simulacion">
+                    <div class="flex items-center gap-3"><i data-lucide="trending-up" class="btn-icon w-4 h-4"></i> <span class="btn-text" data-i18n="btn-sim">Simulaci√≥n Exit</span></div>
+                    <div class="audio-progress-container"><div class="audio-progress-fill"></div></div>
+                </button>
+            </div>
+        </div>
+    </header>
+    <section id="tesis" class="py-24 px-6 bg-green-900/5">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+            <div>
+                <h2 class="text-4xl font-black uppercase italic mb-8 text-green-900" data-i18n="sec1-title">01. Tesis de Inversi√≥n: <span class="text-orange">Oportunidad</span></h2>
+                <div class="space-y-6 text-gray-500 leading-relaxed">
+                    <p data-i18n="sec1-p1">Torrevella S.L. ha completado su fase de CAPEX biol√≥gico. El inversor entra en el punto de inflexi√≥n donde el <strong>Margen de Seguridad es del 50%</strong> respecto a los activos brutos.</p>
+                    <div class="p-8 bg-white border-l-8 border-orange rounded-r-3xl shadow-sm">
+                        <p class="text-[11px] uppercase font-bold text-gray-400 mb-1" data-i18n="sec1-req-label">Capital Solicitado</p>
+                        <p class="text-4xl font-black text-green-900">1.500.000 ‚Ç¨</p>
+                        <p class="text-sm font-bold text-orange uppercase tracking-widest mt-1" data-i18n="sec1-equity-detail">Por el 30% Participaci√≥n Social (Equity)</p>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="glass-card p-4 rounded-xl text-center">
+                            <p class="text-orange font-black text-2xl">LTV < 15%</p>
+                            <p class="text-[10px] uppercase font-bold text-gray-500" data-i18n="sec1-risk">Riesgo Financiero</p>
+                        </div>
+                        <div class="glass-card p-4 rounded-xl text-center">
+                            <p class="text-green-900 font-black text-2xl">8,6M ‚Ç¨</p>
+                            <p class="text-[10px] uppercase font-bold text-gray-500" data-i18n="sec1-backing">Respaldo Activos</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <h3 class="text-xs font-black text-gray-400 uppercase tracking-[0.2em] mb-8" data-i18n="sec1-assets-title">Desglose T√©cnico de Activos</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="glass-card p-6 rounded-3xl bg-white/60 flex flex-col justify-between h-full">
+                        <div class="flex items-center gap-3 mb-2">
+                            <div class="p-2 bg-green-900/10 rounded-full text-green-800"><i data-lucide="map" class="w-5 h-5"></i></div>
+                            <span class="text-[10px] text-gray-400 font-bold uppercase" data-i18n="asset-land-desc">135 Ha Productivas</span>
+                        </div>
+                        <div><span class="block text-green-900 font-black text-lg leading-tight" data-i18n="asset-land">Suelo Agr√≠cola</span><span class="text-3xl font-black text-orange mt-1 block">3,30 M‚Ç¨</span></div>
+                    </div>
+                    <div class="glass-card p-6 rounded-3xl bg-white/60 flex flex-col justify-between h-full">
+                        <div class="flex items-center gap-3 mb-2">
+                            <div class="p-2 bg-blue-900/10 rounded-full text-blue-800"><i data-lucide="warehouse" class="w-5 h-5"></i></div>
+                            <span class="text-[10px] text-gray-400 font-bold uppercase" data-i18n="asset-build-desc">Naves e Infra.</span>
+                        </div>
+                        <div><span class="block text-green-900 font-black text-lg leading-tight" data-i18n="asset-build">Infraestructura</span><span class="text-3xl font-black text-blue-900 mt-1 block">1,60 M‚Ç¨</span></div>
+                    </div>
+                    <div class="glass-card p-6 rounded-3xl bg-white/60 flex flex-col justify-between h-full">
+                        <div class="flex items-center gap-3 mb-2">
+                            <div class="p-2 bg-green-600/10 rounded-full text-green-600"><i data-lucide="trees" class="w-5 h-5"></i></div>
+                            <span class="text-[10px] text-gray-400 font-bold uppercase" data-i18n="asset-forest-desc">35.250 √Årboles</span>
+                        </div>
+                        <div><span class="block text-green-900 font-black text-lg leading-tight" data-i18n="asset-forest">Masa Biol√≥gica</span><span class="text-3xl font-black text-green-700 mt-1 block">1,50 M‚Ç¨</span></div>
+                    </div>
+                    <div class="glass-card p-6 rounded-3xl bg-white/60 flex flex-col justify-between h-full">
+                        <div class="flex items-center gap-3 mb-2">
+                            <div class="p-2 bg-orange/10 rounded-full text-orange"><i data-lucide="castle" class="w-5 h-5"></i></div>
+                            <span class="text-[10px] text-gray-400 font-bold uppercase" data-i18n="asset-house-desc">Patrimonio Hist√≥rico</span>
+                        </div>
+                        <div><span class="block text-green-900 font-black text-lg leading-tight" data-i18n="asset-house">Vivienda Se√±orial</span><span class="text-3xl font-black text-orange mt-1 block">2,20 M‚Ç¨</span></div>
+                    </div>
+                </div>
+                <div class="mt-6 glass-card p-6 rounded-2xl bg-green-900/5 border border-green-900/10 flex justify-between items-center">
+                    <span class="text-sm font-black text-gray-500 uppercase" data-i18n="asset-total">Total Activos Reales</span>
+                    <span class="text-4xl font-black text-green-900">8,60 M‚Ç¨</span>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div style="page-break-before: always; height: 0px; width: 100%; visibility: hidden;"></div>
+    <section id="analisis" class="py-24 px-6">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-4xl font-black uppercase italic mb-12 text-center text-green-900" data-i18n="sec2-title">02. Validaci√≥n Comercial: <span class="text-orange">Picos de Venta</span></h2>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
+                <div class="lg:col-span-2 h-[400px] glass-card rounded-2xl p-4">
+                    <canvas id="historicalChart"></canvas>
+                </div>
+                <div class="space-y-4">
+                    <div class="glass-card p-6 rounded-2xl border-l-4 border-red-800/60"><p class="text-[10px] uppercase font-bold text-gray-500" data-i18n="sec2-cherry">Pico Cerezas IGP</p><p class="text-3xl font-black text-green-900">300.000 ‚Ç¨</p></div>
+                    <div class="glass-card p-6 rounded-2xl border-l-4 border-green-800/60"><p class="text-[10px] uppercase font-bold text-gray-500" data-i18n="sec2-oil">Pico Aceite AOVE</p><p class="text-3xl font-black text-green-900">180.000 ‚Ç¨</p></div>
+                    <div class="glass-card p-6 rounded-2xl border-l-4 border-purple-800/60"><p class="text-[10px] uppercase font-bold text-gray-500" data-i18n="sec2-vinegar">Pico Vinagres PX</p><p class="text-3xl font-black text-green-900">110.000 ‚Ç¨</p></div>
+                </div>
+            </div>
+            
+            <!-- Tarjeta de Refuerzo de Tesis Comercial -->
+            <div class="glass-card p-10 rounded-[3rem] mt-10 border-t-4 border-green-800 bg-white/60 flex flex-col md:flex-row items-center gap-8 shadow-xl">
+                <div class="w-20 h-20 bg-green-900/10 rounded-full flex-shrink-0 flex items-center justify-center text-green-800"><i data-lucide="line-chart" class="w-10 h-10"></i></div>
+                <div>
+                    <h3 class="text-2xl font-black text-green-900 uppercase mb-2">Validaci√≥n de Recuperaci√≥n en V</h3>
+                    <p class="text-lg text-gray-600 leading-relaxed">
+                        La tesis comercial se confirma con una **recuperaci√≥n ya observable en 2024 y 2025**. El incremento en la producci√≥n biol√≥gica, sumado a la entrada de capital estrat√©gico, permite capitalizar las inversiones realizadas en infraestructura. Se proyecta una progresi√≥n ascendente sostenida gracias a la optimizaci√≥n operativa y el posicionamiento premium de la marca Sotaroni.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section id="inventario" class="py-24 px-6 bg-green-900/5">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-4xl font-black uppercase italic mb-12 text-center text-green-900" data-i18n="sec3-title">03. Inventario Biol√≥gico: <span class="text-orange">37.750 √Årboles</span></h2>
+            <div class="overflow-x-auto glass-card rounded-3xl">
+                <table class="w-full text-left text-sm">
+                    <thead class="bg-green-900/5 text-orange uppercase text-[10px] tracking-widest font-bold">
+                        <tr><th class="p-6" data-i18n="tab-crop">Cultivo</th><th class="p-6" data-i18n="tab-ha">Hect√°reas</th><th class="p-6" data-i18n="tab-trees">Censo √Årboles</th><th class="p-6" data-i18n="tab-status">Estatus 2026</th></tr>
+                    </thead>
+                    <tbody class="divide-y divide-green-900/10">
+                        <tr><td class="p-6 font-bold text-green-900">Olivar Ecol√≥gico</td><td class="p-6">70 Ha</td><td class="p-6">16.655</td><td class="p-6 text-green-700 font-bold">Producci√≥n Ascendente</td></tr>
+                        <tr><td class="p-6 font-bold text-green-900">Almendro Ecol√≥gico</td><td class="p-6">30 Ha</td><td class="p-6">6.533</td><td class="p-6 text-orange font-bold">Crecimiento</td></tr>
+                        <tr><td class="p-6 font-bold text-green-900">Cerezo IGP</td><td class="p-6">25 Ha</td><td class="p-6">10.782</td><td class="p-6 text-blue-700 font-bold">70% de Producci√≥n</td></tr>
+                        <tr><td class="p-6 font-bold text-green-900">Manzanos</td><td class="p-6">5 Ha</td><td class="p-6">2.500</td><td class="p-6 text-blue-700 font-bold">70% de Producci√≥n</td></tr>
+                        <tr><td class="p-6 font-bold text-green-900">Libres</td><td class="p-6">35 Ha</td><td class="p-6">----</td><td class="p-6 text-blue-700 font-bold">Preparadas para ampliar cultivos</td></tr>
+                        <tr class="bg-green-900/5 font-black text-green-900">
+                            <td class="p-6">TOTAL</td><td class="p-6">165 Ha</td><td class="p-6">37.750</td><td class="p-6">Gestionados</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Nueva Tarjeta de Imagen (Punto 03) -->
+            <div class="glass-card p-4 rounded-[3rem] mt-8 overflow-hidden border border-green-900/10 bg-white/40 shadow-xl">
+                <img src="https://cdn.shopify.com/s/files/1/0323/6095/5948/files/Bebop2_20170807114847_0200.jpg?v=1614325390" 
+                     alt="[Imagen de Vista A√©rea de la Finca]" 
+                     class="w-full h-auto rounded-[2.5rem] object-cover"
+                     onerror="this.src='https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&q=80&w=1200'">
+            </div>
+        </div>
+    </section>
+    <div style="page-break-before: always; width: 100%; display: block;"></div>
+    <section id="infraestructura" class="py-24 px-6 bg-white">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-4xl font-black uppercase italic mb-12 text-center text-green-900">04. Infraestructura Agr√≠cola: <span class="text-orange">Equipamiento Integral</span></h2>
+
+            <div class="grid grid-cols-1 gap-6">
+                <!-- Tarjeta 1: Maquinaria -->
+                <div class="glass-card p-10 rounded-[3rem] border-l-8 border-green-800 flex flex-col md:flex-row items-center justify-between gap-8">
+                    <div class="flex items-center gap-6 md:w-1/3">
+                        <div class="w-20 h-20 bg-green-900/10 rounded-full flex-shrink-0 flex items-center justify-center text-green-800"><i data-lucide="tractor" class="w-10 h-10"></i></div>
+                        <h3 class="text-2xl font-black text-green-900 uppercase leading-tight">Parque de<br>Maquinaria</h3>
+                    </div>
+                    <div class="md:w-2/3 w-full">
+                        <ul class="infra-list grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-1 w-full text-left">
+                            <li><strong>Tractor 130 CV</strong></li>
+                            <li><strong>2x Tractor 90 CV</strong></li>
+                            <li>Trituradora Forestal</li>
+                            <li>Trituradora de Brazo</li>
+                            <li>Cultivador Extensible</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Tarjeta 2: Riego -->
+                <div class="glass-card p-10 rounded-[3rem] border-l-8 border-blue-600 flex flex-col md:flex-row items-center justify-between gap-8">
+                    <div class="flex items-center gap-6 md:w-1/3">
+                        <div class="w-20 h-20 bg-blue-900/10 rounded-full flex-shrink-0 flex items-center justify-center text-blue-700"><i data-lucide="settings" class="w-10 h-10"></i></div>
+                        <h3 class="text-2xl font-black text-green-900 uppercase leading-tight">Tecnolog√≠a de<br>Riego</h3>
+                    </div>
+                    <div class="md:w-2/3 w-full">
+                        <ul class="infra-list grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-1 w-full text-left">
+                            <li><strong>Cabezal Riego</strong></li>
+                            <li>3 Bombas Impulsoras</li>
+                            <li>3 Dep√≥sitos 2.000 L</li>
+                            <li>Programador Digital</li>
+                            <li><strong>18 Sectores</strong></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Tarjeta 3: Instalaciones -->
+                <div class="glass-card p-10 rounded-[3rem] border-l-8 border-orange flex flex-col md:flex-row items-center justify-between gap-8">
+                    <div class="flex items-center gap-6 md:w-1/3">
+                        <div class="w-20 h-20 bg-orange/10 rounded-full flex-shrink-0 flex items-center justify-center text-orange"><i data-lucide="home" class="w-10 h-10"></i></div>
+                        <h3 class="text-2xl font-black text-green-900 uppercase leading-tight">Instalaciones<br>Fijas</h3>
+                    </div>
+                    <div class="md:w-2/3 w-full">
+                        <ul class="infra-list grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-1 w-full text-left">
+                            <li><strong>Nave Agr√≠cola</strong></li>
+                            <li>Taller Mantenimiento</li>
+                            <li>Almac√©n Insumos</li>
+                            <li><strong>Bodega Propia</strong></li>
+                            <li>Viviendas Personal</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>              
+        </div>
+        
+        <!-- Bloque de Infraestructura H√≠drica A√±adido con Espacio y T√≠tulo -->
+        <div class="max-w-7xl mx-auto mt-24">
+            <h3 class="text-3xl font-black uppercase italic mb-12 text-center text-green-900">INFRASTRUCTURA H√çDRICA DE GARANTIA</h3>
+            
+            <!-- Tarjeta 4: Capacidad Operativa (Movida aqu√≠ debajo del t√≠tulo) -->
+            <div class="glass-card p-10 rounded-[3rem] border-l-8 border-green-900 flex flex-col md:flex-row items-center justify-between gap-8 mb-12">
+                <div class="flex items-center gap-6 md:w-1/3">
+                    <div class="w-20 h-20 bg-green-900/10 rounded-full flex-shrink-0 flex items-center justify-center text-green-800"><i data-lucide="activity" class="w-10 h-10"></i></div>
+                    <h3 class="text-2xl font-black text-green-900 uppercase leading-tight">Capacidad<br>Operativa</h3>
+                </div>
+                <div class="md:w-2/3 w-full">
+                    <p class="text-2xl font-black text-orange uppercase italic">infrastuctura actual: 300.000 m3/a√±o</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                 <div class="glass-card p-8 rounded-[2.5rem] border-l-4 border-blue-700/50">
+                    <div class="flex items-center gap-4 mb-6"><div class="p-3 bg-blue-700/10 rounded-full text-blue-800"><i data-lucide="droplets"></i></div><h4 class="text-2xl font-black text-green-900 uppercase">Dotaci√≥n Actual</h4></div>
+                    <div class="text-center py-6"><span class="text-5xl font-black text-orange block mb-2">50.000 <span class="text-lg">m¬≥/a√±o</span></span><p class="text-sm text-gray-500 font-bold uppercase tracking-widest">2 Pozos Operativos (8 l/s)</p></div>
+                 </div>
+                 <div class="glass-card p-8 rounded-[2.5rem] border-l-4 border-green-700/50 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 bg-orange text-white text-[10px] font-bold px-3 py-1 rounded-bl-xl uppercase">Proyecto Expansi√≥n</div>
+                    <div class="flex items-center gap-4 mb-6"><div class="p-3 bg-green-700/10 rounded-full text-green-800"><i data-lucide="waves"></i></div><h4 class="text-2xl font-black text-green-900 uppercase">Acu√≠fero La Cabranta</h4></div>
+                     <div class="text-center py-6"><span class="text-5xl font-black text-green-900 block mb-2">+150.000 <span class="text-lg">m¬≥/a√±o</span></span><p class="text-sm text-gray-500 font-bold uppercase tracking-widest">Avalado por Ingenier√≠a Rodes</p></div>
+                 </div>
+            </div>
+        </div>
+    </section>
+    <div style="page-break-before: always; width: 100%; display: block;"></div>
+    <section id="saneamiento" class="py-24 px-6 bg-green-900/5">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-4xl font-black uppercase italic mb-12 text-center text-green-900" data-i18n="sec4-title">05. Estrategia de <span class="text-orange">Saneamiento</span></h2>
+            
+            <div class="glass-card p-8 rounded-[2rem] text-center mb-12 max-w-xl mx-auto border-2 border-orange/20 bg-white/60">
+                <span class="block text-xs font-bold text-gray-400 uppercase tracking-[0.2em] mb-2" data-i18n="sec4-total-label">Importe Operaci√≥n</span>
+                <span class="block text-5xl font-black text-green-900">1.500.000 ‚Ç¨</span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                <!-- Tarjeta 1: Deuda -->
+                <div class="glass-card p-10 rounded-[3rem] flex flex-col items-center">
+                    <div class="w-16 h-16 bg-green-700/10 rounded-full flex items-center justify-center mb-6 text-orange"><i data-lucide="shield-check"></i></div>
+                    <h4 class="font-black text-5xl mb-2 text-green-900 uppercase">60%</h4>
+                    <span class="block text-2xl font-light text-orange mb-4">900.000 ‚Ç¨ DEUDA</span>
+                    <p class="text-sm text-gray-500 leading-relaxed max-w-[220px]">Cancelaci√≥n total de pasivos y regularizaci√≥n de acreedores.</p>
+                </div>
+
+                <!-- Tarjeta 2: CAPEX -->
+                <div class="glass-card p-10 rounded-[3rem] flex flex-col items-center">
+                    <div class="w-16 h-16 bg-blue-700/10 rounded-full flex items-center justify-center mb-6 text-blue-800"><i data-lucide="droplets"></i></div>
+                    <h4 class="font-black text-5xl mb-2 text-green-900 uppercase">25%</h4>
+                    <span class="block text-2xl font-light text-blue-700 mb-4">350.000 ‚Ç¨ CAPEX</span>
+                    <p class="text-sm text-gray-500 leading-relaxed max-w-[220px]">Infraestructuras h√≠dricas y mantenimiento biol√≥gico.</p>
+                </div>
+
+                <!-- Tarjeta 3: Marketing -->
+                <div class="glass-card p-10 rounded-[3rem] flex flex-col items-center">
+                    <div class="w-16 h-16 bg-purple-700/10 rounded-full flex items-center justify-center mb-6 text-purple-800"><i data-lucide="trending-up"></i></div>
+                    <h4 class="font-black text-5xl mb-2 text-green-900 uppercase">15%</h4>
+                    <span class="block text-2xl font-light text-purple-700 mb-4">225.000 ‚Ç¨ MKT</span>
+                    <p class="text-sm text-gray-500 leading-relaxed max-w-[220px]">Expansi√≥n internacional B2C de la marca Sotaroni.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div style="page-break-before: always; height: 0px; width: 100%; visibility: hidden;"></div>
+    <section id="financieros" class="py-24 px-6 bg-white">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-4xl font-black uppercase italic mb-12 text-center text-green-900" data-i18n="sec5-title">06. Cuenta de Explotaci√≥n: <span class="text-orange">PyG 2019-2024</span></h2>
+            <div class="grid grid-cols-1 lg:grid-cols-1 gap-12">
+                <div class="glass-card p-8 rounded-[2.5rem] flex flex-col">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-xl font-black text-green-900 uppercase" data-i18n="sec5-chart-title">Evoluci√≥n de Resultados</h3>
+                        <div class="flex gap-2 text-[9px] font-bold uppercase">
+                            <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-green-700"></span> Ingresos</span>
+                            <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-red-800"></span> Gastos</span>
+                        </div>
+                    </div>
+                    <div class="flex-grow min-h-[350px]">
+                        <canvas id="financeChart"></canvas>
+                    </div>
+                </div>
+                <div class="glass-card p-8 rounded-[2.5rem] overflow-hidden">
+                    <h3 class="text-xl font-black text-green-900 uppercase mb-6" data-i18n="sec5-table-title">Cuenta de Explotaci√≥n Detallada</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-right pyg-table">
+                            <thead><tr><th class="text-left">Partida (‚Ç¨)</th><th>2024</th><th>2023</th><th>2022</th><th>2021</th><th>2020</th><th>2019</th></tr></thead>
+                            <tbody>
+                                <tr><td class="text-left font-bold text-gray-700">Ingresos Explotaci√≥n</td><td>358.612</td><td>176.639</td><td>290.953</td><td>465.123</td><td>514.949</td><td>389.000</td></tr>
+                                <tr><td class="text-left text-gray-500">Aprovisionamientos</td><td class="negative-val">-140.068</td><td class="negative-val">-171.012</td><td class="negative-val">-124.280</td><td class="negative-val">-275.444</td><td class="negative-val">-158.000</td><td class="negative-val">-205.158</td></tr>
+                                <tr><td class="text-left text-gray-500">Gtos. Estructura y Otros</td><td class="negative-val">-179.645</td><td class="negative-val">-119.749</td><td class="negative-val">-233.642</td><td class="negative-val">-187.626</td><td class="negative-val">-292.800</td><td class="negative-val">-173.417</td></tr>
+                                <tr class="pyg-row-subtotal"><td class="text-left">RESULTADO EXPLOTACI√ìN</td><td class="positive-val">38.899</td><td class="negative-val">-114.122</td><td class="negative-val">-66.969</td><td class="positive-val">2.053</td><td class="positive-val">64.149</td><td class="positive-val">10.425</td></tr>
+                                <tr><td class="text-left text-blue-700">Ingresos Financieros</td><td>31.803</td><td>36.878</td><td>20.921</td><td>35.876</td><td>748</td><td>68.302</td></tr>
+                                <tr class="pyg-row-total bg-green-50"><td class="text-left text-green-900">RES. ANTES IMPUESTOS</td><td class="positive-val">70.702</td><td class="negative-val">-77.244</td><td class="negative-val">-46.048</td><td class="positive-val">37.929</td><td class="positive-val">64.897</td><td class="positive-val">78.727</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div style="page-break-before: always; height: 0px; width: 100%; visibility: hidden;"></div>
+    <section id="estrategia-contexto" class="py-24 px-6 bg-green-900/5">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-4xl font-black uppercase italic mb-12 text-center text-green-900">Contexto Estrat√©gico & <span class="text-orange">Recuperaci√≥n</span></h2>
+            <div class="grid grid-cols-1 lg:grid-cols-1 gap-8">
+                <div class="glass-card p-10 rounded-[3rem] border-l-8 border-orange bg-white">
+                    <div class="flex items-center gap-4 mb-6"><div class="p-3 bg-orange/10 rounded-full text-orange"><i data-lucide="history" class="w-8 h-8"></i></div><h3 class="text-2xl font-black text-green-900 uppercase">Reestructuraci√≥n 2021</h3></div>
+                    <p class="text-sm text-gray-600 mb-6 leading-relaxed">En 2021 se ejecut√≥ una reestructuraci√≥n integral hacia <strong>cultivo ecol√≥gico certificado</strong>. Esta decisi√≥n estrat√©gica implic√≥ la eliminaci√≥n selectiva de plantas para mejorar la calidad y estabilizar la producci√≥n.</p>
+                    <div class="bg-green-50 p-4 rounded-xl border border-green-100 mb-6"><p class="text-xs font-bold text-green-800 uppercase mb-2">Impacto en Tesorer√≠a</p><p class="text-sm text-gray-600">Esta reconversi√≥n caus√≥ la tensi√≥n de tesorer√≠a observada, cuya recuperaci√≥n ya es visible en 2024.</p></div>
+                    <div class="bg-green-50 p-4 rounded-xl border border-green-100 mb-6"><p class="text-xs font-bold text-green-800 uppercase mb-2">Recuperaci√≥n Productiva</p><p class="text-sm text-gray-600">Desde 2024 la recuperacon productiva del Olivar en prduci√≥n es un hecho que ayudara al aumento de los ingresos.</p></div>
+                    <div class="flex justify-between items-end mt-4"><div class="text-center"><span class="block text-3xl font-black text-gray-400">25%</span><span class="text-[20px] font-bold uppercase text-gray-500">Operativa 2025</span></div><div class="h-1 flex-grow mx-4 bg-gray-200 rounded relative overflow-hidden"><div class="absolute left-0 top-0 h-full bg-orange w-1/4"></div><div class="absolute left-1/4 top-0 h-full bg-green-500 w-3/4 opacity-20 dashed-line"></div></div><div class="text-center"><span class="block text-3xl font-black text-green-900">80%</span><span class="text-[20px] font-bold uppercase text-green-700">Objetivo 2030</span></div></div>
+                </div>
+                <div class="glass-card p-10 rounded-[3rem] border-l-8 border-green-700 bg-white">
+                    <div class="flex items-center gap-4 mb-6"><div class="p-3 bg-green-700/10 rounded-full text-green-700"><i data-lucide="scaling" class="w-8 h-8"></i></div><h3 class="text-2xl font-black text-green-900 uppercase">Expansi√≥n & Eficiencia 2021</h3></div>
+                    <ul class="space-y-4">
+                        <li class="flex gap-4"><i data-lucide="sprout" class="w-5 h-5 text-orange flex-shrink-0 mt-1"></i><div><span class="block font-bold text-green-900 text-sm uppercase">Arrendamiento Estrat√©gico (+100 Ha)</span><span class="text-xs text-gray-600">Nuevas plantaciones de Olivar Ecol√≥gico para aumentar rentabilidad.</span></div></li>
+                        <li class="flex gap-4"><i data-lucide="droplets" class="w-5 h-5 text-blue-600 flex-shrink-0 mt-1"></i><div><span class="block font-bold text-green-900 text-sm uppercase">Inversi√≥n H√≠drica</span><span class="text-xs text-gray-600">Modernizaci√≥n total del sistema de riego con <strong>gotero subterr√°neo</strong>.</span></div></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div style="page-break-before: always; height: 0px; width: 100%; visibility: hidden;"></div>
+    <section id="marca" class="py-24 px-6 bg-green-900/5">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-4xl font-black uppercase italic mb-12 text-center text-green-900" data-i18n="sec6-title">07. Valor de Marca: <span class="text-orange">Sotaroni</span></h2>
+            <div class="grid grid-cols-1 lg:grid-cols-1 gap-12 items-center text-left">
+                <div class="space-y-6">
+                    <p class="text-xl text-gray-600 font-light" data-i18n="sec5-desc">Sotaroni es una marca gourmet consolidada con presencia en el canal HORECA premium y mercados de exportaci√≥n.</p>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="p-4 border-l-2 border-orange bg-white/40"><span class="block text-2xl font-black text-green-900">AOVE & PX</span><span class="text-[10px] text-gray-500 uppercase font-bold">Productos Insignia</span></div>
+                        <div class="p-4 border-l-2 border-orange bg-white/40"><span class="block text-2xl font-black text-green-900">Gourmet</span><span class="text-[10px] text-gray-500 uppercase font-bold">Posicionamiento</span></div>
+                    </div>
+                </div>
+                <div class="relative group">
+                    <a href="https://sotaroni.es" target="_blank" rel="noopener noreferrer" class="block">
+                        <div class="relative glass-card p-8 rounded-3xl border border-green-900/10 text-center">
+                            <span class="text-orange font-black text-5xl">sotaroni.es</span>
+                            <p class="mt-4 uppercase font-bold tracking-widest text-xs text-gray-600">Brand Equity Auditado</p>
+                        </div>
+                    </a>
+                </div>
+                
+                <!-- Nueva Tarjeta de Imagen (Una Columna) -->
+                <div class="glass-card p-4 rounded-[3rem] overflow-hidden border border-green-900/10 bg-white/40 shadow-xl">
+                    <img src="https://cdn.shopify.com/s/files/1/0323/6095/5948/files/Gemini_Generated_Image_t7w8e7t7w8e7t7w8.png?v=1768593823" 
+                         alt="[Imagen de Marca Sotaroni]" 
+                         class="w-full h-auto rounded-[2.5rem] object-cover"
+                         onerror="this.src='https://images.unsplash.com/photo-1474440692490-2e83af13a443?auto=format&fit=crop&q=80&w=1200'">
+                </div>
+            </div>
+        </div>
+    </section>
+    <div style="page-break-before: always; height: 0px; width: 100%; visibility: hidden;"></div>
+    <section id="exit" class="py-24 px-6">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-4xl font-black uppercase italic mb-12 text-center text-green-900">08. Estrategia de Gesti√≥n y Salida</h2>
+            <div class="grid grid-cols-1 gap-6">
+                <div class="glass-card p-12 rounded-[3rem] text-center border-t-4 border-orange">
+                    <h4 class="text-orange font-black text-3xl mb-6 uppercase">Dividendo Recurrente</h4>
+                    <p class="text-xl text-gray-600">Reparto del 40% del EBITDA a partir de 2027.</p>
+                </div>
+                <div class="glass-card p-12 rounded-[3rem] text-center border-t-4 border-green-800">
+                    <h4 class="text-green-900 font-black text-3xl mb-6 uppercase">Opci√≥n Buy-Back</h4>
+                    <p class="text-xl text-gray-600">Compromiso de recompra por la propiedad (A√±o 5-7).</p>
+                </div>
+                <div class="glass-card p-12 rounded-[3rem] text-center border-t-4 border-green-600">
+                    <h4 class="text-green-700 font-black text-3xl mb-6 uppercase">Venta ESG</h4>
+                    <p class="text-xl text-gray-600">Salida a fondos de agricultura regenerativa.</p>
+                </div>
+                <div class="glass-card p-12 rounded-[3rem] text-center border-t-4 border-blue-800">
+                    <h4 class="text-blue-900 font-black text-3xl mb-6 uppercase">Gobierno corporativo</h4>
+                    <p class="text-xl text-gray-600">Crear un consejo asesor (o de administraci√≥n) con representaci√≥n del fondo y expertos en agroindustria y distribuci√≥n premium.</p>
+                </div>
+                <div class="glass-card p-12 rounded-[3rem] text-center border-t-4 border-purple-800">
+                    <h4 class="text-purple-900 font-black text-3xl mb-6 uppercase">Reporting financiero estructurado</h4>
+                    <p class="text-xl text-gray-600">Auditor√≠a anual externa, KPIs mensuales sobre producci√≥n, ventas, m√°rgenes, EBITDA, rentabilidad por hect√°rea.</p>
+                </div>
+                <div class="glass-card p-12 rounded-[3rem] text-center border-t-4 border-green-900 bg-white/40">
+                    <h4 class="text-green-900 font-black text-3xl mb-6 uppercase">Plan de negocio a 5 a√±os</h4>
+                    <p class="text-xl text-gray-600 leading-relaxed">
+                        Con escenarios conservador, medio y agresivo. Incluye: Expansi√≥n del √°rea ecol√≥gica, industrializaci√≥n propia o acuerdos para embotellado/marca blanca, desarrollo del canal e-commerce and exportaci√≥n, y activaci√≥n del agroturismo rural premium.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div style="page-break-before: always; height: 0px; width: 100%; visibility: hidden;"></div>
+    <section id="ubicacion" class="py-24 px-6">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-4xl font-black uppercase italic mb-12 text-center text-green-900" data-i18n="sec9-title">09. Ubicaci√≥n y Log√≠stica <span class="text-orange">Estrat√©gica</span></h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                <div class="glass-card p-8 rounded-[2.5rem] border-t-4 border-green-700">
+                    <h3 class="text-2xl font-black text-green-900 uppercase mb-6">Geograf√≠a & Clima</h3>
+                    <p class="text-sm text-gray-600 mb-8">Valle de Polop, Alcoy (Alicante). Enclave privilegiado entre los Parques Naturales de Font Roja y Sierra de Mariola.</p>
+                    <div class="grid grid-cols-2 gap-6">
+                        <div class="bg-white/40 p-4 rounded-2xl"><span class="block text-xs text-gray-500 font-bold uppercase">Altitud Media</span><span class="text-2xl font-black text-green-900">850 m</span></div>
+                        <div class="bg-white/40 p-4 rounded-2xl"><span class="block text-xs text-gray-500 font-bold uppercase">Pluviometr√≠a</span><span class="text-2xl font-black text-blue-700">600 mm</span></div>
+                        <div class="bg-white/40 p-4 rounded-2xl"><span class="block text-xs text-gray-500 font-bold uppercase">Horas Fr√≠o</span><span class="text-2xl font-black text-orange">1200 h</span></div>
+                        <div class="bg-white/40 p-4 rounded-2xl"><span class="block text-xs text-gray-500 font-bold uppercase">Clima</span><span class="text-lg font-bold text-green-900 uppercase leading-none mt-1">Mediterr√°neo Monta√±a</span></div>
+                    </div>
+                </div>
+                <div class="glass-card p-8 rounded-[2.5rem] border-t-4 border-orange">
+                    <h3 class="text-2xl font-black text-green-900 uppercase mb-6">Conectividad Global</h3>
+                    <ul class="space-y-6">
+                        <li class="flex items-center gap-4"><div class="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center text-red-700"><i data-lucide="hospital"></i></div><div><span class="block font-bold text-green-900 uppercase text-sm">Alcoy (Hospital general)</span><span class="text-gray-600 text-xs">Cercan√≠a estrat√©gica (10 min)</span></div></li>
+                        <li class="flex items-center gap-4"><div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-700"><i data-lucide="anchor"></i></div><div><span class="block font-bold text-green-900 uppercase text-sm">Puertos Mercantiles</span><span class="text-gray-600 text-xs">Alicante (50 min) - Valencia (1h 15m)</span></div></li>
+                        <li class="flex items-center gap-4"><div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center text-orange"><i data-lucide="plane"></i></div><div><span class="block font-bold text-green-900 uppercase text-sm">Aeropuertos Internacionales</span><span class="text-gray-600 text-xs">ALC Alicante (45 min) - VLC Valencia (1h 10m)</span></div></li>
+                        <li class="flex items-center gap-4"><div class="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center text-purple-700"><i data-lucide="train"></i></div><div><span class="block font-bold text-green-900 uppercase text-sm">Alta Velocidad (AVE)</span><span class="text-gray-600 text-xs">Estaci√≥n Villena (30 min)</span></div></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Tarjeta Google Maps Satelital Actualizada -->
+            <div class="glass-card p-4 rounded-[3rem] mt-8 overflow-hidden border border-green-900/10 bg-white/40 shadow-xl">
+                <div class="flex items-center gap-4 mb-6 px-6 pt-4">
+                    <div class="p-3 bg-red-100 rounded-full text-red-600"><i data-lucide="map-pin" class="w-6 h-6"></i></div>
+                    <div>
+                        <h3 class="text-2xl font-black text-green-900 uppercase">Localizaci√≥n & Acceso Finca</h3>
+                        <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Sotaroni Aceites y Vinagres | Partida Polop Alt, 31, 03819 Alcoi</p>
+                    </div>
+                </div>
+                <div class="w-full h-[450px] rounded-[2rem] overflow-hidden border border-green-900/10">
+                    <iframe 
+                        width="100%" 
+                        height="100%" 
+                        frameborder="0" 
+                        style="border:0" 
+                        src="https://maps.google.com/maps?q=Sotaroni+Aceites+y+Vinagres+Alcoi&t=k&z=17&output=embed" 
+                        allowfullscreen>
+                    </iframe>
+                </div>
+                <div class="mt-6 text-center pb-4">
+                    <a href="https://www.google.com/maps/dir/?api=1&destination=Sotaroni+Aceites+y+Vinagres+Alcoi" target="_blank" class="inline-flex items-center gap-2 bg-green-900 text-white px-8 py-3 rounded-2xl font-bold text-sm hover:scale-105 transition-all">
+                        <i data-lucide="navigation" class="w-4 h-4"></i> C√ìMO LLEGAR A TORREVELLA
+                    </a>
+                </div>
+            </div>
+            
+            <div class="glass-card p-8 rounded-[2.5rem] mt-8 border-t-4 border-green-800">
+                <div class="flex items-center gap-4 mb-6">
+                    <div class="p-3 bg-green-800/10 rounded-full text-green-800"><i data-lucide="mountain" class="w-6 h-6"></i></div>
+                    <h3 class="text-2xl font-black text-green-900 uppercase">Orograf√≠a del Terreno</h3>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+                    <div class="bg-white/50 p-6 rounded-2xl border border-green-100">
+                        <span class="block text-4xl font-black text-green-700 mb-2">30%</span>
+                        <span class="text-xs font-bold uppercase tracking-widest text-gray-500">Terrenos Llanos</span>
+                        <div class="w-full h-1 bg-green-200 mt-3 rounded-full"><div class="w-full h-full bg-green-600 rounded-full"></div></div>
+                    </div>
+                    <div class="bg-white/50 p-6 rounded-2xl border border-green-100">
+                        <span class="block text-4xl font-black text-orange mb-2">50%</span>
+                        <span class="text-xs font-bold uppercase tracking-widest text-gray-500">Pendiente Media</span>
+                        <div class="w-full h-1 bg-orange/20 mt-3 rounded-full"><div class="w-full h-full bg-orange rounded-full"></div></div>
+                    </div>
+                    <div class="bg-white/50 p-6 rounded-2xl border border-green-100">
+                        <span class="block text-4xl font-black text-green-900 mb-2">20%</span>
+                        <span class="text-xs font-bold uppercase tracking-widest text-gray-500">Pendiente Elevada / Bancales</span>
+                        <div class="w-full h-1 bg-green-900/20 mt-3 rounded-full"><div class="w-full h-full bg-green-900 rounded-full"></div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div style="page-break-before: always; width: 100%; display: block;"></div>
+    <footer class="py-24 px-6 text-center border-t border-green-900/5">
+        <p class="text-3xl font-black mb-4 tracking-tighter">media@torrevella.com</p>
+        <p class="text-[11px] text-gray-500 uppercase font-bold tracking-[0.4em]" data-i18n="footer">Torrevella S.L. | Relaci√≥n con Inversores 2026</p>
+        <p class="text-[12px] text-green-900 font-bold mt-6">creado por Nicol√°s Sanju√°n P√©rez Administrador √önico</p>
+        <p class="text-[12px] text-green-900 font-bold">WhatsApp: +34 616582106</p>
+    </footer>
+
+    <script>
+        const apiKey = ""; 
+        let currentLang = 'es';
+        let myChart, financeChart;
+
+        const translations = {
+            es: {
+                "nav-tesis": "Tesis", "nav-analysis": "An√°lisis", "nav-saneamiento": "Saneamiento", "nav-finance": "Finanzas", "nav-sotaroni": "Sotaroni",
+                "hero-tag": "Investment Round 2026 | Confidencial",
+                "hero-title": "Patrimonio Bio Ecol√≥gico <br><span class='text-orange text-5xl md:text-7xl'>En Expansi√≥n.</span>",
+                "hero-sub": "Participaci√≥n estrat√©gica del <span class='font-bold text-green-900'>30% del equity</span>. <br>Respaldo patrimonial de <span class='font-bold text-green-900'>8,6M‚Ç¨ en activos reales auditados</span>.",
+                "btn-pitch": "Pitch Inversi√≥n", "btn-val": "Validaci√≥n Comercial", "btn-rep": "Reporte Ejecutivo", "btn-sim": "Simulaci√≥n Exit",
+                "sec1-title": "01. Tesis de Inversi√≥n: <span class='text-orange'>Oportunidad</span>",
+                "sec1-p1": "Torrevella S.L. ha completado su fase de CAPEX biol√≥gico. El inversor entra en el punto de inflexi√≥n donde el <strong>Margen de Seguridad es del 50%</strong> respecto a los activos brutos.",
+                "sec1-req-label": "Capital Solicitado", "sec1-equity-detail": "Por el 30% Participaci√≥n Social (Equity)",
+                "sec1-risk": "Riesgo Financiero", "sec1-backing": "Respaldo Activos",
+                "sec1-assets-title": "Desglose T√©cnico de Activos",
+                "asset-land": "Suelo Agr√≠cola", "asset-land-desc": "135 Ha Productivas",
+                "asset-build": "Edif., Maquinaria e Infra. Agr√≠cola", "asset-build-desc": "NAVES, MAQUINARIA, INFRASTUCTURA H√çDRICA",
+                "asset-forest": "Masa Biol√≥gica", "asset-forest-desc": "35.250 √Årboles",
+                "asset-house": "Vivienda Se√±orial", "asset-house-desc": "Patrimonio Hist√≥rico",
+                "asset-total": "Total Activos Reales",
+                "sec2-title": "02. Validaci√≥n Comercial: <span class='text-orange'>Picos de Venta</span>",
+                "sec2-cherry": "Pico Cerezas IGP", "sec2-oil": "Pico Aceite AOVE", "sec2-vinegar": "Pico Vinagres PX",
+                "sec3-title": "03. Inventario Biol√≥gico: <span class='text-orange'>37.750 √Årboles</span>",
+                "tab-crop": "Cultivo", "tab-ha": "Hect√°reas", "tab-trees": "Censo √Årboles", "tab-status": "Estatus 2026",
+                "crop-olive": "Olivar Ecol√≥gico", "stat-asc": "Producci√≥n Ascendente", "crop-almond": "Almendro Ecol√≥gico", "stat-grow": "Crecimiento", "crop-cherry": "Cerezo IGP", "stat-70": "70% de Producci√≥n",
+                "sec4-title": "05. Estrategia de <span class='text-orange'>Saneamiento</span>",
+                "sec4-total-label": "Importe Operaci√≥n",
+                "sec4-debt": "60% Deuda", "sec4-debt-desc": "Cancelaci√≥n total de pasivos y regularizaci√≥n de acreedores.",
+                "sec4-capex-desc": "Infraestructuras h√≠dricas y mantenimiento biol√≥gico.",
+                "sec4-mkt": "15% Marketing", "sec4-mkt-desc": "Expansi√≥n internacional B2C de la marca Sotaroni.",
+                "sec5-title": "06. Desempe√±o Financiero: <span class='text-orange'>PyG 2019-2024</span>",
+                "sec5-chart-title": "Evoluci√≥n de Resultados", "sec5-table-title": "Cuenta de Explotaci√≥n Detallada",
+                "sec6-title": "07. Valor de Marca: <span class='text-orange'>Sotaroni</span>",
+                "sec5-desc": "Sotaroni es una marca gourmet consolidada con presencia en el canal HORECA premium y mercados de exportaci√≥n (EEUU, Europa).",
+                "sec5-prod": "Productos Insignia", "sec5-pos": "Posicionamiento", "sec5-equity": "Audited Brand Equity",
+                "sec7-title": "08. Estrategia de <span class='text-orange'>Salida</span>",
+                "sec6-div": "Recurring Dividend", "sec6-div-desc": "Reparto del 40% del EBITDA a partir de 2027.",
+                "sec6-buy": "Opci√≥n Buy-Back", "sec6-buy-desc": "Compromiso de recompra por la propiedad (A√±o 5-7).",
+                "sec6-esg": "Venta ESG", "sec6-esg-desc": "Salida a fondos de agricultura regenerativa.",
+                "sec8-title": "09. Infraestructura H√≠drica: <span class='text-orange'>Garant√≠a</span>",
+                "sec7-current": "Dotaci√≥n Actual", "sec7-wells": "2 Pozos Operativos (8 l/s)",
+                "sec7-tag": "Proyecto Expansi√≥n", "sec7-project": "Acu√≠fero La Cabranta", "sec7-study": "Avalado por Ingenier√≠a Rodes",
+                "sec9-title": "10. Ubicaci√≥n y Log√≠stica <span class='text-orange'>Estrat√©gica</span>",
+                "footer": "Torrevella S.L. | Relaci√≥n con Inversores 2026"
+            },
+            en: {
+                "nav-tesis": "Thesis", "nav-analysis": "Analysis", "nav-saneamiento": "Restructuring", "nav-finance": "Finance", "nav-sotaroni": "Sotaroni",
+                "hero-tag": "Investment Round 2026 | Confidential",
+                "hero-title": "Bio-Organic Heritage <br><span class='text-orange text-5xl md:text-7xl'>Expanding.</span>",
+                "hero-sub": "Strategic <span class='font-bold text-green-900'>30% equity stake</span>. <br>Asset backing of <span class='font-bold text-green-900'>‚Ç¨8.6M in audited real assets</span>.",
+                "btn-pitch": "Investment Pitch", "btn-val": "Market Validation", "btn-rep": "Executive Report", "btn-sim": "Exit Simulation",
+                "sec1-title": "01. Investment Thesis: <span class='text-orange'>Opportunity</span>",
+                "sec1-p1": "Torrevella S.L. has completed its biological CAPEX phase. Investors join at the inflection point where the <strong>Margin of Safety is 50%</strong> relative to gross assets.",
+                "sec1-req-label": "Capital Requested", "sec1-equity-detail": "For a 30% Equity Stake",
+                "sec1-risk": "Financial Risk", "sec1-backing": "Asset Backing",
+                "sec1-assets-title": "Technical Asset Breakdown",
+                "asset-land": "Agricultural Land", "asset-land-desc": "135 Productive Ha",
+                "asset-build": "Infrastructure & Machinery", "asset-build-desc": "PLANT, MACHINERY, WATER SYSTEMS",
+                "asset-forest": "Biological Assets", "asset-forest-desc": "37,750 Trees",
+                "asset-house": "Manor House", "asset-house-desc": "Historical Heritage",
+                "asset-total": "Total Real Assets",
+                "sec2-title": "02. Market Validation: <span class='text-orange'>Sales Peaks</span>",
+                "sec2-cherry": "PGI Cherry Peak", "sec2-oil": "EVOO Oil Peak", "sec2-vinegar": "PX Vinegar Peak",
+                "sec3-title": "03. Biological Inventory: <span class='text-orange'>37,750 Trees</span>",
+                "tab-crop": "Crop", "tab-ha": "Hectares", "tab-trees": "Tree Census", "tab-status": "2026 Status",
+                "crop-olive": "Organic Olive", "stat-asc": "Rising Yields", "crop-almond": "Organic Almond", "stat-grow": "Growth Phase", "crop-cherry": "PGI Cherry", "stat-70": "70% Production",
+                "sec4-title": "05. Restructuring <span class='text-orange'>Strategy</span>",
+                "sec4-total-label": "Total Operation Amount",
+                "sec4-debt": "60% Debt", "sec4-debt-desc": "Full liability clearance and creditor settlement.",
+                "sec4-capex-desc": "Water infrastructure and biological upkeep.",
+                "sec4-mkt": "15% Marketing", "sec4-mkt-desc": "Sotaroni brand B2C international expansion.",
+                "sec5-title": "06. Financial Performance: <span class='text-orange'>P&L 2019-2024</span>",
+                "sec5-chart-title": "Performance Trends", "sec5-table-title": "Income Statement Breakdown",
+                "sec6-title": "07. Brand Equity: <span class='text-orange'>Sotaroni</span>",
+                "sec5-desc": "Sotaroni is a consolidated gourmet brand present in premium HORECA channels and global export markets (USA, EU).",
+                "sec5-prod": "Flagship Products", "sec5-pos": "Market Positioning", "sec5-equity": "Audited Brand Equity",
+                "sec7-title": "08. Exit <span class='text-orange'>Strategy</span>",
+                "sec6-div": "Recurring Dividend", "sec6-div-desc": "40% EBITDA distribution starting in 2027.",
+                "sec6-buy": "Buy-Back Option", "sec6-buy-desc": "Buy-back commitment by current ownership (Year 5-7).",
+                "sec6-esg": "ESG Sale", "sec6-esg-desc": "Exit to regenerative agriculture funds.",
+                "sec8-title": "09. Water Infrastructure: <span class='text-orange'>Reliability</span>",
+                "sec7-current": "Current Supply", "sec7-wells": "2 Operational Wells (8 l/s)",
+                "sec7-tag": "Expansion Project", "sec7-project": "La Cabranta Aquifer", "sec7-study": "Rodes Engineering Verified",
+                "sec9-title": "10. Strategic Location & <span class='text-orange'>Logistics</span>",
+                "footer": "Torrevella S.L. | Investor Relations 2026"
+            }
+        };
+
+        const guiones = {
+            es: {
+                pitch: "Informe de inversi√≥n Torrevella Sociedad Limitada. Se ofrece una participaci√≥n del treinta por ciento del capital social por uno coma tres millones de euros. La operaci√≥n est√° respaldada por activos reales auditados de ocho coma seis millones.",
+                validacion: "An√°lisis comercial hist√≥rico. Torrevella alcanz√≥ picos de facturaci√≥n superiores a los quinientos mil euros anuales, certificando la tracci√≥n de la marca Sotaroni en el canal gourmet premium.",
+                reporte: "Resumen operativo. El ejercicio dos mil veinticuatro confirma la recuperaci√≥n t√©cnica con EBITDA positivo de ciento dos mil euros. La certificaci√≥n ecol√≥gica √≠ntegra en dos mil veintis√©is elevar√° la rentabilidad.",
+                simulacion: "Estrategia de salida. Contemplamos reparto del cuarenta por ciento del EBITDA o una opci√≥n de recompra por la propiedad original a un m√∫ltiplo de seis veces EBITDA."
+            },
+            en: {
+                pitch: "Torrevella Limited Liability Company Investment Report. We offer a thirty percent equity stake for one point five million euros. The operation is backed by audited real assets valued at eight point six million euros.",
+                validacion: "Historical commercial analysis. Torrevella reached sales peaks exceeding five hundred thousand euros annually, certifying the traction of the Sotaroni brand in the premium gourmet market.",
+                reporte: "Operational summary. The 2024 fiscal year confirms technical recovery with a positive EBITDA of one hundred and two thousand euros. Full organic certification by 2026 will significantly boost profitability.",
+                simulacion: "Exit strategy. We contemplate a forty percent EBITDA distribution or a buy-back option by the original ownership at a multiple of six times EBITDA."
+            }
+        };
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'es' ? 'en' : 'es';
+            document.getElementById('langBtn').innerHTML = currentLang === 'es' ? 'ES | <span class="opacity-50">EN</span>' : '<span class="opacity-50">ES</span> | EN';
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[currentLang][key]) el.innerHTML = translations[currentLang][key];
+            });
+            updateCharts();
+        }
+
+        function initIcons() { if (typeof lucide !== 'undefined') lucide.createIcons(); }
+
+        async function handlePrint() {
+            const btn = document.getElementById('btnImprimir');
+            const btnText = btn.querySelector('.btn-text');
+            const loader = btn.querySelector('.loader');
+            const icon = btn.querySelector('.btn-icon');
+            const originalText = btnText.innerText;
+
+            btn.disabled = true;
+            btnText.innerText = "GENERANDO...";
+            loader.style.display = "inline-block";
+            if(icon) icon.style.display = "none";
+            document.body.classList.add('print-mode');
+
+            try {
+                const canvases = document.querySelectorAll('canvas');
+                canvases.forEach(canvas => {
+                    canvas.style.display = 'none';
+                    if (!canvas.nextElementSibling || !canvas.nextElementSibling.classList.contains('print-chart-image')) {
+                        const img = new Image();
+                        img.src = canvas.toDataURL('image/png', 1.0);
+                        img.className = 'print-chart-image';
+                        img.style.width = '100%';
+                        img.style.display = 'block';
+                        canvas.parentNode.insertBefore(img, canvas.nextSibling);
+                    }
+                });
+
+                const element = document.body;
+                const opt = {
+                    margin:       [5, 5, 5, 5],
+                    filename:     'Torrevella_Inversion_2026.pdf',
+                    image:        { type: 'jpeg', quality: 0.98 },
+                    html2canvas:  { 
+                        scale: 2, 
+                        useCORS: true, 
+                        ignoreElements: (element) => {
+                            return element.classList.contains('no-print') || 
+                                   element.classList.contains('quick-action-btn') || 
+                                   element.tagName === 'NAV' || 
+                                   element.tagName === 'FOOTER' ||
+                                   (element.tagName === 'BUTTON' && element.id !== 'fakeBtn'); 
+                        }
+                    },
+                    jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+                };
+
+                await html2pdf().set(opt).from(element).save();
+
+            } catch (error) {
+                console.error("Error PDF:", error);
+            } finally {
+                document.body.classList.remove('print-mode');
+                const canvases = document.querySelectorAll('canvas');
+                canvases.forEach(canvas => {
+                    canvas.style.display = 'block';
+                    if (canvas.nextElementSibling && canvas.nextElementSibling.classList.contains('print-chart-image')) {
+                        canvas.nextElementSibling.remove();
+                    }
+                });
+
+                btnText.innerText = originalText;
+                loader.style.display = "none";
+                if(icon) icon.style.display = "inline-block";
+                btn.disabled = false;
+            }
+        }
+
+        function updateCharts() {
+            const ctx = document.getElementById('historicalChart').getContext('2d');
+            if (myChart) myChart.destroy();
+            myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['2019', '2020', '2021', '2023', '2024', '2026 Est.'],
+                    datasets: [{
+                        label: currentLang === 'es' ? 'Facturaci√≥n (‚Ç¨)' : 'Revenue (‚Ç¨)',
+                        data: [366000, 515000, 465123, 176639, 358612, 590000],
+                        borderColor: '#556B2F', backgroundColor: 'rgba(85, 107, 47, 0.2)', fill: true, tension: 0.4
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, grid: { color: 'rgba(51, 102, 0, 0.1)' }, ticks: { color: '#336600' } }, x: { grid: { display: false }, ticks: { color: '#336600' } } } }
+            });
+
+            const ctx2 = document.getElementById('financeChart').getContext('2d');
+            if (financeChart) financeChart.destroy();
+            financeChart = new Chart(ctx2, {
+                type: 'bar',
+                data: {
+                    labels: ['2019', '2020', '2021', '2022', '2023', '2024'],
+                    datasets: [
+                        { type: 'line', label: currentLang === 'es' ? 'Res. Antes Impuestos' : 'EBT', data: [78727, 64897, 37929, -46048, -77244, 70702], borderColor: '#1e3a8a', borderWidth: 2, pointRadius: 4, pointBackgroundColor: '#1e3a8a', tension: 0.2, yAxisID: 'y' },
+                        { type: 'line', label: currentLang === 'es' ? 'EBITDA / Explotaci√≥n' : 'EBITDA / Operating', data: [10425, 64149, 2053, -66969, -114122, 38899], borderColor: '#f97316', borderWidth: 3, pointBackgroundColor: '#f97316', tension: 0.3, yAxisID: 'y' },
+                        { type: 'bar', label: currentLang === 'es' ? 'Ingresos Totales' : 'Total Revenue', data: [389000, 514949, 465123, 290953, 176639, 358612], backgroundColor: 'rgba(21, 128, 61, 0.7)', borderRadius: 4, yAxisID: 'y' },
+                        { type: 'bar', label: currentLang === 'es' ? 'Gastos Operativos' : 'OpEx', data: [378575, 450800, 463070, 357922, 290761, 319713], backgroundColor: 'rgba(153, 27, 27, 0.5)', borderRadius: 4, yAxisID: 'y' }
+                    ]
+                },
+                options: { responsive: true, maintainAspectRatio: false, interaction: { mode: 'index', intersect: false }, scales: { y: { grid: { color: 'rgba(0,0,0,0.05)' } }, x: { grid: { display: false } } }, plugins: { legend: { position: 'bottom', labels: { usePointStyle: true, font: { size: 10 } } } } }
+            });
+        }
+
+        async function fetchWithRetry(url, options, maxRetries = 5) {
+            let delay = 1000;
+            for (let i = 0; i < maxRetries; i++) {
+                try {
+                    const response = await fetch(url, options);
+                    if (response.ok) return response;
+                } catch (e) {}
+                await new Promise(res => setTimeout(res, delay));
+                delay *= 2;
+            }
+            throw new Error("Error.");
+        }
+
+        async function playStaticAudio(type) {
+            const btn = document.getElementById(`btn-${type}`);
+            const btnText = btn.querySelector('.btn-text');
+            const btnIcon = btn.querySelector('.btn-icon');
+            const progressContainer = btn.querySelector('.audio-progress-container');
+            const originalText = translations[currentLang][`btn-${type.substring(0,3)}`] || btnText.textContent;
+            const originalIcon = btnIcon.getAttribute('data-lucide');
+            const text = guiones[currentLang][type];
+            btn.classList.add('anim-loading');
+            btnText.textContent = currentLang === 'es' ? "Procesando..." : "Processing...";
+            btnIcon.setAttribute('data-lucide', 'loader-2');
+            progressContainer.style.display = 'block';
+            initIcons();
+            try {
+                let voiceInstruction = currentLang === 'es' ? `Diga con acento de Madrid, tono ejecutivo: ${text}` : `Speak in a professional British accent: ${text}`;
+                const response = await fetchWithRetry(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${apiKey}`, {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ contents: [{ parts: [{ text: voiceInstruction }] }], generationConfig: { responseModalities: ["AUDIO"], speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: "Charon" } } } } })
+                });
+                const result = await response.json();
+                const pcmData = result.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
+                if (pcmData) {
+                    const audio = new Audio(URL.createObjectURL(pcmToWav(pcmData, 24000)));
+                    btn.classList.remove('anim-loading');
+                    btn.classList.add('playing-pulse');
+                    btnText.textContent = currentLang === 'es' ? "Escuchando..." : "Listening...";
+                    btnIcon.setAttribute('data-lucide', 'volume-2');
+                    progressContainer.style.display = 'none';
+                    initIcons();
+                    audio.onended = () => resetButton();
+                    audio.play();
+                } else { resetButton(); }
+            } catch (e) { resetButton(); }
+            function resetButton() {
+                btn.classList.remove('anim-loading', 'playing-pulse');
+                btnText.textContent = originalText;
+                btnIcon.setAttribute('data-lucide', originalIcon);
+                progressContainer.style.display = 'none';
+                initIcons();
+            }
+        }
+
+        function pcmToWav(base64Pcm, sampleRate) {
+            const buffer = Uint8Array.from(atob(base64Pcm), c => c.charCodeAt(0)).buffer;
+            const wavBuffer = new ArrayBuffer(44 + buffer.byteLength);
+            const view = new DataView(wavBuffer);
+            const writeString = (o, s) => { for(let i=0;i<s.length;i++) view.setUint8(o+i, s.charCodeAt(i)); };
+            writeString(0, 'RIFF'); view.setUint32(4, 36 + buffer.byteLength, true); writeString(8, 'WAVE'); writeString(12, 'fmt ');
+            view.setUint32(16, 16, true); view.setUint16(20, 1, true); view.setUint16(22, 1, true); view.setUint32(24, sampleRate, true);
+            view.setUint32(28, sampleRate * 2, true); view.setUint16(32, 2, true); view.setUint16(34, 16, true); writeString(36, 'data');
+            view.setUint32(40, buffer.byteLength, true);
+            const pcmView = new DataView(buffer);
+            for(let i=0;i<buffer.byteLength;i++) view.setUint8(44+i, pcmView.getUint8(i));
+            return new Blob([wavBuffer], { type: 'audio/wav' });
+        }
+
+        window.onload = () => { initIcons(); updateCharts(); };
+    </script>
+</body>
+</html>
