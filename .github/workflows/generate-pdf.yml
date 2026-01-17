@@ -1,0 +1,77 @@
+name: Generate Professional PDF
+on:
+  push:
+    branches:
+      - main  # Se ejecuta automáticamente al subir cambios a la rama main
+
+jobs:
+  render_pdf:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout del código
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Instalar Puppeteer
+        run: |
+          npm init -y
+          npm install puppeteer
+
+      - name: Generar PDF Profesional
+        run: |
+          node -e "
+          const puppeteer = require('puppeteer');
+          (async () => {
+            const browser = await puppeteer.launch({ 
+              headless: 'new',
+              args: ['--no-sandbox'] 
+            });
+            const page = await browser.newPage();
+            
+            // Cargamos el archivo local
+            const filePath = 'file://' + process.cwd() + '/index.html';
+            await page.goto(filePath, { waitUntil: 'networkidle0' });
+            
+            // Preparamos el DOM para impresión (sin modificar el archivo real)
+            await page.evaluate(() => {
+              // 1. Forzar clase de impresión
+              document.body.classList.add('print-mode');
+              
+              // 2. Convertir Canvas a Imágenes de alta resolución
+              const canvases = document.querySelectorAll('canvas');
+              canvases.forEach(c => {
+                const img = document.createElement('img');
+                img.src = c.toDataURL('image/png', 1.0);
+                img.style.width = '100%';
+                img.style.display = 'block';
+                c.style.display = 'none';
+                c.parentNode.insertBefore(img, c.nextSibling);
+              });
+            });
+
+            // Generar PDF con formato A4 y márgenes precisos
+            await page.pdf({
+              path: 'Torrevella_Reporte_Inversion_2026.pdf',
+              format: 'A4',
+              printBackground: true,
+              margin: { top: '15mm', bottom: '15mm', left: '15mm', right: '15mm' }
+            });
+
+            await browser.close();
+            console.log('PDF Generado con éxito');
+          })();
+          "
+
+      - name: Guardar PDF en el repositorio
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add Torrevella_Reporte_Inversion_2026.pdf
+          git commit -m "Sistema: Actualización automática del Reporte PDF Profesional" || echo "Sin cambios"
+          git push
