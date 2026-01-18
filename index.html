@@ -1026,7 +1026,7 @@
             const originalText = btnText.innerText;
 
             // Cambia esta ruta al archivo real que hayas añadido al repo
-            const filePath = flies/TORREVELLA S.L. Investor Deck 2026.pdf; // <-- ajusta aquí según corresponda
+            const filePath = "flies/TORREVELLA S.L. Investor Deck 2026.pdf"; // <-- ajusta aquí según corresponda
 
             btn.disabled = true;
             btnText.innerText = 'DESCARGANDO...';
@@ -1037,7 +1037,7 @@
                 let response = await fetch(filePath);
                 if (!response.ok) {
                     // Intento 2: raw.githubusercontent (cuando el HTML se sirve desde otro origen)
-                    const rawUrl = https://github.com/media-creator/dashboard/blob/main/flies/TORREVELLA%20S.L.%20Investor%20Deck%202026.pdf;
+                    const rawUrl = "https://github.com/media-creator/dashboard/blob/main/flies/TORREVELLA%20S.L.%20Investor%20Deck%202026.pdf";
                     response = await fetch(rawUrl);
                 }
 
