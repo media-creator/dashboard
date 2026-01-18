@@ -759,76 +759,192 @@
 
         // --- LÓGICA DEL DASHBOARD ---
 
-        const translations = {
-            es: {
-                "nav-tesis": "Tesis", "nav-analysis": "Análisis", "nav-infra": "Infraestructura", "nav-restructuring": "Saneamiento", "nav-finance": "Finanzas",
-                "btn-download": "DESCARGAR PDF",
-                "hero-tag": "Investment Round 2026 | Confidencial",
-                "hero-title": "Patrimonio Bio Ecológico <br><span class='text-orange text-5xl md:text-7xl'>En Expansión.</span>",
-                "hero-sub": "Participación estratégica del <span class='font-bold text-green-900'>30% del equity</span>. <br>Respaldo patrimonial de <span class='font-bold text-green-900'>8,6M€ en activos reales auditados</span>.",
-                "btn-pitch": "Pitch Inversión", "btn-val": "Validación Comercial", "btn-rep": "Reporte Ejecutivo", "btn-sim": "Simulación Exit",
-                "sec1-title": "01. Tesis de Inversión: <span class='text-orange'>Oportunidad</span>",
-                "sec1-p1": "Torrevella S.L. ha completado su fase de CAPEX biológico. El inversor entra en el punto de inflexión donde el <strong>Margen de Seguridad es del 50%</strong> respecto a los activos brutos.",
-                "sec1-req-label": "Capital Solicitado", "sec1-equity-detail": "Por el 30% Participación Social (Equity)",
-                "sec1-risk": "Riesgo Financiero", "sec1-backing": "Respaldo Activos",
-                "sec1-assets-title": "Desglose Técnico de Activos",
-                "asset-land": "Suelo Agrícola", "asset-land-desc": "135 Ha Productivas",
-                "asset-build": "Infraestructura", "asset-build-desc": "Naves e Infra.",
-                "asset-forest": "Masa Biológica", "asset-forest-desc": "35.250 Árboles",
-                "asset-house": "Vivienda Señorial", "asset-house-desc": "Patrimonio Histórico",
-                "asset-total": "Total Activos Reales",
-                "sec2-title": "02. Validación Comercial: <span class='text-orange'>Picos de Venta</span>",
-                "sec2-cherry": "Pico Cerezas IGP", "sec2-oil": "Pico Aceite AOVE", "sec2-vinegar": "Pico Vinagres PX",
-                "v-recovery-title": "Validación de Recuperación en V",
-                "v-recovery-desc": "La tesis comercial se confirma con una recuperación ya observable en 2024 y 2025. El incremento en la producción biológica, sumado a la entrada de capital estratégico, permite capitalizar las inversiones realizadas en infraestructura. Se proyecta una progresión ascendente sostenida gracias a la optimización operativa y el posicionamiento premium de la marca Sotaroni.",
-                "sec3-title": "03. Inventario Biológico: <span class='text-orange'>37.750 Árboles</span>",
-                "tab-crop": "Cultivo", "tab-ha": "Hectáreas", "tab-trees": "Censo Árboles", "tab-status": "Estatus 2026",
-                "crop-olive": "Olivar Ecológico", "stat-asc": "Producción Ascendente", "crop-almond": "Almendro Ecológico", "stat-grow": "Crecimiento", "crop-cherry": "Cerezo IGP", "crop-apple": "Manzanos", "stat-70": "70% de Producción",
-                "crop-free": "Libres", "stat-prepared": "Preparadas para ampliar cultivos", "tab-total": "TOTAL", "stat-managed": "Gestionados",
-                "sec-infra-title": "04. Infraestructura Agrícola: <span class='text-orange'>Equipamiento Integral</span>",
-                "infra-machinery-title": "Parque de<br>Maquinaria",
-                "item-tractor-130": "Tractor 130 CV", "item-tractor-90": "2x Tractor 90 CV", "item-shredder-f": "Trituradora Forestal", "item-shredder-a": "Trituradora de Brazo", "item-cultivator": "Cultivador Extensible",
-                "infra-irrigation-title": "Tecnología de<br>Riego",
-                "item-irr-head": "Cabezal Riego", "item-pumps": "3 Bombas Impulsoras", "item-tanks": "3 Depósitos 2.000 L", "item-timer": "Programador Digital", "item-sectors": "18 Sectores",
-                "infra-facilities-title": "Instalaciones<br>Fijas",
-                "item-warehouse": "Nave Agrícola", "item-workshop": "Taller Mantenimiento", "item-supplies": "Almacén Insumos", "item-winery": "Bodega Propia", "item-housing": "Viviendas Personal",
-                "sec-water-guarantee": "INFRASTRUCTURA HÍDRICA DE GARANTIA",
-                "cap-op-title": "Capacidad<br>Operativa", "cap-op-actual": "infrastuctura actual: 300.000 m3/año",
-                "dot-actual-title": "Dotación Actual", "dot-actual-desc": "2 Pozos Operativos (8 l/s)", "sec7-tag": "Proyecto Expansión", "sec7-project": "Acuífero La Cabranta", "sec7-study": "Avalado por Ingeniería Rodes",
-                "sec4-title": "05. Estrategia de <span class='text-orange'>Saneamiento</span>",
-                "sec4-total-label": "Importe Operación",
-                "sec4-debt": "900.000 € DEUDA", "sec4-debt-desc": "Cancelación total de pasivos y regularización de acreedores.",
-                "sec4-capex": "350.000 € CAPEX", "sec4-capex-desc": "Infraestructuras hídricas y mantenimiento biológico.",
-                "sec4-mkt": "225.000 € MKT", "sec4-mkt-desc": "Expansión internacional B2C de la marca Sotaroni.",
-                "sec5-title": "06. Cuenta de Explotación: <span class='text-orange'>PyG 2019-2024</span>",
-                "sec5-chart-title": "Evolución de Resultados", "legend-income": "Ingresos", "legend-expenses": "Gastos",
-                "sec5-table-title": "Cuenta de Explotación Detallada", "tab-partid": "Partida (€)",
-                "pyg-op-income": "Ingresos Explotación", "pyg-supplies": "Aprovisionamientos", "pyg-structure": "Gtos. Estructura y Otros", "pyg-op-result": "RESULTADO EXPLOTACIÓN", "pyg-fin-income": "Ingresos Financieros", "pyg-pretax": "RES. ANTES IMPUESTOS",
-                "context-main-title": "Contexto Estratégico & <span class='text-orange'>Recuperación</span>",
-                "context-rest-title": "Reestructuración 2021", "context-rest-desc": "En 2021 se ejecutó una reestructuración integral hacia <strong>cultivo ecológico certificado</strong>.",
-                "context-impact-label": "Impacto en Tesorería", "context-impact-desc": "Esta reconversión causó la tensión de tesorería observada.",
-                "context-rec-label": "Recuperación Productiva", "context-rec-desc": "Desde 2024 la recuperacon productiva es un hecho.",
-                "progress-2025": "Operativa 2025", "progress-2030": "Objetivo 2030",
-                "exp-eff-title": "2021 Expansion & Efficiency", "exp-lease-title": "Arrendamiento Estratégico (+100 Ha)", "exp-lease-desc": "Nuevas plantaciones de Olivar Ecológico.", "exp-water-title": "Inversión Hídrica", "exp-water-desc": "Modernización total del sistema de riego.",
-                "sec6-title": "07. Valor de Marca: <span class='text-orange'>Sotaroni</span>",
-                "sec6-desc": "Sotaroni es una marca gourmet consolidada con presencia en el canal HORECA premium.",
-                "sec6-prod": "AOVE & PX", "sec6-prod-tag": "Productos Insignia", "sec6-pos": "Gourmet", "sec6-pos-tag": "Posicionamiento", "brand-audit": "Brand Equity Auditado",
-                "exit-main-title": "08. Management and Exit Strategy",
-                "exit-div-title": "Dividendo Recurrente", "exit-div-desc": "Reparto del 40% del EBITDA a partir de 2027.",
-                "exit-buy-title": "Buy-Back Option", "exit-buy-desc": "Compromiso de recompra por la propiedad (Año 5-7).",
-                "exit-esg-title": "Venta ESG", "exit-esg-desc": "Salida a fondos de agricultura regenerativa.",
-                "exit-gov-title": "Gobierno corporativo", "exit-gov-desc": "Crear un consejo asesor con representación del fondo.",
-                "exit-rep-title": "Reporting financiero estructurado", "exit-rep-desc": "Auditoría anual externa y KPIs mensuales.",
-                "exit-plan-title": "5-Year Business Plan", "exit-plan-desc": "Includes organic expansion, industrialization, and agrotourism.",
-                "sec9-title": "09. Strategic Location & <span class='text-orange'>Logistics</span>",
-                "geo-title": "Geography & Climate", "geo-desc": "Polop Valley, Alcoy (Alicante). Situated between Natural Parks.",
-                "geo-alt-label": "Mean Altitude", "geo-rain-label": "Rainfall", "geo-cold-label": "Cold Hours", "geo-clima-label": "Climate", "geo-clima-type": "Mediterráneo Montaña",
-                "log-title": "Conectividad Global", "log-hosp": "Alcoy (Hospital general)", "log-hosp-dist": "Cercanía estratégica (10 min)", "log-ports": "Puertos Mercantiles", "log-ports-dist": "Alicante (50 min) - Valencia (1h 15m)", "log-air": "Aeropuertos Internacionales", "log-air-dist": "Alicante (45 min) - Valencia (1h 10m)", "log-ave": "Alta Velocidad (AVE)", "log-ave-dist": "Villena Station (30 min)",
-                "maps-title": "Localización & Acceso Finca", "maps-addr": "Sotaroni Oils and Vinegars | Alcoi", "btn-maps": "CÓMO LLEGAR A TORREVELLA",
-                "oro-title": "Terrain Orography", "oro-flat": "Flat Lands", "oro-mid": "Medium Slope", "oro-high": "High Slope / Terraces",
-                "footer": "Torrevella S.L. | Investor Relations 2026", "footer-admin": "Created by Nicolás Sanjuán Pérez - Sole Administrator"
-            }
-        };
+     const translations = {
+    es: {
+        // Navegación
+        "nav-tesis": "Tesis", "nav-analysis": "Análisis", "nav-infra": "Infraestructura", "nav-restructuring": "Saneamiento", "nav-finance": "Finanzas",
+        "btn-download": "ARCHIVO PDF",
+        
+        // Hero
+        "hero-tag": "Investment Round 2026 | Confidencial",
+        "hero-title": "Patrimonio Bio Ecológico <br><span class='text-orange text-5xl md:text-7xl'>En Expansión.</span>",
+        "hero-sub": "Participación estratégica del <span class='font-bold text-green-900'>30% del equity</span>. <br>Respaldo patrimonial de <span class='font-bold text-green-900'>8,6M€ en activos reales auditados</span>.",
+        "btn-pitch": "Pitch Inversión", "btn-val": "Validación Comercial", "btn-rep": "Reporte Ejecutivo", "btn-sim": "Simulación Exit",
+        
+        // Sección 01 - Tesis
+        "sec1-title": "01. Tesis de Inversión: <span class='text-orange'>Oportunidad</span>",
+        "sec1-p1": "Torrevella S.L. ha completado su fase de CAPEX biológico. El inversor entra en el punto de inflexión donde el <strong>Margen de Seguridad es del 50%</strong> respecto a los activos brutos.",
+        "sec1-req-label": "Capital Solicitado", "sec1-equity-detail": "Por el 30% Participación Social (Equity)",
+        "sec1-risk": "Riesgo Financiero", "sec1-backing": "Respaldo Activos",
+        "sec1-assets-title": "Desglose Técnico de Activos",
+        "asset-land": "Suelo Agrícola", "asset-land-desc": "135 Ha Productivas",
+        "asset-build": "Infraestructura", "asset-build-desc": "Naves e Infra.",
+        "asset-forest": "Masa Biológica", "asset-forest-desc": "35.250 Árboles",
+        "asset-house": "Vivienda Señorial", "asset-house-desc": "Patrimonio Histórico",
+        "asset-total": "Total Activos Reales",
+
+        // Sección 02 - Validación
+        "sec2-title": "02. Validación Comercial: <span class='text-orange'>Picos de Venta</span>",
+        "sec2-cherry": "Pico Cerezas IGP", "sec2-oil": "Pico Aceite AOVE", "sec2-vinegar": "Pico Vinagres PX",
+        "v-recovery-title": "Validación de Recuperación en V",
+        "v-recovery-desc": "La tesis comercial se confirma con una recuperación ya observable en 2024 y 2025. El incremento en la producción biológica, sumado a la entrada de capital estratégico, permite capitalizar las inversiones realizadas en infraestructura.",
+
+        // Sección 03 - Inventario
+        "sec3-title": "03. Inventario Biológico: <span class='text-orange'>37.750 Árboles</span>",
+        "tab-crop": "Cultivo", "tab-ha": "Hectáreas", "tab-trees": "Censo Árboles", "tab-status": "Estatus 2026",
+        "crop-olive": "Olivar Ecológico", "stat-asc": "Producción Ascendente",
+        "crop-almond": "Almendro Ecológico", "stat-grow": "Crecimiento",
+        "crop-cherry": "Cerezo IGP", "crop-apple": "Manzanos", "stat-70": "70% de Producción",
+        "crop-free": "Libres", "stat-prepared": "Preparadas para ampliar cultivos",
+        "tab-total": "TOTAL", "stat-managed": "Gestionados",
+
+        // Sección 04 - Infraestructura
+        "sec-infra-title": "04. Infraestructura Agrícola: <span class='text-orange'>Equipamiento Integral</span>",
+        "infra-machinery-title": "Parque de<br>Maquinaria",
+        "item-tractor-130": "Tractor 130 CV", "item-tractor-90": "2x Tractor 90 CV", "item-shredder-f": "Trituradora Forestal",
+        "infra-irrigation-title": "Tecnología de<br>Riego",
+        "item-irr-head": "Cabezal Riego", "item-sectors": "18 Sectores",
+        "infra-facilities-title": "Instalaciones<br>Fijas",
+        "item-warehouse": "Nave Agrícola", "item-winery": "Bodega Propia",
+        "sec-water-guarantee": "INFRAESTRUCTURA HÍDRICA DE GARANTÍA",
+        "cap-op-title": "Capacidad<br>Operativa", "cap-op-actual": "Infraestructura actual: 300.000 m3/año",
+        "dot-actual-title": "Dotación Actual", "dot-actual-desc": "2 Pozos Operativos (8 l/s)",
+        "sec7-tag": "Proyecto Expansión", "sec7-project": "Acuífero La Cabranta", "sec7-study": "Avalado por Ingeniería Rodes",
+
+        // Sección 05 - Saneamiento
+        "sec4-title": "05. Estrategia de <span class='text-orange'>Saneamiento</span>",
+        "sec4-total-label": "Importe Operación",
+        "sec4-debt": "900.000 € DEUDA", "sec4-debt-desc": "Cancelación total de pasivos y regularización de acreedores.",
+        "sec4-capex": "350.000 € CAPEX", "sec4-capex-desc": "Infraestructuras hídricas y mantenimiento biológico.",
+        "sec4-mkt": "225.000 € MKT", "sec4-mkt-desc": "Expansión internacional B2C de la marca Sotaroni.",
+
+        // Sección 06 - Finanzas
+        "sec5-title": "06. Cuenta de Explotación: <span class='text-orange'>PyG 2019-2024</span>",
+        "sec5-chart-title": "Evolución de Resultados", "legend-income": "Ingresos", "legend-expenses": "Gastos",
+        "sec5-table-title": "Cuenta de Explotación Detallada", "tab-partida": "Partida (€)",
+        "pyg-op-income": "Ingresos Explotación", "pyg-supplies": "Aprovisionamientos", "pyg-structure": "Gtos. Estructura y Otros", "pyg-op-result": "RESULTADO EXPLOTACIÓN", "pyg-fin-income": "Ingresos Financieros", "pyg-pretax": "RES. ANTES IMPUESTOS",
+
+        // Sección 07 - Contexto
+        "context-main-title": "Contexto Estratégico & <span class='text-orange'>Recuperación</span>",
+        "context-rest-title": "Reestructuración 2021", "context-rest-desc": "En 2021 se ejecutó una reestructuración integral hacia <strong>cultivo ecológico certificado</strong>.",
+        "context-impact-label": "Impacto en Tesorería", "context-impact-desc": "Esta reconversión causó la tensión de tesorería observada.",
+        "context-rec-label": "Recuperación Productiva", "context-rec-desc": "Desde 2024 la recuperación productiva es un hecho.",
+        "progress-2025": "Operativa 2025", "progress-2030": "Objetivo 2030",
+        "exp-eff-title": "Expansión & Eficiencia 2021",
+        "exp-lease-title": "Arrendamiento Estratégico (+100 Ha)", "exp-lease-desc": "Nuevas plantaciones de Olivar Ecológico.",
+        "exp-water-title": "Inversión Hídrica", "exp-water-desc": "Modernización total del sistema de riego.",
+
+        // Sección 08 - Marca y Exit
+        "sec6-title": "07. Valor de Marca: <span class='text-orange'>Sotaroni</span>",
+        "sec6-desc": "Sotaroni es una marca gourmet consolidada con presencia en el canal HORECA premium.",
+        "exit-main-title": "08. Estrategia de Gestión y Salida",
+        "exit-div-title": "Dividendo Recurrente", "exit-div-desc": "Reparto del 40% del EBITDA a partir de 2027.",
+        "exit-buy-title": "Opción Buy-Back", "exit-buy-desc": "Compromiso de recompra por la propiedad (Año 5-7).",
+        "exit-esg-title": "Venta ESG", "exit-esg-desc": "Salida a fondos de agricultura regenerativa.",
+        "exit-plan-title": "Plan de negocio a 5 años", "exit-plan-desc": "Incluye expansión del área ecológica y agroturismo rural premium.",
+
+        // Sección 09 - Ubicación
+        "sec9-title": "09. Ubicación y Logística <span class='text-orange'>Estratégica</span>",
+        "geo-title": "Geografía & Clima", "geo-desc": "Valle de Polop, Alcoy (Alicante). Entre Parques Naturales.",
+        "geo-alt-label": "Altitud Media", "geo-rain-label": "Pluviometría", "geo-cold-label": "Horas Frío", "geo-clima-label": "Clima", "geo-clima-type": "Mediterráneo Montaña",
+        "log-title": "Conectividad Global", "log-hosp": "Alcoy (Hospital General)", "log-ports": "Puertos Mercantiles", "log-air": "Aeropuertos Internacionales", "log-ave": "Alta Velocidad (AVE)",
+        "maps-title": "Localización & Acceso Finca", "btn-maps": "CÓMO LLEGAR A TORREVELLA",
+        "oro-title": "Orografía del Terreno", "oro-flat": "Terrenos Llanos", "oro-mid": "Pendiente Media", "oro-high": "Pendiente Elevada",
+        "footer": "Torrevella S.L. | Relación con Inversores 2026", "footer-admin": "Creado por Nicolás Sanjuán Pérez - Administrador Único"
+    },
+    en: {
+        // Navigation
+        "nav-tesis": "Thesis", "nav-analysis": "Analysis", "nav-infra": "Infrastructure", "nav-restructuring": "Restructuring", "nav-finance": "Finance",
+        "btn-download": "PDF FILE",
+        
+        // Hero
+        "hero-tag": "Investment Round 2026 | Confidential",
+        "hero-title": "Bio-Ecological Heritage <br><span class='text-orange text-5xl md:text-7xl'>Expanding.</span>",
+        "hero-sub": "Strategic stake of <span class='font-bold text-green-900'>30% equity</span>. <br>Asset backing of <span class='font-bold text-green-900'>€8.6M in audited real assets</span>.",
+        "btn-pitch": "Investment Pitch", "btn-val": "Sales Validation", "btn-rep": "Executive Report", "btn-sim": "Exit Simulation",
+
+        // Section 01 - Thesis
+        "sec1-title": "01. Investment Thesis: <span class='text-orange'>Opportunity</span>",
+        "sec1-p1": "Torrevella S.L. has completed its biological CAPEX phase. The investor enters at the turning point where the <strong>Margin of Safety is 50%</strong> relative to gross assets.",
+        "sec1-req-label": "Requested Capital", "sec1-equity-detail": "For 30% Equity Stake",
+        "sec1-risk": "Financial Risk", "sec1-backing": "Asset Backing",
+        "sec1-assets-title": "Technical Asset Breakdown",
+        "asset-land": "Agricultural Land", "asset-land-desc": "135 Productive Ha",
+        "asset-build": "Infrastructure", "asset-build-desc": "Warehouses & Infra.",
+        "asset-forest": "Biological Mass", "asset-forest-desc": "35,250 Trees",
+        "asset-house": "Manor House", "asset-house-desc": "Historical Heritage",
+        "asset-total": "Total Real Assets",
+
+        // Section 02 - Validation
+        "sec2-title": "02. Commercial Validation: <span class='text-orange'>Sales Peaks</span>",
+        "sec2-cherry": "PGI Cherry Peak", "sec2-oil": "EVOO Oil Peak", "sec2-vinegar": "PX Vinegar Peak",
+        "v-recovery-title": "V-Shaped Recovery Validation",
+        "v-recovery-desc": "The commercial thesis is confirmed by a recovery already observable in 2024 and 2025. Increased biological production allows capitalizing on infrastructure investments.",
+
+        // Section 03 - Inventory
+        "sec3-title": "03. Biological Inventory: <span class='text-orange'>37,750 Trees</span>",
+        "tab-crop": "Crop", "tab-ha": "Hectares", "tab-trees": "Tree Count", "tab-status": "2026 Status",
+        "crop-olive": "Organic Olive", "stat-asc": "Rising Production",
+        "crop-almond": "Organic Almond", "stat-grow": "Growth Phase",
+        "crop-cherry": "PGI Cherry", "crop-apple": "Apple Trees", "stat-70": "70% Production",
+        "crop-free": "Available", "stat-prepared": "Prepared for crop expansion",
+        "tab-total": "TOTAL", "stat-managed": "Managed",
+
+        // Section 04 - Infrastructure
+        "sec-infra-title": "04. Agricultural Infra: <span class='text-orange'>Full Equipment</span>",
+        "infra-machinery-title": "Machinery<br>Park",
+        "item-tractor-130": "130 HP Tractor", "item-tractor-90": "2x 90 HP Tractors", "item-shredder-f": "Forestry Shredder",
+        "infra-irrigation-title": "Irrigation<br>Tech",
+        "item-irr-head": "Irrigation Head", "item-sectors": "18 Sectors",
+        "infra-facilities-title": "Fixed<br>Facilities",
+        "item-warehouse": "Agro Warehouse", "item-winery": "Private Winery",
+        "sec-water-guarantee": "GUARANTEED WATER INFRASTRUCTURE",
+        "cap-op-title": "Operational<br>Capacity", "cap-op-actual": "Current infrastructure: 300,000 m3/year",
+        "dot-actual-title": "Current Supply", "dot-actual-desc": "2 Active Wells (8 l/s)",
+        "sec7-tag": "Expansion Project", "sec7-project": "La Cabranta Aquifer", "sec7-study": "Endorsed by Rodes Engineering",
+
+        // Section 05 - Restructuring
+        "sec4-title": "05. Financial <span class='text-orange'>Restructuring</span>",
+        "sec4-total-label": "Operation Amount",
+        "sec4-debt": "€900,000 DEBT", "sec4-debt-desc": "Full cancellation of liabilities and creditor settlement.",
+        "sec4-capex": "€350,000 CAPEX", "sec4-capex-desc": "Water infrastructure and biological maintenance.",
+        "sec4-mkt": "€225,000 MKT", "sec4-mkt-desc": "B2C international expansion for Sotaroni brand.",
+
+        // Section 06 - Finance
+        "sec5-title": "06. Profit & Loss: <span class='text-orange'>P&L 2019-2024</span>",
+        "sec5-chart-title": "Results Evolution", "legend-income": "Income", "legend-expenses": "Expenses",
+        "sec5-table-title": "Detailed P&L Account", "tab-partida": "Item (€)",
+        "pyg-op-income": "Operating Income", "pyg-supplies": "Supplies", "pyg-structure": "Structure & Others", "pyg-op-result": "OPERATING RESULT", "pyg-fin-income": "Financial Income", "pyg-pretax": "RESULT BEFORE TAX",
+
+        // Section 07 - Context
+        "context-main-title": "Strategic Context & <span class='text-orange'>Recovery</span>",
+        "context-rest-title": "2021 Restructuring", "context-rest-desc": "In 2021, a full restructuring towards <strong>certified organic farming</strong> was executed.",
+        "context-impact-label": "Cash Flow Impact", "context-impact-desc": "This conversion caused the observed treasury tension.",
+        "context-rec-label": "Productive Recovery", "context-rec-desc": "Since 2024, productive recovery is a reality.",
+        "progress-2025": "2025 Operations", "progress-2030": "2030 Objective",
+        "exp-eff-title": "2021 Expansion & Efficiency",
+        "exp-lease-title": "Strategic Lease (+100 Ha)", "exp-lease-desc": "New Organic Olive plantations.",
+        "exp-water-title": "Water Investment", "exp-water-desc": "Total modernization of the irrigation system.",
+
+        // Section 08 - Brand & Exit
+        "sec6-title": "07. Brand Equity: <span class='text-orange'>Sotaroni</span>",
+        "sec6-desc": "Sotaroni is a consolidated gourmet brand with a presence in the premium HORECA channel.",
+        "exit-main-title": "08. Management & Exit Strategy",
+        "exit-div-title": "Recurring Dividend", "exit-div-desc": "Distribution of 40% of EBITDA starting in 2027.",
+        "exit-buy-title": "Buy-Back Option", "exit-buy-desc": "Repurchase commitment by ownership (Year 5-7).",
+        "exit-esg-title": "ESG Sale", "exit-esg-desc": "Exit to regenerative agriculture funds.",
+        "exit-plan-title": "5-Year Business Plan", "exit-plan-desc": "Includes organic expansion and premium rural agrotourism.",
+
+        // Section 09 - Location
+        "sec9-title": "09. Strategic Location & <span class='text-orange'>Logistics</span>",
+        "geo-title": "Geography & Climate", "geo-desc": "Polop Valley, Alcoy (Alicante). Located between Natural Parks.",
+        "geo-alt-label": "Avg Altitude", "geo-rain-label": "Rainfall", "geo-cold-label": "Chill Hours", "geo-clima-label": "Climate", "geo-clima-type": "Mountain Mediterranean",
+        "log-title": "Global Connectivity", "log-hosp": "Alcoy (General Hospital)", "log-ports": "Commercial Ports", "log-air": "International Airports", "log-ave": "High-Speed Rail (AVE)",
+        "maps-title": "Location & Farm Access", "btn-maps": "HOW TO GET TO TORREVELLA",
+        "oro-title": "Terrain Orography", "oro-flat": "Flat Terrain", "oro-mid": "Medium Slope", "oro-high": "Steep Slope",
+        "footer": "Torrevella S.L. | Investor Relations 2026", "footer-admin": "Created by Nicolás Sanjuán Pérez - Sole Administrator"
+    }
+};
 
         const guiones = {
             es: {
