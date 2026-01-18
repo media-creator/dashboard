@@ -200,10 +200,10 @@
                     <a href="#financieros" class="hover:text-white transition-colors" data-i18n="nav-finance">Finanzas</a>
                 </div>
                 <div class="flex gap-2">
-                    <button onclick="handlePrint()" id="btnImprimir" class="bg-orange/90 hover:bg-orange text-white px-4 py-2 rounded-lg text-xs font-bold transition-all shadow-lg flex items-center gap-2">
-                        <i data-lucide="download" class="w-4 h-4 btn-icon"></i>
-                        <span class="btn-text" data-i18n="btn-download">DESCARGAR PDF</span>
-                        <span class="loader" style="display: none;"></span>
+                  <!-- NUEVO: Botón para descargar un archivo del repositorio -->
+                    <button id="btnDownloadFile" onclick="downloadRepoFile()" class="bg-white/10 border border-white/20 text-white px-3 py-1.5 rounded text-[10px] font-bold flex items-center gap-2">
+                        <i data-lucide="download-cloud" class="w-4 h-4 btn-icon"></i>
+                        <span class="btn-text">DESCARGAR ARCHIVO</span>
                     </button>
                     <button onclick="toggleLanguage()" class="bg-white/10 border border-white/20 text-white px-3 py-1.5 rounded text-[10px] font-bold" id="langBtn">ES | <span class="opacity-50">EN</span></button>
                 </div>
@@ -1004,6 +1004,55 @@
 
             window.speechSynthesis.cancel(); 
             window.speechSynthesis.speak(utterance);
+        }
+
+          /**
+         * NUEVA FUNCION: Descargar archivo desde el repositorio
+         * - Ajusta la variable `filePath` a la ruta donde dejaste el archivo en el repo.
+         * - Intenta primero con una ruta relativa en el mismo servidor; si no existe, usa la URL raw de GitHub.
+         */
+        async function downloadRepoFile() {
+            const btn = document.getElementById('btnDownloadFile');
+            const btnText = btn.querySelector('.btn-text');
+            const icon = btn.querySelector('.btn-icon');
+            const originalText = btnText.innerText;
+
+            // Cambia esta ruta al archivo real que hayas añadido al repo
+            const filePath = 'files/Torrevella_Informe_2026.pdf'; // <-- ajusta aquí según corresponda
+
+            btn.disabled = true;
+            btnText.innerText = 'DESCARGANDO...';
+            if (icon) icon.style.display = 'none';
+
+            try {
+                // Intento 1: ruta relativa (útil si el archivo está junto al sitio)
+                let response = await fetch(filePath);
+                if (!response.ok) {
+                    // Intento 2: raw.githubusercontent (cuando el HTML se sirve desde otro origen)
+                    const rawUrl = `https://raw.githubusercontent.com/media-creator/dashboard/main/${filePath}`;
+                    response = await fetch(rawUrl);
+                }
+
+                if (!response.ok) throw new Error('Archivo no encontrado (404) o acceso denegado.');
+
+                const blob = await response.blob();
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = filePath.split('/').pop();
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+                URL.revokeObjectURL(url);
+            } catch (err) {
+                console.error('Error descargando archivo:', err);
+                alert('No se pudo descargar el archivo. Comprueba la ruta o que el archivo exista en el repositorio.');
+            } finally {
+                btn.disabled = false;
+                btnText.innerText = originalText;
+                if (icon) icon.style.display = 'inline-block';
+                if (typeof lucide !== 'undefined') lucide.createIcons();
+            }
         }
 
         function pcmToWav(base64Pcm, sampleRate) {
